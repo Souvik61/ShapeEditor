@@ -111,6 +111,7 @@ file(GLOB_RECURSE GAME_HEADER
 	Source/Test/PointBuffer.h
 	Source/Test/PointSpaceNode.h
 	Source/Test/ProjectManager.h
+	Source/Test/RbListController.h
 	Source/Test/RigidbodiesManager.h
 	Source/Test/RigidBodyModel.h
 	Source/Test/ShapeModel.h
@@ -176,6 +177,7 @@ file(GLOB_RECURSE GAME_SOURCE
 	Source/Test/PointBuffer.cpp
 	Source/Test/PointSpaceNode.cpp
 	Source/Test/ProjectManager.cpp
+	Source/Test/RbListController.cpp
 	Source/Test/RigidbodiesManager.cpp
 	Source/Test/RigidBodyModel.cpp
 	Source/Test/ShapeModel.cpp
