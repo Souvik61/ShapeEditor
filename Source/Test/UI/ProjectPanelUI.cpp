@@ -100,6 +100,7 @@ void ProjectPanelUI::addOtherUIComponents()
         cmplxBtn->setup("Sprites/icons/ic_new.png", "New");
         layout->addChild(cmplxBtn, 0, "ic_new");
         cmplxBtn->setLayoutParameter(lp);
+        cmplxBtn->addTouchEventListener(CC_CALLBACK_2(ProjectPanelUI::onButtonClicked, this));
     }
 
     //Add load icon
@@ -108,8 +109,9 @@ void ProjectPanelUI::addOtherUIComponents()
         cmplxBtn->setContentSize(Size(63, 30));
         cmplxBtn->setup("Sprites/newicons/ic_import.png", "Load");
         layout->addChild(cmplxBtn, 0, "ic_load");
-        cmplxBtn->setLayoutParameter(lp);
+        cmplxBtn->setLayoutParameter(lp->clone());
         cmplxBtn->icon->setScale(0.23f);
+        cmplxBtn->addTouchEventListener(CC_CALLBACK_2(ProjectPanelUI::onButtonClicked, this));
     }
     //Add save icon
     {
@@ -117,8 +119,9 @@ void ProjectPanelUI::addOtherUIComponents()
         cmplxBtn->setContentSize(Size(63, 30));
         cmplxBtn->setup("Sprites/newicons/ic_save.png", "Save");
         layout->addChild(cmplxBtn, 0, "ic_save");
-        cmplxBtn->setLayoutParameter(lp);
+        cmplxBtn->setLayoutParameter(lp->clone());
         cmplxBtn->icon->setScale(0.23f);
+        cmplxBtn->addTouchEventListener(CC_CALLBACK_2(ProjectPanelUI::onButtonClicked, this));
     }
 
     abovePos = layout->getPosition();
@@ -186,6 +189,7 @@ void ProjectPanelUI::addOtherUIComponents()
         //Add file open button
         {
             Button* button = Button::create("Sprites/icons/ic_open.png");
+            button->setColor(Color3B::BLACK);
             button->addTouchEventListener(CC_CALLBACK_2(ProjectPanelUI::onButtonClicked, this));
             //button->setLayoutParameter(lp->clone());
             layout->addChild(button, 0, "ic_fopen");
