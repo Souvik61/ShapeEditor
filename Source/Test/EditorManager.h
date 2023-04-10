@@ -9,6 +9,7 @@ class PointSpaceNode;
 class EditorPanelUI;
 class OverallManager;
 class EditorDraw;
+class RigidBodiesManager;
 
 //Represents a mouse selection
 class MouseSelection
@@ -51,6 +52,8 @@ public:
 	EditorPanelUI* editorUI;
 	PointSpaceNode* pointsNode;
 	OverallManager* oManager;
+	RigidBodiesManager* rbManager;
+	
 	EditorDraw* drawer;
 public:
 	virtual bool init();

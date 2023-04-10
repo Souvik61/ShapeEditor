@@ -2,9 +2,8 @@
 #include "RigidBodiesManager.h"
 #include "ShapeModel.h"
 #include "RigidBodyModel.h"
-//#include "EditorPanel.h"
-#include "EditorScreenInterface.h"
-#include "EditorPanelUI.h"
+#include "Test/UI/EditorScreenInterface.h"
+#include "Test/UI/EditorPanelUI.h"
 
 USING_NS_CC;
 
@@ -85,7 +84,7 @@ void ShapesDrawNode::drawShapes()
                 _shapeDraw->drawLine(vs[0], vs[vs.size() - 1], Color4F::WHITE);
             }
             else { //Else
-                _shapeDraw->drawLine(_editPanelUI->_screenInterface->_currentPointerLoc, vs[vs.size() - 1], Color4F::WHITE);
+                //_shapeDraw->drawLine(_editPanelUI->_screenInterface->_currentPointerLoc, vs[vs.size() - 1], Color4F::WHITE);
             }
         }
         break;
@@ -171,22 +170,22 @@ void ShapesDrawNode::drawVerts()
 
 void ShapesDrawNode::drawSelectedVerts()
 {
-    std::vector<Vec2*>& points = _editPanelUI->selectedPoints;
-
-    for (auto point : points)
-    {
-        _vertDraw->drawDot(*point, 5, Color4F::GREEN);
-    }
+    //std::vector<Vec2*>& points = _editPanelUI->selectedPoints;
+    //
+    //for (auto point : points)
+    //{
+    //    _vertDraw->drawDot(*point, 5, Color4F::GREEN);
+    //}
 }
 
 void ShapesDrawNode::drawSelectionBox()
 {
-    Vec2* sP1 = _editPanelUI->_screenInterface->mouseSelectP1;
-    Vec2* sP2 = _editPanelUI->_screenInterface->mouseSelectP2;
-    
-    if (sP1 && sP2)
-    {
-        _selectionDraw->drawRect(*sP1, *sP2, Color4F::GREEN);
-        _selectionDraw->drawSolidRect(*sP1, *sP2, Color4F(0, 1, 0, 0.40f));
-    }
+    //Vec2* sP1 = _editPanelUI->_screenInterface->mouseSelectP1;
+    //Vec2* sP2 = _editPanelUI->_screenInterface->mouseSelectP2;
+    //
+    //if (sP1 && sP2)
+    //{
+    //    _selectionDraw->drawRect(*sP1, *sP2, Color4F::GREEN);
+    //    _selectionDraw->drawSolidRect(*sP1, *sP2, Color4F(0, 1, 0, 0.40f));
+    //}
 }

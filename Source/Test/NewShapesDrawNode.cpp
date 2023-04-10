@@ -2,9 +2,8 @@
 #include "RigidBodiesManager.h"
 #include "ShapeModel.h"
 #include "RigidBodyModel.h"
-//#include "EditorPanel.h"
-#include "EditorScreenInterface.h"
-#include "EditorPanelUI.h"
+#include "Test/UI/EditorScreenInterface.h"
+#include "Test/UI/EditorPanelUI.h"
 #include "PointArrayDelegate.h"
 #include "OverallManager.h"
 
@@ -149,7 +148,7 @@ void NewShapesDrawNode::drawShapes()
                 //_editPanelUI->oManager->buffDelegate->applyNewTransform(bV);
                 _editPanelUI->oManager->spaceConv->applyT(bV);
                 
-                _shapeDraw->drawLine(_editPanelUI->_screenInterface->_currentPointerLoc, *bV, Color4F::GRAY);
+                //_shapeDraw->drawLine(_editPanelUI->_screenInterface->_currentPointerLoc, *bV, Color4F::GRAY);
             }
         }
         break;
@@ -229,17 +228,17 @@ void NewShapesDrawNode::drawVerts()
 
 void NewShapesDrawNode::drawSelectedVerts()
 {
-    std::vector<Vec2*>& points = _editPanelUI->selectedPoints;
-
-    for (auto point : points)
-    {
-        Vec2 v(*point);
-        _editPanelUI->oManager->spaceConv->applyT(&v);
-
-        _vertDraw->drawDot(v, 5, Color4F::GREEN);
-
-
-    }
+    //std::vector<Vec2*>& points = _editPanelUI->selectedPoints;
+    //
+    //for (auto point : points)
+    //{
+    //    Vec2 v(*point);
+    //    _editPanelUI->oManager->spaceConv->applyT(&v);
+    //
+    //    _vertDraw->drawDot(v, 5, Color4F::GREEN);
+    //
+    //
+    //}
 }
 
 //void NewShapesDrawNode::drawSelectionBox()
@@ -256,22 +255,22 @@ void NewShapesDrawNode::drawSelectedVerts()
 
 void NewShapesDrawNode::drawSelectionBox()
 {
-    Vec2* sP1 = _editPanelUI->_screenInterface->mouseSelectP1;
-    Vec2* sP2 = _editPanelUI->_screenInterface->mouseSelectP2;
-
-    if (sP1 && sP2)
-    {
-        Vec2 a = *sP1;
-        Vec2 b = *sP2;
-
-        //_editPanelUI->oManager->buffDelegate->applyNewInvTransform(&a);
-        //_editPanelUI->oManager->buffDelegate->applyNewInvTransform(&b);
-        _editPanelUI->oManager->spaceConv->applyT(&a);
-        _editPanelUI->oManager->spaceConv->applyT(&b);
-
-        _selectionDraw->drawRect(a, b, Color4F::GREEN);
-        _selectionDraw->drawSolidRect(a, b, Color4F(0, 1, 0, 0.40f));
-    }
+    //Vec2* sP1 = _editPanelUI->_screenInterface->mouseSelectP1;
+    //Vec2* sP2 = _editPanelUI->_screenInterface->mouseSelectP2;
+    //
+    //if (sP1 && sP2)
+    //{
+    //    Vec2 a = *sP1;
+    //    Vec2 b = *sP2;
+    //
+    //    //_editPanelUI->oManager->buffDelegate->applyNewInvTransform(&a);
+    //    //_editPanelUI->oManager->buffDelegate->applyNewInvTransform(&b);
+    //    _editPanelUI->oManager->spaceConv->applyT(&a);
+    //    _editPanelUI->oManager->spaceConv->applyT(&b);
+    //
+    //    _selectionDraw->drawRect(a, b, Color4F::GREEN);
+    //    _selectionDraw->drawSolidRect(a, b, Color4F(0, 1, 0, 0.40f));
+    //}
 }
 
 void NewShapesDrawNode::drawOrigin()

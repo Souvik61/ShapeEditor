@@ -23,12 +23,12 @@ bool EditorManager::init()
 
 void EditorManager::resetPointSpace()
 {
-	pointsNode->setPosition(editorUI->getWorldViewPortMidpoint());
+	//pointsNode->setPosition(editorUI->getWorldViewPortMidpoint());
 }
 
 void EditorManager::validateNearestPoint(const Vec2& pt)
 {
-    RigidBodyModel* model = editorUI->_rbManager->getSelectedModel();
+    RigidBodyModel* model = rbManager->getSelectedModel();
     if (model == nullptr) return;
 
     Vec2 p = pt;
@@ -90,7 +90,7 @@ void EditorManager::selectedPointsReplaceBy(Vec2* p)
 
 void EditorManager::selectPointsInMouseSelection()
 {
-    RigidBodyModel* model = editorUI->_rbManager->getSelectedModel();
+    RigidBodyModel* model = rbManager->getSelectedModel();
 
     //Not sure if its required
     selectedPoints.clear();
