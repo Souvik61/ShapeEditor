@@ -8,20 +8,20 @@ USING_NS_AX;
 //RbListController class
 //--------------------------------
 
-bool RbListControl::init()
+bool RbListController::init()
 {
     selectedEntryName = "";
 
     return true;
 }
 
-void RbListControl::onEnter()
+void RbListController::onEnter()
 {
     Node::onEnter();
    
 }
 
-void RbListControl::syncUIwithRbManager()
+void RbListController::syncUIwithRbManager()
 {
     rbUI->clearAllEntries();
 
@@ -31,9 +31,31 @@ void RbListControl::syncUIwithRbManager()
     }
 }
 
-void RbListControl::enableSpawnMode(bool en)
+void RbListController::enableSpawnMode(bool en)
 {
    
 }
 
+//----------
 //Events
+//----------
+
+//-------------------------------------
+//Callbacks from Rigidbodies Manager
+//-------------------------------------
+
+
+void RbListController::entryAddedCallback(std::string s)
+{
+    rbUI->addEntry(s);
+}
+
+void RbListController::entryDeletedCallback(std::string s)
+{
+    rbUI->deleteEntry(s);
+}
+
+void RbListController::entrySelectedCallback(std::string s)
+{
+    //////////////////////////////
+}

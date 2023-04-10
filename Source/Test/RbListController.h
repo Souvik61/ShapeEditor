@@ -9,7 +9,7 @@ class RigidBodiesManager;
 
 //Rigidbodies list controller
 //Responsible for syncing RbListUI and RigidbodyManager
-class RbListControl : public ax::Node
+class RbListController : public ax::Node
 {
 public:
 	std::string selectedEntryName;
@@ -19,7 +19,7 @@ public:
 
 	virtual bool init() override;
 	void onEnter() override;
-	CREATE_FUNC(RbListControl);
+	CREATE_FUNC(RbListController);
 
 	void syncUIwithRbManager();
 
@@ -29,6 +29,10 @@ public:
 	void addSpwnBtnListener(std::function<void(std::string)> callback);
 
 	//Events
+
+	void entryAddedCallback(std::string);
+	void entryDeletedCallback(std::string);
+	void entrySelectedCallback(std::string);
 
 };
 #endif//__RBLIST_CONTROL_H__

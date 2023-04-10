@@ -1,7 +1,6 @@
 #include "Test/EventManager.h"
 #include "Test/OverallManager.h"
 #include "Utils/FileDialogs.h"
-//#include "NewEditorPanelUI.h"
 #include "Test/UI/PlayTabLayout.h"
 #include "ShapesDrawNode.h"
 #include "NewShapesDrawNode.h"

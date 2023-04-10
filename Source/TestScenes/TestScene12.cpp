@@ -5,6 +5,7 @@
 #include "AppDelegate.h"
 #include "Test/OverallManager.h"
 #include "Test/NewShapesDrawNode.h"
+#include "Test/RbListController.h"
 //Box2d helpers
 #include "Phys/B2_WorldNode.h"
 #include "Phys/DebugDrawNode.h"
@@ -47,15 +48,21 @@ bool TestScene12::init()
 
     auto prjManager = new ProjectManager();
     auto rbManager = new RigidBodiesManager();
-    auto prjManager = new ProjectManager();
 
     _manager = new OverallManager();
     _manager->uiSystem = _uiSystem;
     _manager->prjManager = prjManager;
     _manager->rbManager = rbManager;
-    _manager->prjManager = prjManager;
     _manager->rbManager->setInputModuleUI(_uiSystem->editPanelUI);
     prjManager->jIOSystem->setOverallManager(_manager);
+
+    auto rBListCtrl = RbListController::create();
+    addChild(rBListCtrl);
+    rBListCtrl->rbMan = rbManager;
+    rBListCtrl->rbUI = _uiSystem->rbPanelUI;
+    _manager->rbManager->_onEntryAddedListenerList.push_back(CC_CALLBACK_1(RbListController::entryAddedCallback, rBListCtrl));
+    _manager->rbManager->onEntryDeletedListenerList.push_back(CC_CALLBACK_1(RbListController::entryDeletedCallback, rBListCtrl));
+    _manager->rbManager->onSelChangedListenerList.push_back(CC_CALLBACK_1(RbListController::entrySelectedCallback, rBListCtrl));
 
     //Add event manager
     auto eM = EventManager::create();
@@ -120,10 +127,6 @@ bool TestScene12::init()
 
     editPanelUI = _manager->uiSystem->editPanelUI;
 
-    //_manager->rbManager->_onEntryAddedListenerList.push_back(CC_CALLBACK_1(RBListControl::addEntryR, _rbListController));
-    //_manager->rbManager->onEntryDeletedListenerList.push_back(CC_CALLBACK_1(RBListControl::deleteEntryR, _rbListController));
-    //_manager->rbManager->onSelChangedListenerList.push_back(CC_CALLBACK_1(RBListControl::selectEntry, _rbListController));
-
 
     _uiSystem->rbPanelUI->_rbToolbarLayout->_onClickEventFromButtons = CC_CALLBACK_1(EventManager::onButtonPressFromRbPanel, _manager->eventManager);
     _manager->uiSystem->rbPanelUI->onAListingClicked = CC_CALLBACK_1(EventManager::onAListingClickedFromRbPanel, _manager->eventManager);
@@ -134,23 +137,6 @@ bool TestScene12::init()
 
     dynamic_cast<EditorPanelUI*>(_manager->uiSystem->editPanelUI)->playTab->pCtrlPanel->eOnButtonPress = CC_CALLBACK_1(EventManager::onPlayTabCtrlEvent, _manager->eventManager);
 
-    //Point Buffer(old)
-    {
-        PointBuffer* pointBuffer = new PointBuffer();
-        //Point Buffer Delegate
-        PointArrayDelegate* buffDelegate = new PointArrayDelegate();
-        buffDelegate->pBuffer = pointBuffer;//Set point buffer to delegate
-        _manager->buffDelegate = buffDelegate;
-
-        buffDelegate->center = _manager->uiSystem->editPanelUI->getWorldViewPortMidpoint();
-
-        buffDelegate->applyScale(1.f);
-
-
-        buffDelegate->screenOffset.set(Vec2(-buffDelegate->center.x, -buffDelegate->center.y));
-        buffDelegate->validateNewTransform();
-        shapeDraw1->pDelegate = buffDelegate;
-    }
     //Add new screen space translator
     {
         auto t = new SpaceConverter();
@@ -163,7 +149,6 @@ bool TestScene12::init()
         t->validateMatrices();
 
         _manager->spaceConv = t;
-
     }
 
     //Setup a new camera
