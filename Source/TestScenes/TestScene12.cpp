@@ -246,7 +246,7 @@ void TestScene12::addUISubsystem()
     //    rbUI->addEntry(std::to_string(i));
     //}
     ////rbUI->addEntry("Hello");
-    rbUI->addEntry("World");
+    //rbUI->addEntry("World");
 
     //Add Editorpanel
     auto editorUI = EditorPanelUI::create();
