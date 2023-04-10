@@ -14,7 +14,6 @@ public:
     ax::Vec2 origin;
     OverallManager* _manager;
     UISubsystem* _uiSystem;
-    EditorPanelUI* panelUI;
     ax::Camera* b2Cam;
     EditorPanelUI* editPanelUI;
 public:

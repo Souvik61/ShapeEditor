@@ -265,7 +265,7 @@ void TestScene12::addUISubsystem()
         Vec2 a(origin.x + 282, origin.y);
         a += Vec2(s.width / 2, s.height / 2);
         editorUI->setPosition(a);
-        panelUI = editorUI;
+        editPanelUI = editorUI;
     }
     //editorUI->setScale(0.9f);
 
@@ -275,8 +275,10 @@ void TestScene12::addUISubsystem()
     notif->setup(Vec2(visibleSize.width, visibleSize.height - 50));
 
     auto ui = UISubsystem::create();
+    ui->rbPanelUI = rbUI;
     ui->prjPanelUI = prjUI;
     ui->notifSys = notif;
+    ui->editPanelUI = editPanelUI;
     addChild(ui, 1, "ui_system");
     _uiSystem = ui;
 
@@ -298,7 +300,7 @@ void TestScene12::addB2DSystem()
     //Add box2d Manager
     auto bMan = new B2DManager();
     bMan->wN = wN;
-    panelUI->playTab->bManager = bMan;//Link box2d manager and playtab interface
+    editPanelUI->playTab->bManager = bMan;//Link box2d manager and playtab interface
     bMan->b2Cam = b2Cam;//Link camera
     _manager->b2dManager = bMan;
     bMan->oManager = _manager;

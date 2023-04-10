@@ -41,6 +41,9 @@ public:
 
 	//RBListControl* getRbListController() { return _rbListController; }
 	void addSpwnBtnListener(std::function<void(std::string)> callback);
+
+private:
+	void RigidbodiesPanelUI::onRbEntryClicked(ax::Ref* ref, ax::ui::Widget::TouchEventType touchType);
 };
 
 //Rigidbody tool bar layout class

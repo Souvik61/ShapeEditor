@@ -89,6 +89,7 @@ void RigidbodiesPanelUI::addOtherUIComponents()
     {
         toolBar->setupWithSize(Size(s1.width, 37));
         l->addChild(toolBar);//Add to layout
+        _rbToolbarLayout = toolBar;
     }
 
     //Add listview
@@ -140,7 +141,8 @@ void RigidbodiesPanelUI::addEntry(std::string name)
     auto a = _listView->getContentSize();
     Size s(a.width - 15, 40);
     entry->setup(s, name);
-    //entry->addTouchEventListener(CC_CALLBACK_2(RBListControl::onRbEntryClicked, this));
+    entry->setTouchEnabled(true);
+    entry->addTouchEventListener(CC_CALLBACK_2(RigidbodiesPanelUI::onRbEntryClicked, this));
     //entry->_spwnBtn->addTouchEventListener(CC_CALLBACK_2(RBListControl::onRbSpawnClicked, this));//Add spawn click listener
     _listView->pushBackCustomItem(entry);
 
@@ -170,6 +172,16 @@ void RigidbodiesPanelUI::deleteEntry(std::string n)
 
 void RigidbodiesPanelUI::addSpwnBtnListener(std::function<void(std::string)> callback)
 {
+}
+
+void RigidbodiesPanelUI::onRbEntryClicked(Ref* ref, Widget::TouchEventType touchType)
+{
+    if (touchType == Widget::TouchEventType::ENDED)
+    {
+        auto t = dynamic_cast<RbEntryLayout*>(ref);
+        if (onAListingClicked)
+            onAListingClicked(t->listingName);
+    }
 }
 
 //--------------------------------
