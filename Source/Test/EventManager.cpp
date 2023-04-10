@@ -147,7 +147,7 @@ void EventManager::onBtnPressedFromPrjPanel(std::string btnName)
 	{
 		onSaveBtnPressed();
 	}
-	else if (btnName == "ic_open")
+	else if (btnName == "ic_load")//"ic_open" is now "ic_load"
 	{
 		onLoadBtnPressed();
 	}
