@@ -1,6 +1,6 @@
 #include "RigidBodiesManager.h"
 #include "RigidBodyModel.h"
-#include "EditorPanelUI.h"
+#include "Test/UI/EditorPanelUI.h"
 #include "ShapeModel.h"
 
 
@@ -8,16 +8,6 @@ RigidBodiesManager::RigidBodiesManager() :_selectedModel(nullptr), selectedModel
 {
 
 }
-
-//RigidBodyModel* RigidBodiesManager::getModel(string name)
-//{
-//    for (auto it = _rbModels.begin();it != _rbModels.end(); it++)
-//    {
-//        if ((*it)->getName() == name)
-//            return *it;
-//    }
-//    return nullptr;
-//}
 
 RigidBodyModel* RigidBodiesManager::getModel(string name)
 {
@@ -46,7 +36,7 @@ void RigidBodiesManager::setInputModule(EditorPanel* panel)
 
 void RigidBodiesManager::setInputModuleUI(EditorPanelUI* panel)
 {
-    panel->setRigidBodyManager(this);
+    //panel->setRigidBodyManager(this);
     _editPanel = panel;
 }
 
