@@ -38,6 +38,7 @@ public:
 	//Entry related
 	void addEntry(std::string name);
 	void deleteEntry(std::string name);
+	void clearAllEntries();
 
 	//RBListControl* getRbListController() { return _rbListController; }
 	void addSpwnBtnListener(std::function<void(std::string)> callback);

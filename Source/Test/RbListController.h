@@ -11,12 +11,17 @@ class RigidBodiesManager;
 //Responsible for syncing RbListUI and RigidbodyManager
 class RbListControl : public ax::Node
 {
+public:
 	std::string selectedEntryName;
+	RigidbodiesPanelUI* rbUI;
+	RigidBodiesManager* rbMan;
 public:
 
 	virtual bool init() override;
 	void onEnter() override;
 	CREATE_FUNC(RbListControl);
+
+	void syncUIwithRbManager();
 
 	//In spawn mode all spawn buttons of rbentrylayout is enabled
 	void enableSpawnMode(bool en);

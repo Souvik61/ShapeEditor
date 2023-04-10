@@ -45,9 +45,17 @@ bool TestScene12::init()
 
     addUISubsystem();
 
+    auto prjManager = new ProjectManager();
+    auto rbManager = new RigidBodiesManager();
+    auto prjManager = new ProjectManager();
+
     _manager = new OverallManager();
     _manager->uiSystem = _uiSystem;
+    _manager->prjManager = prjManager;
+    _manager->rbManager = rbManager;
+    _manager->prjManager = prjManager;
     _manager->rbManager->setInputModuleUI(_uiSystem->editPanelUI);
+    prjManager->jIOSystem->setOverallManager(_manager);
 
     //Add event manager
     auto eM = EventManager::create();
@@ -120,7 +128,7 @@ bool TestScene12::init()
     _uiSystem->rbPanelUI->_rbToolbarLayout->_onClickEventFromButtons = CC_CALLBACK_1(EventManager::onButtonPressFromRbPanel, _manager->eventManager);
     _manager->uiSystem->rbPanelUI->onAListingClicked = CC_CALLBACK_1(EventManager::onAListingClickedFromRbPanel, _manager->eventManager);
 
-    _manager->uiSystem->prjPanelUI->onBtnPressedCallback = CC_CALLBACK_1(EventManager::onBtnPressedFromPrjPanel\, _manager->eventManager);
+    _manager->uiSystem->prjPanelUI->onBtnPressedCallback = CC_CALLBACK_1(EventManager::onBtnPressedFromPrjPanel, _manager->eventManager);
 
     _manager->uiSystem->rbPanelUI->addSpwnBtnListener(CC_CALLBACK_1(EventManager::onSpwnButtonFromRbPanel, _manager->eventManager));
 

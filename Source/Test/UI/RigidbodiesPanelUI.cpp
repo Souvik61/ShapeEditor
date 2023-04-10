@@ -170,6 +170,12 @@ void RigidbodiesPanelUI::deleteEntry(std::string n)
     }
 }
 
+void RigidbodiesPanelUI::clearAllEntries()
+{
+    _listView->removeAllItems();
+    _rbLayoutMap.clear();
+}
+
 void RigidbodiesPanelUI::addSpwnBtnListener(std::function<void(std::string)> callback)
 {
 }
