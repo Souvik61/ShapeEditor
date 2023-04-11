@@ -127,12 +127,9 @@ bool TestScene12::init()
 
     editPanelUI = _manager->uiSystem->editPanelUI;
 
-
     _uiSystem->rbPanelUI->_rbToolbarLayout->_onClickEventFromButtons = CC_CALLBACK_1(EventManager::onButtonPressFromRbPanel, _manager->eventManager);
     _manager->uiSystem->rbPanelUI->onAListingClicked = CC_CALLBACK_1(EventManager::onAListingClickedFromRbPanel, _manager->eventManager);
-
     _manager->uiSystem->prjPanelUI->onBtnPressedCallback = CC_CALLBACK_1(EventManager::onBtnPressedFromPrjPanel, _manager->eventManager);
-
     _manager->uiSystem->rbPanelUI->addSpwnBtnListener(CC_CALLBACK_1(EventManager::onSpwnButtonFromRbPanel, _manager->eventManager));
 
     dynamic_cast<EditorPanelUI*>(_manager->uiSystem->editPanelUI)->playTab->pCtrlPanel->eOnButtonPress = CC_CALLBACK_1(EventManager::onPlayTabCtrlEvent, _manager->eventManager);

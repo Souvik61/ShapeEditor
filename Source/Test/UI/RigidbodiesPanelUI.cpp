@@ -155,18 +155,24 @@ void RigidbodiesPanelUI::deleteEntry(std::string n)
     if (_rbLayoutMap.find(n) == _rbLayoutMap.end())
         return;
 
+    //Remove item layout from list
     auto a = _rbLayoutMap.at(n);
-    //_rbEntriesLayout->removeChild(a);
-    //_rbLayoutMap.erase(n);
+    _listView->removeItem(_listView->getIndex(a));
+}
 
-    if (_rbLayoutMap.size() == 0)
+void RigidbodiesPanelUI::selectEntry(std::string name)
+{
+    for (auto item : _rbLayoutMap)
     {
-        selectedEntryName = "";
-    }
-    if (selectedEntryName == n)
-    {
-        //selectEntry((*_rbLayoutMap.begin()).first);
-        selectedEntryName = "";
+        if (item.first == name)
+        {
+            item.second->setSelectedState(true);
+            selectedEntryName = name;
+        }
+        else
+        {
+            item.second->setSelectedState(false);
+        }
     }
 }
 
@@ -219,6 +225,7 @@ bool RbToolbarLayout::init()
         addChild(cmplxBtn, 0, "btn_add");
         cmplxBtn->setLayoutParameter(lp);
         _addRbBtn = cmplxBtn;
+        cmplxBtn->addTouchEventListener(CC_CALLBACK_2(RbToolbarLayout::onAButtonCallback, this));
     }
 
     //Add delete icon
@@ -230,6 +237,7 @@ bool RbToolbarLayout::init()
         cmplxBtn->setLayoutParameter(lp->clone());
         addChild(cmplxBtn, 0, "btn_del");
         _delRbBtn = cmplxBtn;
+        cmplxBtn->addTouchEventListener(CC_CALLBACK_2(RbToolbarLayout::onAButtonCallback, this));
     }
 
     //Add rename icon
@@ -240,6 +248,7 @@ bool RbToolbarLayout::init()
         cmplxBtn->setLayoutParameter(lp->clone());
         addChild(cmplxBtn, 0, "btn_ren");
         _renRbBtn = cmplxBtn;
+        cmplxBtn->addTouchEventListener(CC_CALLBACK_2(RbToolbarLayout::onAButtonCallback, this));
     }
 
     return true;
@@ -263,7 +272,6 @@ void RbToolbarLayout::onAButtonCallback(Ref* sender, Widget::TouchEventType t)
         }
     }
 }
-
 
 //----------------------
 //RBEntry layout class
@@ -349,4 +357,17 @@ void RbEntryLayout::enableFocusState(bool enable)
     //{
     //    _rbNameBannerLayout->setBackGroundColor(Color3B::WHITE);
     //}
+}
+
+void RbEntryLayout::setSelectedState(bool selected)
+{
+
+    if (selected)
+    {
+        setBackGroundImage("Sprites/newicons/round_purple_selected.png");
+    }
+    else
+    {
+        setBackGroundImage("Sprites/newicons/round_purple_sbright.png");
+    }
 }

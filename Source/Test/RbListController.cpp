@@ -57,5 +57,5 @@ void RbListController::entryDeletedCallback(std::string s)
 
 void RbListController::entrySelectedCallback(std::string s)
 {
-    //////////////////////////////
+    rbUI->selectEntry(s);
 }

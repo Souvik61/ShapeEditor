@@ -38,6 +38,7 @@ public:
 	//Entry related
 	void addEntry(std::string name);
 	void deleteEntry(std::string name);
+	void selectEntry(std::string name);
 	void clearAllEntries();
 
 	//RBListControl* getRbListController() { return _rbListController; }
@@ -76,6 +77,7 @@ private:
 	ax::ui::ImageView* _rbIcon;
 public:
 	int id;
+	bool isSelected;
 	ax::ui::Button* _spwnBtn;
 	std::string listingName;
 	CREATE_FUNC(RbEntryLayout);
@@ -85,6 +87,7 @@ public:
 	void setup(ax::Size size, std::string);
 
 	void enableFocusState(bool enable);
+	void setSelectedState(bool selected);
 	void enableSpawnBtn(bool en) { _spwnBtn->setVisible(en); }
 
 };
