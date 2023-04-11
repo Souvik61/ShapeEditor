@@ -5,13 +5,17 @@
 #include "../UtilityClasses.h"
 
 class EditorPanelUI;
+class EditorManager;
 
 //Input processor
+//Encapsulates logic that will occur when an editor input occurs
+//Different editor modes has different processors each inherits from this class
 class EditorInputProcessor
 {
-protected:
+public:
 	EditorPanelUI* _editorPanel;
-protected:
+	EditorManager* editManager;
+public:
 	virtual void onMouseUp(CustomMouseEvent);
 	virtual void onMouseMoved(CustomMouseEvent);
 	virtual void onMouseDown(CustomMouseEvent);
@@ -21,8 +25,7 @@ protected:
 	virtual void onKeyUp(cocos2d::EventKeyboard::KeyCode, cocos2d::Event*);
 public:
 	void setEditorPanel(EditorPanelUI* p) { _editorPanel = p; }
-
-	friend class EditorPanelUI;
+	void setEditorManager(EditorManager* man) { editManager = man; }
 };
 
 #endif // __EDITOR_INPUT_PROCESSOR_H__

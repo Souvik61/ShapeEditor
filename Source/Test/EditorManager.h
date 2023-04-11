@@ -10,6 +10,7 @@ class EditorPanelUI;
 class OverallManager;
 class EditorDraw;
 class RigidBodiesManager;
+class EditorInputProcessor;
 
 //Represents a mouse selection
 class MouseSelection
@@ -36,6 +37,7 @@ public:
 //Editor Manager
 //holds point buffers
 //Send data input processors
+//Encapsulate majority logic of editor window
 class EditorManager : public ax::Node
 {
 public:
@@ -44,6 +46,7 @@ public:
 	//Pointer to the nearest point
 	//It directly points to the rigidbody model's vertices array
 	ax::Vec2* nearestPoint;
+	ax::Vec2 prevMousePoint;
 
 	//Represents current mouse selection
 	//The points in screen space
@@ -54,8 +57,10 @@ public:
 	PointSpaceNode* pointsNode;
 	OverallManager* oManager;
 	RigidBodiesManager* rbManager; //Editor panel interacts with RigidbodyManger about touch coords.
-	
+	EditorInputProcessor* _currentInputProcessor;
 	EditorDraw* drawer;
+	EditorMode _mode;
+	EditorMode _prevMode;//Previous mode that active
 public:
 	virtual bool init();
 	//virtual void onEnter() override;
@@ -77,18 +82,37 @@ public:
 
 	//Selects(load into selectedPoints array) points that is in the BB of mouse selection
 	void selectPointsInMouseSelection();
-
 	void removeSelectedPoints();
-
 	bool isRemoveEnabled();
-
 	//Set nearest point that can close the shape ,set avail to false if none available 
 	void setNearestClosingPt(bool avail, const ax::Vec2&);
 
-	//Events
+	void setInputProcessor(EditorInputProcessor*);
+
+	//Do not use!
+	void changeMode();
+	//Change between NONE, EDIT, CREATE
+	void changeModeCycle();
+	//Change mode by passing in mode enum
+	void changeMode(EditorMode mode);
+	void changeModeDisabled();
+	//This function is useful transitioning from play tab
+	void changeToModeFromPlay();
 
 	void onChangeToPlayMode();
 	void onChangeFromPlayMode();
+
+	//Events
+
+	//Mouse Callbacks
+	virtual void onMouseUp(ax::EventMouse*);
+	virtual void onMouseMoved(ax::EventMouse*);
+	virtual void onMouseDown(ax::EventMouse*);
+	virtual void onMouseScroll(ax::EventMouse*);
+
+	//Keyboard callbacks
+	virtual void onKeyDown(cocos2d::EventKeyboard::KeyCode, cocos2d::Event*);
+	virtual void onKeyUp(cocos2d::EventKeyboard::KeyCode, cocos2d::Event*);
 
 public:
 	bool _hasNearClosePt;

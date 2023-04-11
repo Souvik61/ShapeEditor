@@ -8,7 +8,7 @@
 
 class OverallManager;
 //class EditorInputProcessor;
-//class EditorManager;
+class EditorManager;
 class EditorTabLayout;
 class PlayTabLayout;
 
@@ -26,7 +26,7 @@ public:
 	ax::EventListenerKeyboard* _listenerKey;
 	EditorScreenInterface* _screenInterface;
 	ax::Label* _modeLabel; //Label to display mode status
-
+	EditorManager* editManager;
 
 public:
 	

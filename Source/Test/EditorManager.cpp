@@ -6,8 +6,13 @@
 #include "Test/UI/EditorScreenInterface.h"
 #include "OverallManager.h"
 #include "draw/EditorDraw.h"
+#include "Test/input_processors/CreationInputProcessor.h"
+#include "Test/input_processors/EditorInputProcessor.h"
+#include "Test/input_processors/TestInputProcessor.h"
+#include "Test/input_processors/ViewInputProcessor.h"
+#include "Test/input_processors/EditionInputProcessorv3.h"
 
-USING_NS_CC;
+USING_NS_AX;
 
 // on "init" you need to initialize your instance
 bool EditorManager::init()
@@ -181,6 +186,189 @@ void EditorManager::setNearestClosingPt(bool avail,const ax::Vec2& v)
 //-------------------
 //Events
 //-------------------
+
+
+//------------------------
+//--Mouse Input functions
+//------------------------
+
+void EditorManager::onMouseUp(EventMouse* e)
+{
+    CustomMouseEvent mEve = { CustomMouseEvent::EventType::UP,e };
+    //_rbManager->onMouseInteractionFromEditor(mEve, _mode);
+
+    if (_currentInputProcessor)
+        _currentInputProcessor->onMouseUp(mEve); //Send event to input processor
+}
+
+void EditorManager::onMouseMoved(EventMouse* e)
+{
+    //_mousePointer->setOpacity(255);
+    //_mousePointer->setPosition(e->getLocationInView());
+
+    //Send event to rigidbodies manager
+    CustomMouseEvent mEve = { CustomMouseEvent::EventType::MOVED,e };
+    //_rbManager->onMouseInteractionFromEditor(mEve, _mode);
+
+    if (_currentInputProcessor)
+        _currentInputProcessor->onMouseMoved(mEve); //Send event to input processor
+    prevMousePoint = e->getLocationInView();
+}
+
+void EditorManager::onMouseDown(EventMouse* e)
+{
+    //Send event to rigidbodies manager
+    CustomMouseEvent mEve = { CustomMouseEvent::EventType::DOWN,e };
+    // _rbManager->onMouseInteractionFromEditor(mEve, _mode);
+
+    if (_currentInputProcessor)
+        _currentInputProcessor->onMouseDown(mEve); //Send event to input processor
+}
+
+void EditorManager::onMouseScroll(cocos2d::EventMouse* e)
+{
+    //Send event
+    CustomMouseEvent mEve = { CustomMouseEvent::EventType::MOVED,e };
+    //_rbManager->onMouseInteractionFromEditor(mEve, _mode);
+
+    //@todo again send this event to editor manager for proper processing
+    if (_currentInputProcessor)
+        _currentInputProcessor->onMouseScroll(mEve); //Send event to input processor
+}
+
+//---------------------------
+//--Keyboard Input functions
+//---------------------------
+
+void EditorManager::onKeyDown(EventKeyboard::KeyCode k, Event* e)
+{
+    if (k == EventKeyboard::KeyCode::KEY_M)
+    {
+        //changeMode();
+        changeModeCycle();
+    }
+    else if (k == EventKeyboard::KeyCode::KEY_DELETE)//Why is this here? change it
+    {
+        removeSelectedPoints();
+    }
+}
+
+void EditorManager::onKeyUp(EventKeyboard::KeyCode, Event*)
+{
+}
+
+//-------------------
+//Others
+//-------------------
+
+void EditorManager::setInputProcessor(EditorInputProcessor* p)
+{
+    _currentInputProcessor = p;
+    //_currentInputProcessor->setEditorPanel(this);
+    _currentInputProcessor->setEditorManager(this);
+}
+
+void EditorManager::changeMode()
+{
+    //CC_SAFE_DELETE(_currentInputProcessor);
+    //
+    //_mode = EditorMode((_mode + 1) % 3);
+    //_mode = EditorMode((_mode == 0) ? 1 : _mode);
+    //
+    //switch (_mode)
+    //{
+    //case VIEW:
+    //    break;
+    //case CREATE:
+    //{
+    //    auto p = new CreationInputProcessor();
+    //    setInputProcessor(p);
+    //    _modeLabel->setString("Mode: Create");
+    //}break;
+    //case EDIT:
+    //{
+    //    auto p = new NewEditionInputProcessor();
+    //    setInputProcessor(p);
+    //    _modeLabel->setString("Mode: Edit");
+    //}   break;
+    //case TEST:
+    //{
+    //    _modeLabel->setString("Mode: Test");
+    //}   break;
+    //default:
+    //    break;
+    //}
+}
+
+void EditorManager::changeModeCycle()
+{
+    auto mode = EditorMode((_mode + 1) % 3);
+    //_mode = EditorMode((_mode == 0) ? 1 : _mode);
+
+    changeMode(mode);
+}
+
+void EditorManager::changeMode(EditorMode mode)
+{
+    _prevMode = _mode;
+    CC_SAFE_DELETE(_currentInputProcessor);
+
+    _mode = mode;
+    switch (mode)
+    {
+    case VIEW:
+    {
+        auto p = new  ViewInputProcessor();
+        setInputProcessor(p);
+        //_modeLabel->setString("Mode: View");
+        editorUI->changeModeUI(EditorMode::VIEW);
+    }
+    break;
+    case CREATE:
+    {
+        auto p = new CreationInputProcessor();
+        setInputProcessor(p);
+        //_modeLabel->setString("Mode: Create");
+        editorUI->changeModeUI(EditorMode::CREATE);
+    }
+    break;
+    case EDIT:
+    {
+        //auto p = new NewEditionInputProcessor();
+        auto p = new EditionInputProcessorv3();
+        setInputProcessor(p);
+        //_modeLabel->setString("Mode: Edit");
+        editorUI->changeModeUI(EditorMode::EDIT);
+    }   
+    break;
+    case TEST:
+    {
+        auto p = new TestInputProcessor();
+        p->init(oManager->b2dManager);
+        setInputProcessor(p);
+        //_modeLabel->setString("Mode: Test");
+        editorUI->changeModeUI(EditorMode::VIEW);
+    }
+    break;
+    default:
+        break;
+    }
+}
+
+void EditorManager::changeModeDisabled()
+{
+    _mode = EditorMode::VIEW;
+    CC_SAFE_DELETE(_currentInputProcessor);
+
+    auto p = new EditorInputProcessor();
+    setInputProcessor(p);
+
+}
+
+void EditorManager::changeToModeFromPlay()
+{
+    changeMode(_prevMode);
+}
 
 void EditorManager::onChangeToPlayMode()
 {

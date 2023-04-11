@@ -3,6 +3,7 @@
 #include "EditorTabLayout.h"
 #include "PlayTabLayout.h"
 #include "Utils/Helpers.h"
+#include "Test/EditorManager.h"
 
 USING_NS_AX;
 USING_NS_AX::ui;
@@ -175,6 +176,8 @@ void EditorPanelUI::onMouseDown(cocos2d::EventMouse* em)
 
         CustomMouseEvent mEve = { CustomMouseEvent::EventType::DOWN,em };
         //Do something
+
+        editManager->onMouseDown(em);
         
     }
 }
@@ -187,20 +190,12 @@ void EditorPanelUI::onMouseMoved(EventMouse* em)
 
     if (rect.containsPoint(locationInNode))
     {
-        _mousePointer->setOpacity(255);
-        _mousePointer->setPosition(em->getLocationInView());
-
-        //Send event to rigidbodies manager
-        CustomMouseEvent mEve = { CustomMouseEvent::EventType::MOVED,em };
-
         //if (_currentInputProcessor)
         //    _currentInputProcessor->onMouseMoved(mEve); //Send event to input processor
+
+        editManager->onMouseMoved(em);
+
     }
-    else
-    {
-        _mousePointer->setOpacity(0);
-    }
-    //prevMousePoint = em->getLocationInView();
 }
 
 void EditorPanelUI::onMouseUp(EventMouse* e)
@@ -211,11 +206,12 @@ void EditorPanelUI::onMouseUp(EventMouse* e)
 
     if (rect.containsPoint(locationInNode))
     {
-        CustomMouseEvent mEve = { CustomMouseEvent::EventType::UP,e };
         //_rbManager->onMouseInteractionFromEditor(mEve, _mode);
 
         //if (_currentInputProcessor)
         //    _currentInputProcessor->onMouseUp(mEve); //Send event to input processor
+        
+        editManager->onMouseUp(e);
     }
 }
 
@@ -228,11 +224,12 @@ void EditorPanelUI::onMouseScroll(cocos2d::EventMouse* e)
     if (rect.containsPoint(locationInNode))
     {
         //Send event
-        CustomMouseEvent mEve = { CustomMouseEvent::EventType::MOVED,e };
 
         //@todo again send this event to editor manager for proper processing
         //if (_currentInputProcessor)
         //    _currentInputProcessor->onMouseScroll(mEve); //Send event to input processor
+
+        editManager->onMouseScroll(e);
     }
 }
 
@@ -250,12 +247,17 @@ void EditorPanelUI::onKeyDown(cocos2d::EventKeyboard::KeyCode k, cocos2d::Event*
     //{
     //    changeModeCycle();
     //}
+
+    editManager->onKeyDown(k, e);
 }
 
 void EditorPanelUI::onKeyUp(cocos2d::EventKeyboard::KeyCode k, cocos2d::Event* e)
 {
     //if (_currentInputProcessor)
     //    _currentInputProcessor->onKeyUp(k, e); //Send event to input processor
+    
+    editManager->onKeyUp(k, e);
+
 }
 
 //-----------------

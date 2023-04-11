@@ -6,6 +6,7 @@
 #include "Test/OverallManager.h"
 #include "Test/NewShapesDrawNode.h"
 #include "Test/RbListController.h"
+#include "Test/draw/EditorDraw.h"
 //Box2d helpers
 #include "Phys/B2_WorldNode.h"
 #include "Phys/DebugDrawNode.h"
@@ -112,13 +113,13 @@ bool TestScene12::init()
         addChild(editM);
 
         //New Editor draw
-        //auto eDraw = EditorDraw::create();
-        //addChild(eDraw, 1);
-        //eDraw->editManager = editM;
-        //editM->drawer = eDraw;
+        auto eDraw = EditorDraw::create();
+        addChild(eDraw, 1);
+        eDraw->editManager = editM;
+        editM->drawer = eDraw;
 
         _manager->editSystem = editM;
-        //_manager->uiSystem->editPanelUI->editorManager = editM;
+        _manager->uiSystem->editPanelUI->editManager = editM;
         _manager->uiSystem->editPanelUI->oManager = _manager;
         editM->oManager = _manager;
     }
