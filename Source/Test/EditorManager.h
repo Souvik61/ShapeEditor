@@ -35,6 +35,7 @@ public:
 
 //Editor Manager
 //holds point buffers
+//Send data input processors
 class EditorManager : public ax::Node
 {
 public:
@@ -52,7 +53,7 @@ public:
 	EditorPanelUI* editorUI;
 	PointSpaceNode* pointsNode;
 	OverallManager* oManager;
-	RigidBodiesManager* rbManager;
+	RigidBodiesManager* rbManager; //Editor panel interacts with RigidbodyManger about touch coords.
 	
 	EditorDraw* drawer;
 public:
