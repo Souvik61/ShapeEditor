@@ -36,19 +36,19 @@ void ViewInputProcessor::processPanning(CustomMouseEvent e)
 {
     if (_editorPanel->_screenInterface->isRMBPressed())
     {
-        //auto pN = _editorPanel->editorManager->pointsNode;
-        //Vec2 delta = e.mEvent->getLocationInView() - _editorPanel->prevMousePoint;
-        //
-        //float sc = _editorPanel->oManager->spaceConv->scale;
-        //
+        auto pN = editManager->pointsNode;
+        Vec2 delta = e.mEvent->getLocationInView() - editManager->prevMousePoint;
+        
+        float sc = _editorPanel->oManager->spaceConv->scale;
+        
         //pN->setPosition(pN->getPosition() + delta);
         //_editorPanel->oManager->buffDelegate->addOffset(delta);
         //_editorPanel->oManager->buffDelegate->refreshMat();
         //_editorPanel->oManager->buffDelegate->validateNewTransform();
-        //
-        ////New!
-        //_editorPanel->oManager->spaceConv->addOffset(delta * (1 / sc));
-        //_editorPanel->oManager->spaceConv->validateMatrices();
+        
+        //New!
+        _editorPanel->oManager->spaceConv->addOffset(delta * (1 / sc));
+        _editorPanel->oManager->spaceConv->validateMatrices();
     }
 }
 
@@ -59,9 +59,9 @@ void ViewInputProcessor::processZooming(CustomMouseEvent e)
     sc = max(0.1f, sc);
     sc = min(10.0f, sc);
 
-    _editorPanel->oManager->buffDelegate->applyScale(sc);
-    _editorPanel->oManager->buffDelegate->refreshMat();
-    _editorPanel->oManager->buffDelegate->validateNewTransform();
+    //_editorPanel->oManager->buffDelegate->applyScale(sc);
+    //_editorPanel->oManager->buffDelegate->refreshMat();
+    //_editorPanel->oManager->buffDelegate->validateNewTransform();
 
     //New!
     _editorPanel->oManager->spaceConv->applyScale(sc);

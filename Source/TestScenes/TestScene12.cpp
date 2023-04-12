@@ -107,7 +107,6 @@ bool TestScene12::init()
 
     //Editor manager
     {
-
         auto editM = EditorManager::create();
         editM->editorUI = _manager->uiSystem->editPanelUI;
         addChild(editM);
@@ -122,6 +121,10 @@ bool TestScene12::init()
         _manager->uiSystem->editPanelUI->editManager = editM;
         _manager->uiSystem->editPanelUI->oManager = _manager;
         editM->oManager = _manager;
+        editM->rbManager = rbManager;
+
+        //Set initial mode to view
+        editM->changeMode(EditorMode::VIEW);
     }
 
     //Linkages

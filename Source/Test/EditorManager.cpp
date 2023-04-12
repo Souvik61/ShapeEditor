@@ -23,6 +23,9 @@ bool EditorManager::init()
     nearestPoint = nullptr;
     _hasNearClosePt = false;
 	
+    //Initially change mode to view
+    //changeMode(EditorMode::VIEW);
+
 	return true;
 }
 
@@ -264,7 +267,7 @@ void EditorManager::onKeyUp(EventKeyboard::KeyCode, Event*)
 void EditorManager::setInputProcessor(EditorInputProcessor* p)
 {
     _currentInputProcessor = p;
-    //_currentInputProcessor->setEditorPanel(this);
+    _currentInputProcessor->setEditorPanel(editorUI);
     _currentInputProcessor->setEditorManager(this);
 }
 
