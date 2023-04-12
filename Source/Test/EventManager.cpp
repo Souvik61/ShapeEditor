@@ -6,7 +6,7 @@
 #include "NewShapesDrawNode.h"
 #include "AppDelegate.h"
 #include "StateTracker.h"
-#include "EditorManager.h"
+#include "Test/EditorManager.h"
 
 //------------------------
 //Event Manager
@@ -230,17 +230,14 @@ void EventManager::onRenameCancelBtnPress()
 
 void EventManager::onTabChanged(int index)
 {
-	if (index == 1) { //Change to play tab
-	
-		//oManager->uiSystem->editPanelUI->changeModeDisabled();//Disable editor panel
-		
+	if (index == 1) //Change to play tab
+	{
 		oManager->uiSystem->editPanelUI->changeModeUI(EditorMode::TEST);//Disable editor panel
 
 		//((NewShapesDrawNode*)oManager->uiSystem->editPanelUI->_drawNode)->pauseDrawing(true);//Pause drawing
 		oManager->editSystem->onChangeToPlayMode();
-
 		oManager->b2dManager->activateWorld();
-		
+
 		//Need to see this!!!!!!!!!!!!!!!!!!!!!
 		//oManager->uiSystem->rbPanelUI->_rbListController->enableSpawnMode(true);
 
@@ -248,19 +245,18 @@ void EventManager::onTabChanged(int index)
 		oManager->backGrid->setVisible(false);
 
 	}
-	else { //Change to edit tab
-	
+	else
+	{ //Change to edit tab
+
 		oManager->b2dManager->deactivateWorld();
-		
 
 		//((NewShapesDrawNode*)oManager->uiSystem->editPanelUI->_drawNode)->pauseDrawing(false);//Resume drawing
 		oManager->editSystem->onChangeFromPlayMode();
 
 		oManager->uiSystem->editPanelUI->changeToModeFromPlay();//Enable Editor panel
 
-		//Need to see this!!!!!!!!!!!!!!!!!!!!!
 		//oManager->uiSystem->rbPanelUI->_rbListController->enableSpawnMode(false);
-
+		
 		//Patch!!
 		oManager->backGrid->setVisible(true);
 

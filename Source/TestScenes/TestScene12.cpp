@@ -123,6 +123,10 @@ bool TestScene12::init()
         editM->oManager = _manager;
         editM->rbManager = rbManager;
 
+        //Link tab changed event to Event manager
+        //This is awkward
+        _manager->uiSystem->editPanelUI->OnTabChanged = AX_CALLBACK_1(EventManager::onTabChanged, eM);
+
         //Set initial mode to view
         editM->changeMode(EditorMode::VIEW);
     }

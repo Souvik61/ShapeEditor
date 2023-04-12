@@ -159,6 +159,8 @@ void EditorPanelUI::initWithManager(OverallManager* manager)
 void EditorPanelUI::onTabChanged(int t, TabControl::EventType)
 {
     //oManager->eventManager->onTabChanged(t);//Invoke event
+    if (OnTabChanged)
+        OnTabChanged(t);
 }
 
 //-----------------

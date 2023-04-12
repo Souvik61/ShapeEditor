@@ -16,6 +16,9 @@ class PlayTabLayout;
 class EditorPanelUI : public ax::Node
 {
 public:
+	//Callbacks
+	std::function<void(int)> OnTabChanged;
+public:
 	EditorMode mode;
 	OverallManager* oManager;
 	PlayTabLayout* playTab;
