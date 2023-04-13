@@ -373,6 +373,7 @@ void EditorManager::changeToModeFromPlay()
     changeMode(_prevMode);
 }
 
+//Call this function intelligently
 void EditorManager::onChangeToPlayMode()
 {
     drawer->pauseDrawing(true);

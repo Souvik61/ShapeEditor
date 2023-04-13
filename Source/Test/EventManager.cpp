@@ -232,7 +232,8 @@ void EventManager::onTabChanged(int index)
 {
 	if (index == 1) //Change to play tab
 	{
-		oManager->uiSystem->editPanelUI->changeModeUI(EditorMode::TEST);//Disable editor panel
+		//oManager->uiSystem->editPanelUI->changeModeUI(EditorMode::TEST);//Disable editor panel
+		oManager->editSystem->changeMode(EditorMode::TEST);//Disable editor panel
 
 		//((NewShapesDrawNode*)oManager->uiSystem->editPanelUI->_drawNode)->pauseDrawing(true);//Pause drawing
 		oManager->editSystem->onChangeToPlayMode();
@@ -253,7 +254,7 @@ void EventManager::onTabChanged(int index)
 		//((NewShapesDrawNode*)oManager->uiSystem->editPanelUI->_drawNode)->pauseDrawing(false);//Resume drawing
 		oManager->editSystem->onChangeFromPlayMode();
 
-		oManager->uiSystem->editPanelUI->changeToModeFromPlay();//Enable Editor panel
+		//oManager->uiSystem->editPanelUI->changeToModeFromPlay();//Enable Editor panel
 
 		//oManager->uiSystem->rbPanelUI->_rbListController->enableSpawnMode(false);
 		
