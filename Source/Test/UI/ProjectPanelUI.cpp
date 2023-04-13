@@ -132,6 +132,7 @@ void ProjectPanelUI::addOtherUIComponents()
         cmplxBtn->setContentSize(Size(63, 30));
         cmplxBtn->setup("Sprites/newicons/ic_ques.png", "Help");
         _windowLayout->addChild(cmplxBtn, 0, "ic_help");
+        cmplxBtn->addTouchEventListener(CC_CALLBACK_2(ProjectPanelUI::onButtonClicked, this));
         cmplxBtn->icon->setScale(0.23f);
 
         float x = _windowLayout->getContentSize().width - 31.5 - 10;
