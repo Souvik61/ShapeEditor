@@ -236,7 +236,7 @@ void EventManager::onTabChanged(int index)
 		oManager->editSystem->changeMode(EditorMode::TEST);//Disable editor panel
 
 		//((NewShapesDrawNode*)oManager->uiSystem->editPanelUI->_drawNode)->pauseDrawing(true);//Pause drawing
-		oManager->editSystem->onChangeToPlayMode();
+		oManager->editSystem->changeToPlayMode();
 		oManager->b2dManager->activateWorld();
 
 		//Need to see this!!!!!!!!!!!!!!!!!!!!!
@@ -252,7 +252,7 @@ void EventManager::onTabChanged(int index)
 		oManager->b2dManager->deactivateWorld();
 
 		//((NewShapesDrawNode*)oManager->uiSystem->editPanelUI->_drawNode)->pauseDrawing(false);//Resume drawing
-		oManager->editSystem->onChangeFromPlayMode();
+		oManager->editSystem->changeFromPlayMode();
 
 		//oManager->uiSystem->editPanelUI->changeToModeFromPlay();//Enable Editor panel
 

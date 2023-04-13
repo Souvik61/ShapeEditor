@@ -97,9 +97,11 @@ public:
 	void changeMode(EditorMode mode);
 	void changeModeDisabled();
 	//This function is useful transitioning from play tab
-	void changeToModeFromPlay();
+	//void changeToModeFromPlay();
+	//This function is useful transitioning from play tab
+	void changeFromPlayMode();
 
-	void onChangeToPlayMode();
+	void changeToPlayMode();
 	void onChangeFromPlayMode();
 
 	//Events

@@ -368,18 +368,14 @@ void EditorManager::changeModeDisabled()
 
 }
 
-void EditorManager::changeToModeFromPlay()
+void EditorManager::changeFromPlayMode()
 {
     changeMode(_prevMode);
+    drawer->pauseDrawing(false);
 }
 
 //Call this function intelligently
-void EditorManager::onChangeToPlayMode()
+void EditorManager::changeToPlayMode()
 {
     drawer->pauseDrawing(true);
-}
-
-void EditorManager::onChangeFromPlayMode()
-{
-    drawer->pauseDrawing(false);
 }
