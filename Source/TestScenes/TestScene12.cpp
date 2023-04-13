@@ -89,13 +89,6 @@ bool TestScene12::init()
     auto shapeDraw1 = NewShapesDrawNode::create();
     //Add shape draw node
     {
-        auto shapeDraw = ShapesDrawNode::create();
-        shapeDraw->setRbManager(_manager->rbManager);
-        shapeDraw->setEditorPanel(_manager->uiSystem->editPanelUI);
-        //_manager->uiSystem->editPanelUI->setDrawNode(shapeDraw);
-        addChild(shapeDraw, 9);
-        shapeDraw->setVisible(false);
-
         shapeDraw1->setRbManager(_manager->rbManager);
         shapeDraw1->setEditorPanel(_manager->uiSystem->editPanelUI);
         addChild(shapeDraw1, 9);
