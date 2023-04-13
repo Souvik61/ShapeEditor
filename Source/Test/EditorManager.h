@@ -11,6 +11,7 @@ class OverallManager;
 class EditorDraw;
 class RigidBodiesManager;
 class EditorInputProcessor;
+class NewShapesDrawNode;
 
 //Represents a mouse selection
 class MouseSelection
@@ -61,6 +62,7 @@ public:
 	EditorDraw* drawer;
 	EditorMode _mode;
 	EditorMode _prevMode;//Previous mode that active
+	NewShapesDrawNode* auxDrawer;//auxilary draw node
 public:
 	virtual bool init();
 	//virtual void onEnter() override;

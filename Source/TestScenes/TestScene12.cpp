@@ -103,6 +103,7 @@ bool TestScene12::init()
         auto editM = EditorManager::create();
         editM->editorUI = _manager->uiSystem->editPanelUI;
         addChild(editM);
+        editM->auxDrawer = shapeDraw1;
 
         //New Editor draw
         auto eDraw = EditorDraw::create();
