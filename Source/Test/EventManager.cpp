@@ -7,6 +7,7 @@
 #include "AppDelegate.h"
 #include "StateTracker.h"
 #include "Test/EditorManager.h"
+#include "Test/RbListController.h"
 
 //------------------------
 //Event Manager
@@ -240,7 +241,7 @@ void EventManager::onTabChanged(int index)
 		oManager->b2dManager->activateWorld();
 
 		//Need to see this!!!!!!!!!!!!!!!!!!!!!
-		//oManager->uiSystem->rbPanelUI->_rbListController->enableSpawnMode(true);
+		oManager->uiSystem->rbPanelUI->rbListController->enableSpawnMode(true);
 
 		//Patch!!
 		oManager->backGrid->setVisible(false);
@@ -256,7 +257,7 @@ void EventManager::onTabChanged(int index)
 
 		//oManager->uiSystem->editPanelUI->changeToModeFromPlay();//Enable Editor panel
 
-		//oManager->uiSystem->rbPanelUI->_rbListController->enableSpawnMode(false);
+		oManager->uiSystem->rbPanelUI->rbListController->enableSpawnMode(false);
 		
 		//Patch!!
 		oManager->backGrid->setVisible(true);

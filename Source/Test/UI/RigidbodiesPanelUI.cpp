@@ -2,6 +2,7 @@
 #include "Utils/Helpers.h"
 #include "RigidbodiesPanelUI.h"
 #include "Test/UI/CustomUI.h"
+#include "Test/RbListController.h"
 
 USING_NS_CC;
 USING_NS_CC::ui;
@@ -114,7 +115,7 @@ ax::ui::ListView* RigidbodiesPanelUI::createTheListView(ax::Size s)
     // set list view ex direction
     _listView->setDirection(ui::ScrollView::Direction::VERTICAL);
     _listView->setBounceEnabled(true);
-    _listView->setBackGroundImage("Sprites/newicons/round_purple_disabled.png");
+    _listView->setBackGroundImage("Sprites/newicons/round_purple_cornered.png");
     _listView->setBackGroundImageScale9Enabled(true);
     _listView->setBackGroundImageCapInsets(Rect(16, 16, 32, 32));
     //_listView->setBackGroundColor(Color3B(63, 167, 170));
@@ -143,7 +144,7 @@ void RigidbodiesPanelUI::addEntry(std::string name)
     entry->setup(s, name);
     entry->setTouchEnabled(true);
     entry->addTouchEventListener(CC_CALLBACK_2(RigidbodiesPanelUI::onRbEntryClicked, this));
-    //entry->_spwnBtn->addTouchEventListener(CC_CALLBACK_2(RBListControl::onRbSpawnClicked, this));//Add spawn click listener
+    entry->_spwnBtn->addTouchEventListener(CC_CALLBACK_2(RbListController::rbSpawnCallback, rbListController));//Add spawn click listener
     _listView->pushBackCustomItem(entry);
 
     _rbLayoutMap[name] = entry;
@@ -186,6 +187,15 @@ void RigidbodiesPanelUI::addSpwnBtnListener(std::function<void(std::string)> cal
 {
 }
 
+void RigidbodiesPanelUI::enableSpawnModeUI(bool en)
+{
+    //Traverse all layouts and set spawn btn to hidden
+    for (auto i = _rbLayoutMap.begin(); i != _rbLayoutMap.end(); i++) {
+
+        i->second->enableSpawnBtn(en);
+    }
+}
+
 void RigidbodiesPanelUI::onRbEntryClicked(Ref* ref, Widget::TouchEventType touchType)
 {
     if (touchType == Widget::TouchEventType::ENDED)
@@ -207,7 +217,7 @@ bool RbToolbarLayout::init()
 
     setAnchorPoint(Vec2::ANCHOR_MIDDLE);
     setLayoutType(Layout::Type::HORIZONTAL);
-    setBackGroundImage("Sprites/newicons/round_purple_dark.png");
+    setBackGroundImage("Sprites/newicons/round_purple_cornered1.png");
     setBackGroundImageScale9Enabled(true);
     setBackGroundImageCapInsets(Rect(16, 16, 32, 32));
     setBackGroundColor(Color3B(86, 0, 232));
@@ -317,10 +327,24 @@ bool RbEntryLayout::init()
 
     //Add spawnbutton
     {
-        _spwnBtn = Button::create("Sprites/icons/ic_add.png");
-        _spwnBtn->setUserData((void*)this);//set buttons user pointer to this layout
-        addChild(_spwnBtn, 1);
+        //_spwnBtn = Button::create("Sprites/newicons/round_purple.png");
+        //_spwnBtn->setScale9Enabled(true);
+        //_spwnBtn->setCapInsets(Rect(16, 16, 32, 32));
+        //_spwnBtn->setTitleText("Spawn");
+        //_spwnBtn->setUserData((void*)this);//set buttons user pointer to this layout
+        //_spwnBtn->setContentSize(Vec2(63, 27));
+        //addChild(_spwnBtn, 1);
+        //_spwnBtn->setVisible(false);
+
+        auto cmplxBtn = ComplexButton1::create();
+        cmplxBtn->setContentSize(Size(75, 27));
+        cmplxBtn->setup("Sprites/newicons/ic_exitRight.png", "Spawn");
+        cmplxBtn->icon->setScale(0.23f);
+        addChild(cmplxBtn, 0);
+        _spwnBtn = cmplxBtn;
         _spwnBtn->setVisible(false);
+        _spwnBtn->setUserData((void*)this);//set buttons user pointer to this layout
+
     }
 
     return true;
@@ -345,23 +369,14 @@ void RbEntryLayout::setup(Size size, std::string name)
         _bodyNameText->setPosition(Vec2(100, 20));
         _bodyNameText->setString(name);
     }
-}
 
-void RbEntryLayout::enableFocusState(bool enable)
-{
-    //if (enable)
-    //{
-    //    _rbNameBannerLayout->setBackGroundColor(Color3B(74, 171, 191));
-    //}
-    //else
-    //{
-    //    _rbNameBannerLayout->setBackGroundColor(Color3B::WHITE);
-    //}
+    {
+        _spwnBtn->setPosition(Vec2(s.width - 50, s.height / 2));
+    }
 }
 
 void RbEntryLayout::setSelectedState(bool selected)
 {
-
     if (selected)
     {
         setBackGroundImage("Sprites/newicons/round_purple_selected.png");

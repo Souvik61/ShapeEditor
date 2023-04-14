@@ -18,7 +18,6 @@ bool RbListController::init()
 void RbListController::onEnter()
 {
     Node::onEnter();
-   
 }
 
 void RbListController::syncUIwithRbManager()
@@ -33,7 +32,25 @@ void RbListController::syncUIwithRbManager()
 
 void RbListController::enableSpawnMode(bool en)
 {
-   
+    //Enable spawn mode for UI
+    rbUI->enableSpawnModeUI(en);
+}
+
+void RbListController::addSpwnBtnListener(std::function<void(std::string)> callback)
+{
+    OnASpawnClicked = callback;
+}
+
+void RbListController::rbSpawnCallback(Ref* ref, ui::Widget::TouchEventType touchType)
+{
+    if (touchType == ui::Widget::TouchEventType::ENDED)
+    {
+        auto t = dynamic_cast<ui::Button*>(ref);
+        auto t1 = static_cast<RbEntryLayout*>(t->getUserData());
+        //t->removeFromParent();
+        if (OnASpawnClicked)
+            OnASpawnClicked(t1->listingName);
+    }
 }
 
 //----------

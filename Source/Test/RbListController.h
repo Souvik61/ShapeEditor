@@ -29,10 +29,14 @@ public:
 	void addSpwnBtnListener(std::function<void(std::string)> callback);
 
 	//Events
+	void rbSpawnCallback(ax::Ref* ref, ax::ui::Widget::TouchEventType touchType);
 
 	void entryAddedCallback(std::string);
 	void entryDeletedCallback(std::string);
 	void entrySelectedCallback(std::string);
+
+private:
+	std::function<void(std::string)> OnASpawnClicked;
 
 };
 #endif//__RBLIST_CONTROL_H__

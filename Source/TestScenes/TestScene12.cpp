@@ -61,6 +61,7 @@ bool TestScene12::init()
     addChild(rBListCtrl);
     rBListCtrl->rbMan = rbManager;
     rBListCtrl->rbUI = _uiSystem->rbPanelUI;
+    _uiSystem->rbPanelUI->rbListController = rBListCtrl;//rbPanelUI with list controller
     _manager->rbManager->_onEntryAddedListenerList.push_back(CC_CALLBACK_1(RbListController::entryAddedCallback, rBListCtrl));
     _manager->rbManager->onEntryDeletedListenerList.push_back(CC_CALLBACK_1(RbListController::entryDeletedCallback, rBListCtrl));
     _manager->rbManager->onSelChangedListenerList.push_back(CC_CALLBACK_1(RbListController::entrySelectedCallback, rBListCtrl));
@@ -132,7 +133,7 @@ bool TestScene12::init()
     _uiSystem->rbPanelUI->_rbToolbarLayout->_onClickEventFromButtons = CC_CALLBACK_1(EventManager::onButtonPressFromRbPanel, _manager->eventManager);
     _manager->uiSystem->rbPanelUI->onAListingClicked = CC_CALLBACK_1(EventManager::onAListingClickedFromRbPanel, _manager->eventManager);
     _manager->uiSystem->prjPanelUI->onBtnPressedCallback = CC_CALLBACK_1(EventManager::onBtnPressedFromPrjPanel, _manager->eventManager);
-    _manager->uiSystem->rbPanelUI->addSpwnBtnListener(CC_CALLBACK_1(EventManager::onSpwnButtonFromRbPanel, _manager->eventManager));
+    rBListCtrl->addSpwnBtnListener(CC_CALLBACK_1(EventManager::onSpwnButtonFromRbPanel, _manager->eventManager));
 
     dynamic_cast<EditorPanelUI*>(_manager->uiSystem->editPanelUI)->playTab->pCtrlPanel->eOnButtonPress = CC_CALLBACK_1(EventManager::onPlayTabCtrlEvent, _manager->eventManager);
 

@@ -8,6 +8,7 @@
 
 class RbToolbarLayout;
 class RbEntryLayout;
+class RbListController;
 
 //Encapsulates whole UI logic of Rigidbodies panel
 class RigidbodiesPanelUI : public ax::Node
@@ -18,7 +19,7 @@ public:
 public:
 	ax::ui::ListView* _listView;
 	cocos2d::ui::Layout* _windowLayout;
-	//RBListControl* _rbListController;
+	RbListController* rbListController;
 	RbToolbarLayout* _rbToolbarLayout;
 
 	std::function<void(std::string)> onAListingClicked;
@@ -40,6 +41,7 @@ public:
 	void deleteEntry(std::string name);
 	void selectEntry(std::string name);
 	void clearAllEntries();
+	void enableSpawnModeUI(bool en);
 
 	//RBListControl* getRbListController() { return _rbListController; }
 	void addSpwnBtnListener(std::function<void(std::string)> callback);
@@ -86,7 +88,6 @@ public:
 	//Initial setup
 	void setup(ax::Size size, std::string);
 
-	void enableFocusState(bool enable);
 	void setSelectedState(bool selected);
 	void enableSpawnBtn(bool en) { _spwnBtn->setVisible(en); }
 
