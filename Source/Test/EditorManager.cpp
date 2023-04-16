@@ -26,6 +26,8 @@ bool EditorManager::init()
     //Initially change mode to view
     //changeMode(EditorMode::VIEW);
 
+
+
 	return true;
 }
 

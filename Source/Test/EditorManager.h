@@ -38,7 +38,7 @@ public:
 //Editor Manager
 //holds point buffers
 //Send data input processors
-//Encapsulate majority logic of editor window
+//Encapsulates majority logic of editor window
 class EditorManager : public ax::Node
 {
 public:
