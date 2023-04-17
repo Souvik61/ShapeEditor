@@ -1,5 +1,6 @@
 #include "EditorTabLayout.h"
 #include "Utils/Helpers.h"
+#include "Test/draw/BackGrid.h"
 
 USING_NS_CC;
 USING_NS_CC::ui;
@@ -74,6 +75,20 @@ void EditorTabLayout::initLayout()
         auto dN = DrawNode::create();
         dN->drawSolidRect(Vec2(-100, -100), s * 10, Color4B(167, 167, 170, 255));
         _clipNode->addChild(dN, -1);
+    }
+
+    //Draw checkered background
+    {
+        auto bG = BackGrid::create();
+        //bG->setVisible(false);
+        addChild(bG, 2);
+        bG->setContentSize(viewSize);
+
+        bG->setPosition((s / 2) - (viewSize / 2));
+
+        bG->gridSize = viewSize;//Set total grid size
+        bG->cellSize.set(10, 10);//Set cell size
+        bG->validateGrid();
     }
 
     //Add a RenderTexture

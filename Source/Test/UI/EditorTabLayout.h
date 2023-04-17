@@ -8,7 +8,7 @@
 class EditorTabLayout : public ax::ui::Layout
 {
 public: 
-	//Holds the viewSize in pixels.
+	//Holds the viewport size in pixels.
 	ax::Size viewSize;
 	ax::Label* modeLabel;
 	ax::RenderTexture* _rend;

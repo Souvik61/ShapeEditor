@@ -43,7 +43,7 @@ void EditorManager::update(float dt)
     if (editorCam && backgroundSpriteDraw) {
         camDelegate->setVisitingCamera(editorCam);
         //Set ui render texture to begin and end
-        editorUI->editTab->_rend->beginWithClear(1, 0, 0, 1);
+        editorUI->editTab->_rend->beginWithClear(0, 0, 0, 0);
         backgroundSpriteDraw->visit();
         editorUI->editTab->_rend->end();
         camDelegate->setVisitingCamera(nullptr);
