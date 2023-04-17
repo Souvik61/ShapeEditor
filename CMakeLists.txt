@@ -126,6 +126,7 @@ file(GLOB_RECURSE GAME_HEADER
 	Source/TestScenes/TestScene10.h
 	Source/TestScenes/TestScene11.h
 	Source/TestScenes/TestScene12.h
+	Source/TestScenes/TestScene13.h
 	Source/Utils/FileDialogs.h
 	Source/Utils/Helpers.h
 	Source/AppDelegate.h
@@ -192,6 +193,7 @@ file(GLOB_RECURSE GAME_SOURCE
 	Source/TestScenes/TestScene10.cpp
 	Source/TestScenes/TestScene11.cpp
 	Source/TestScenes/TestScene12.cpp
+	Source/TestScenes/TestScene13.cpp
 	Source/Utils/FileDialogs.cpp
 	Source/Utils/Helpers.cpp
     Source/AppDelegate.cpp

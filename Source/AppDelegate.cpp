@@ -7,6 +7,7 @@
 #include "TestScenes/TestScene10.h"
 #include "TestScenes/TestScene11.h"
 #include "TestScenes/TestScene12.h"
+#include "TestScenes/TestScene13.h"
 
 
 // #define USE_AUDIO_ENGINE 1
@@ -176,7 +177,8 @@ bool AppDelegate::applicationDidFinishLaunching() {
     //auto scene = TestScene9::createScene();
     //auto scene = TestScene10::createScene();
     //auto scene = TestScene11::createScene();
-    auto scene = TestScene12::createScene();
+    //auto scene = TestScene12::createScene();
+    auto scene = TestScene13::createScene();
 
     // run
     director->runWithScene(scene);
