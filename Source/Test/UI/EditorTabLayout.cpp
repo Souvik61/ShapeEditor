@@ -40,13 +40,13 @@ void EditorTabLayout::initLayout()
     _clipNode->setInverted(1);
 
     
-    viewSize.setSize(s.width - 20, s.height - 20);
+    viewSize.set(s.width - 20, s.height - 20);
 
     //Add a black border
     auto border = DrawNode::create();
     border->drawRect(Vec2::ZERO, Vec2(s.width - 20, s.height - 20), Color4F::BLACK);
     border->setPosition(10, 10);
-    addChild(border, 1);
+    addChild(border, 3);
 
     Size s1 = _clipStencil->getContentSize();
     _clipNode->setPosition((s.width - s1.width) / 2, ((s.height - s1.height) / 2));
@@ -67,14 +67,34 @@ void EditorTabLayout::initLayout()
         //_windowLayout->setPositionNormalized(Vec2::ANCHOR_MIDDLE);
         _windowLayout->setPosition(Vec2((s.width / 2) - ((s.width - s1.width) / 2), (s.height / 2) - (s.height - s1.height) / 2));
     }
+
     //Add a second panel
     {
         //Draw gray background
         auto dN = DrawNode::create();
         dN->drawSolidRect(Vec2(-100, -100), s * 10, Color4B(167, 167, 170, 255));
         _clipNode->addChild(dN, -1);
-        //_clipNode->addChild(_windowLayout1, -100);
     }
+
+    //Add a RenderTexture
+    {
+        //Render textures and associates
+        _rend = RenderTexture::create(viewSize.width, viewSize.height, backend::PixelFormat::RGBA8, true);
+        _rend->retain();
+        _rend->setKeepMatrix(true);
+        _rend->setVirtualViewport(Vec2(0, 0), Rect(0, 0, 1280, 720), Rect(0, 0, viewSize.width, viewSize.height));
+
+        //The actual sprite to be drawn on by rendertex
+        auto _spriteDraw = Sprite::createWithTexture(_rend->getSprite()->getTexture());
+        auto spSize = _spriteDraw->getContentSize();
+        _spriteDraw->setScaleY(-1);
+        _spriteDraw->setPosition(s / 2);
+        addChild(_spriteDraw, 2);
+        //::Helper::makeBound(_spriteDraw, Color4F::GREEN);
+    }
+
+
+
     //Add "Press M to change mode" text
     {
         auto lay = static_cast<Layout*>(general);
@@ -100,7 +120,7 @@ void EditorTabLayout::addModeDisplay()
     auto _modeDisplay = DrawNode::create();
     _modeDisplay->setContentSize(Size(150, 25));
     _modeDisplay->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
-    addChild(_modeDisplay, 2);
+    addChild(_modeDisplay, 4);
     _modeDisplay->drawSolidRect(Vec2::ZERO, Vec2(150, 25), Color4F::GRAY);
 
     TTFConfig con;

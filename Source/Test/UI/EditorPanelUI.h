@@ -21,6 +21,7 @@ public:
 public:
 	EditorMode mode;
 	OverallManager* oManager;
+	EditorTabLayout* editTab;
 	PlayTabLayout* playTab;
 	ax::Size viewSize;
 	EditorMode _prevMode;//Previous mode that was active

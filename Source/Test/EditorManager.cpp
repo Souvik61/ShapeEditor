@@ -11,6 +11,8 @@
 #include "Test/input_processors/TestInputProcessor.h"
 #include "Test/input_processors/ViewInputProcessor.h"
 #include "Test/input_processors/EditionInputProcessorv3.h"
+#include "Utils/CamDelegate.h"
+#include "Test/UI/EditorTabLayout.h"
 
 USING_NS_AX;
 
@@ -19,16 +21,33 @@ bool EditorManager::init()
 {
 	//_pointsNode = PointSpaceNode::create();
 	//addChild(_pointsNode);
-
+    scheduleUpdate();
     nearestPoint = nullptr;
     _hasNearClosePt = false;
 	
     //Initially change mode to view
     //changeMode(EditorMode::VIEW);
 
-
+    //Patch
+    backgroundSpriteDraw = Sprite::create("HelloWorld.png");
+    backgroundSpriteDraw->setCameraMask((unsigned short)CameraFlag::USER2);
+    addChild(backgroundSpriteDraw, 3);
 
 	return true;
+}
+
+void EditorManager::update(float dt)
+{
+    Node::update(dt);
+
+    if (editorCam && backgroundSpriteDraw) {
+        camDelegate->setVisitingCamera(editorCam);
+        //Set ui render texture to begin and end
+        editorUI->editTab->_rend->beginWithClear(1, 0, 0, 1);
+        backgroundSpriteDraw->visit();
+        editorUI->editTab->_rend->end();
+        camDelegate->setVisitingCamera(nullptr);
+    }
 }
 
 void EditorManager::resetPointSpace()
@@ -381,3 +400,18 @@ void EditorManager::changeToPlayMode()
 {
     drawer->pauseDrawing(true);
 }
+
+void EditorManager::createCamera()
+{
+    auto defCam = getScene()->getDefaultCamera();
+    //Create a 2nd camera    
+    editorCam = Camera::createOrthographic(970, 662, 1, 1000);//Set harcoded values for now
+    editorCam->setCameraFlag(CameraFlag::USER2);
+    getScene()->addChild(editorCam, 1);
+    //cam->setPosition3D(defCam->getPosition3D());
+    editorCam->setPosition(Vec2(0, 0));
+    editorCam->setPositionZ(defCam->getPositionZ());
+    editorCam->setRotation3D(defCam->getRotation3D());
+}
+
+

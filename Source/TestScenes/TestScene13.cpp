@@ -108,7 +108,7 @@ bool TestScene13::init()
 
         //New Editor draw
         auto eDraw = EditorDraw::create();
-        addChild(eDraw, 1);
+        addChild(eDraw, 100);
         eDraw->editManager = editM;
         editM->drawer = eDraw;
 
@@ -211,6 +211,13 @@ bool TestScene13::init()
     _manager->init();
     
     return true;
+}
+
+void TestScene13::onEnter()
+{
+    Scene::onEnter();
+    //This is to create a camera rendering in editor
+    _manager->editSystem->createCamera();
 }
 
 //Add UI subsystem

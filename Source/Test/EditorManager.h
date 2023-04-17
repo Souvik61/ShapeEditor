@@ -12,6 +12,7 @@ class EditorDraw;
 class RigidBodiesManager;
 class EditorInputProcessor;
 class NewShapesDrawNode;
+class CamDelegate;
 
 //Represents a mouse selection
 class MouseSelection
@@ -63,9 +64,14 @@ public:
 	EditorMode _mode;
 	EditorMode _prevMode;//Previous mode that active
 	NewShapesDrawNode* auxDrawer;//auxilary draw node
+
+	ax::Camera* editorCam;
+	ax::Sprite* backgroundSpriteDraw;//This is drawn in RenderTex
+	CamDelegate* camDelegate;
 public:
 	virtual bool init();
 	//virtual void onEnter() override;
+	virtual void update(float dt) override;
     // implement the "static create()" method manually
     CREATE_FUNC(EditorManager);
 
@@ -106,6 +112,9 @@ public:
 	void changeToPlayMode();
 	void onChangeFromPlayMode();
 
+	//Camera related
+	void createCamera();
+
 	//Events
 
 	//Mouse Callbacks
@@ -121,6 +130,9 @@ public:
 public:
 	bool _hasNearClosePt;
 	ax::Vec2 nearClosePt; //Nearest point that can close the shape in logic space
+
+private:
+
 };
 
 #endif // __EDITOR_MANAGER_H__

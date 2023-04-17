@@ -134,6 +134,7 @@ void EditorPanelUI::addNewUI()
         tab->insertTab(0, header1, container1);
         container1->initLayout();
         _modeLabel = container1->modeLabel;
+        editTab = container1;
     }
     //Add Play Tab
     {
