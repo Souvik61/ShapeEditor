@@ -35,7 +35,7 @@ bool TestScene13::init()
         return false;
     }
 
-    //scheduleUpdate();
+    scheduleUpdate();
 
     visibleSize = _director->getVisibleSize();
     origin = _director->getVisibleOrigin();
@@ -108,7 +108,7 @@ bool TestScene13::init()
 
         //New Editor draw
         auto eDraw = EditorDraw::create();
-        addChild(eDraw, 100);
+        addChild(eDraw, 50);
         eDraw->editManager = editM;
         editM->drawer = eDraw;
 
@@ -203,14 +203,23 @@ bool TestScene13::init()
 
     //Testing
     //auto l = DrawNode::create();
-    //l->drawLine(Vec2::ZERO, Vec2(100, 0), Color4F::RED);
-    //l->setPosition(200, 200);
+    ////l->drawLine(Vec2::ZERO, Vec2(100, 0), Color4F::RED);
+    //l->drawDot(Vec2::ZERO, 10, Color4B::RED);
+    //l->setPosition(640, 360);
     //addChild(l, 100);
 
     //This means all things are inited.
     _manager->init();
+
+    addCloseButton();
     
     return true;
+}
+
+void TestScene13::update(float dt)
+{
+    Scene::update(dt);
+
 }
 
 void TestScene13::onEnter()
@@ -363,9 +372,46 @@ void TestScene13::addGridDraw()
     _manager->backGrid = bG;
 }
 
+void TestScene13::addCloseButton()
+{
+    auto closeItem = MenuItemImage::create(
+        "CloseNormal.png",
+        "CloseSelected.png",
+        CC_CALLBACK_1(TestScene13::menuCloseCallback, this));
+
+    if (closeItem == nullptr ||
+        closeItem->getContentSize().width <= 0 ||
+        closeItem->getContentSize().height <= 0)
+    {
+
+    }
+    else
+    {
+        float x = origin.x + visibleSize.width - closeItem->getContentSize().width / 2;
+        float y = origin.y + closeItem->getContentSize().height / 2;
+        closeItem->setPosition(Vec2(x, y));
+    }
+
+    // create menu, it's an autorelease object
+    auto menu = Menu::create(closeItem, NULL);
+    menu->setPosition(Vec2::ZERO);
+    this->addChild(menu, 1);
+}
+
 void TestScene13::menuCloseCallback(Ref* pSender)
 {
     //Close the cocos2d-x game scene and quit the application
     //_director->end();
+
+    //Vec2 a = _manager->editSystem->convertEditCamToGlobalScreenSpaceCoord(Vec2(180, 185));
+    //Vec2 b = _manager->editSystem->convertGlobalScreenSpaceToEditCamCoord(Vec2(780,360));
+    //
+    ////Testing
+    //auto l = DrawNode::create();
+    //l->setCameraMask((unsigned short)CameraFlag::USER2);
+    //l->drawDot(Vec2::ZERO, 10, Color4B::RED);
+    //l->setPosition(b);
+    //addChild(l, 100);
+    //_manager->editSystem->rendTexVisitNodes.push_back(l);
 
 }

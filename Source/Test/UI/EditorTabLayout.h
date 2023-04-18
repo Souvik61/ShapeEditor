@@ -12,6 +12,10 @@ public:
 	ax::Size viewSize;
 	ax::Label* modeLabel;
 	ax::RenderTexture* _rend;
+	//Render texture renderer sprite
+	ax::Sprite* renderSprite;
+	//A place holder that will sit in the place of renderSprite because reasons
+	ax::Node* viewPlaceholder;
 public:
 	bool init() override;
 	CREATE_FUNC(EditorTabLayout);

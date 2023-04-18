@@ -28,10 +28,12 @@ bool EditorManager::init()
     //Initially change mode to view
     //changeMode(EditorMode::VIEW);
 
-    //Patch
+    //Patch change later
     backgroundSpriteDraw = Sprite::create("HelloWorld.png");
     backgroundSpriteDraw->setCameraMask((unsigned short)CameraFlag::USER2);
+    backgroundSpriteDraw->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
     addChild(backgroundSpriteDraw, 3);
+    rendTexVisitNodes.push_back(backgroundSpriteDraw);
 
 	return true;
 }
@@ -44,7 +46,11 @@ void EditorManager::update(float dt)
         camDelegate->setVisitingCamera(editorCam);
         //Set ui render texture to begin and end
         editorUI->editTab->_rend->beginWithClear(0, 0, 0, 0);
-        backgroundSpriteDraw->visit();
+        //backgroundSpriteDraw->visit();
+        for (auto i : rendTexVisitNodes)
+        {
+            i->visit();
+        }
         editorUI->editTab->_rend->end();
         camDelegate->setVisitingCamera(nullptr);
     }
@@ -412,6 +418,34 @@ void EditorManager::createCamera()
     editorCam->setPosition(Vec2(0, 0));
     editorCam->setPositionZ(defCam->getPositionZ());
     editorCam->setRotation3D(defCam->getRotation3D());
+}
+
+ax::Vec2 EditorManager::convertEditCamToGlobalScreenSpaceCoord(ax::Vec2 in)
+{
+    //Convert to virtual screen space
+    auto a = editorCam->projectGL(Vec3(in.x, in.y, 0));
+    //Convert to rendText Space
+    auto winSize = _director->getWinSize();
+    auto rendTexSize = editorUI->editTab->viewPlaceholder->getContentSize();
+    Vec2 b((a.x / winSize.x) * rendTexSize.width, (a.y / winSize.y) * rendTexSize.height);
+    //Convert to global screen space
+    Vec2 c = editorUI->editTab->viewPlaceholder->convertToWorldSpace(b);
+
+    return c;
+}
+
+ax::Vec2 EditorManager::convertGlobalScreenSpaceToEditCamCoord(ax::Vec2 in)
+{
+    //Convert to Rendtex space
+    Vec2 a = editorUI->editTab->viewPlaceholder->convertToNodeSpace(in);
+    //Convert to virtual viewport space
+    auto winSize = _director->getWinSize();
+    auto rendTexSize = editorUI->editTab->viewPlaceholder->getContentSize();
+    Vec2 b((a.x / rendTexSize.x) * winSize.width, (a.y / rendTexSize.y) * winSize.height);
+    //Convert to worldspace
+    Vec3 c = editorCam->unprojectGL(Vec3(b.x, b.y, 0));
+    
+    return Vec2(c.x, c.y);
 }
 
 

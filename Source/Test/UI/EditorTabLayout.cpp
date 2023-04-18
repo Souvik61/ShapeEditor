@@ -105,10 +105,17 @@ void EditorTabLayout::initLayout()
         _spriteDraw->setScaleY(-1);
         _spriteDraw->setPosition(s / 2);
         addChild(_spriteDraw, 2);
+        renderSprite = _spriteDraw;
         //::Helper::makeBound(_spriteDraw, Color4F::GREEN);
+
+        viewPlaceholder = Node::create();
+        viewPlaceholder->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+        viewPlaceholder->setContentSize(spSize);
+        viewPlaceholder->setPosition(s / 2);
+        addChild(viewPlaceholder, 12);
+        //::Helper::makeBound(viewPlaceholder, Color4F::GREEN);
+
     }
-
-
 
     //Add "Press M to change mode" text
     {
@@ -125,7 +132,6 @@ void EditorTabLayout::initLayout()
     addModeDisplay();
 
     //::Helper::makeBound(this);
-
 }
 
 void EditorTabLayout::addModeDisplay()

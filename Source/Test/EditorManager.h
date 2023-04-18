@@ -114,6 +114,10 @@ public:
 
 	//Camera related
 	void createCamera();
+	//Convert world space coord to global screen space coords
+	ax::Vec2 convertEditCamToGlobalScreenSpaceCoord(ax::Vec2);
+	//Convert global screenspace coord to world coord
+	ax::Vec2 convertGlobalScreenSpaceToEditCamCoord(ax::Vec2);
 
 	//Events
 
@@ -131,7 +135,9 @@ public:
 	bool _hasNearClosePt;
 	ax::Vec2 nearClosePt; //Nearest point that can close the shape in logic space
 
-private:
+public:
+	//This vector is visited when RenderTexture is drawn
+	std::vector<ax::Node*> rendTexVisitNodes;
 
 };
 

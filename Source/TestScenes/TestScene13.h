@@ -20,6 +20,7 @@ public:
     static cocos2d::Scene* createScene();
 
     virtual bool init();
+    virtual void update(float dt);
     virtual void onEnter() override;
     
 
@@ -27,7 +28,7 @@ public:
     void addB2DSystem();
     void addGridDraw();
     
-    //void addCloseButton();
+    void addCloseButton();
 
     // a selector callback
     void menuCloseCallback(cocos2d::Ref* pSender);
