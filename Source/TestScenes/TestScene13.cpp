@@ -414,4 +414,9 @@ void TestScene13::menuCloseCallback(Ref* pSender)
     //addChild(l, 100);
     //_manager->editSystem->rendTexVisitNodes.push_back(l);
 
+    Vec2 a = _manager->editSystem->convertGlobalScreenSpaceToEditCamCoord(Vec2(0, 0));
+    Vec2 b = _manager->editSystem->convertGlobalScreenSpaceToEditCamCoord(Vec2(500, 0));
+    Vec2 c = b - a;
+    CCLOG("%f;%f", c.x, c.y);
+
 }

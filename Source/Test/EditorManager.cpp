@@ -30,6 +30,7 @@ bool EditorManager::init()
 
     //Patch change later
     backgroundSpriteDraw = Sprite::create("HelloWorld.png");
+    backgroundSpriteDraw->setOpacity(127);
     backgroundSpriteDraw->setCameraMask((unsigned short)CameraFlag::USER2);
     backgroundSpriteDraw->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
     addChild(backgroundSpriteDraw, 3);
@@ -41,6 +42,29 @@ bool EditorManager::init()
 void EditorManager::update(float dt)
 {
     Node::update(dt);
+
+    //Position draw nodes and rendered sprite correctly
+    {
+
+        //Calculate sprite scale factor
+        Vec2 spSize = backgroundSpriteDraw->getContentSize();
+        float scF = 500 / spSize.width;//Will change from constant 500 later
+        backgroundSpriteDraw->setScale(scF);
+
+        //Calculate zoom
+        float zoom = oManager->spaceConv->scale;
+        editorCam->initOrthographic(970 * (1 / zoom), 662 * (1 / zoom), 1, 1000);
+
+        //Calculate global screen space position of point(0,0)
+        Vec2 a;
+        oManager->spaceConv->applyT(&a);
+        //Calculate editorCamera space position of the screenspace point calculated above
+        Vec2 b = convertGlobalScreenSpaceToEditCamCoord(a);
+
+        //CCLOG("%f;%f", b.x, b.y);
+
+        backgroundSpriteDraw->setPosition(b);
+    }
 
     if (editorCam && backgroundSpriteDraw) {
         camDelegate->setVisitingCamera(editorCam);
