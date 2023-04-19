@@ -92,7 +92,7 @@ bool TestScene13::init()
     {
         shapeDraw1->setRbManager(_manager->rbManager);
         shapeDraw1->setEditorPanel(_manager->uiSystem->editPanelUI);
-        addChild(shapeDraw1, 9);
+        addChild(shapeDraw1, 100);
         //_manager->uiSystem->editPanelUI->setDrawNode(shapeDraw1);
     }
 
@@ -134,7 +134,9 @@ bool TestScene13::init()
     _manager->uiSystem->rbPanelUI->onAListingClicked = CC_CALLBACK_1(EventManager::onAListingClickedFromRbPanel, _manager->eventManager);
     _manager->uiSystem->prjPanelUI->onBtnPressedCallback = CC_CALLBACK_1(EventManager::onBtnPressedFromPrjPanel, _manager->eventManager);
     rBListCtrl->addSpwnBtnListener(CC_CALLBACK_1(EventManager::onSpwnButtonFromRbPanel, _manager->eventManager));
+    rBListCtrl->addImgBtnListener(CC_CALLBACK_1(EventManager::onImgButtonFromRbPanel, _manager->eventManager));
 
+    
     dynamic_cast<EditorPanelUI*>(_manager->uiSystem->editPanelUI)->playTab->pCtrlPanel->eOnButtonPress = CC_CALLBACK_1(EventManager::onPlayTabCtrlEvent, _manager->eventManager);
 
     //Add new screen space translator

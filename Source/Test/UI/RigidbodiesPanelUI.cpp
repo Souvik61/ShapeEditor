@@ -145,6 +145,7 @@ void RigidbodiesPanelUI::addEntry(std::string name)
     entry->setTouchEnabled(true);
     entry->addTouchEventListener(CC_CALLBACK_2(RigidbodiesPanelUI::onRbEntryClicked, this));
     entry->_spwnBtn->addTouchEventListener(CC_CALLBACK_2(RbListController::rbSpawnCallback, rbListController));//Add spawn click listener
+    entry->imgBtn->addTouchEventListener(CC_CALLBACK_2(RbListController::rbImgCallback, rbListController));//Add image button click listener
     _listView->pushBackCustomItem(entry);
 
     _rbLayoutMap[name] = entry;
@@ -185,6 +186,7 @@ void RigidbodiesPanelUI::clearAllEntries()
 
 void RigidbodiesPanelUI::addSpwnBtnListener(std::function<void(std::string)> callback)
 {
+    onASpawnClicked = callback;
 }
 
 void RigidbodiesPanelUI::enableSpawnModeUI(bool en)
@@ -192,7 +194,7 @@ void RigidbodiesPanelUI::enableSpawnModeUI(bool en)
     //Traverse all layouts and set spawn btn to hidden
     for (auto i = _rbLayoutMap.begin(); i != _rbLayoutMap.end(); i++) {
 
-        i->second->enableSpawnBtn(en);
+        i->second->enableSpawnModeUI(en);
     }
 }
 
@@ -327,15 +329,6 @@ bool RbEntryLayout::init()
 
     //Add spawnbutton
     {
-        //_spwnBtn = Button::create("Sprites/newicons/round_purple.png");
-        //_spwnBtn->setScale9Enabled(true);
-        //_spwnBtn->setCapInsets(Rect(16, 16, 32, 32));
-        //_spwnBtn->setTitleText("Spawn");
-        //_spwnBtn->setUserData((void*)this);//set buttons user pointer to this layout
-        //_spwnBtn->setContentSize(Vec2(63, 27));
-        //addChild(_spwnBtn, 1);
-        //_spwnBtn->setVisible(false);
-
         auto cmplxBtn = ComplexButton1::create();
         cmplxBtn->setContentSize(Size(75, 27));
         cmplxBtn->setup("Sprites/newicons/ic_exitRight.png", "Spawn");
@@ -345,6 +338,15 @@ bool RbEntryLayout::init()
         _spwnBtn->setVisible(false);
         _spwnBtn->setUserData((void*)this);//set buttons user pointer to this layout
 
+    }
+
+    //Add image button(button opens up a window to prompt save image)
+    {
+        imgBtn = Button::create("Sprites/newicons/ic_img.png");
+        imgBtn->setScale(0.4f);
+        //_imgBtn->setZoomScale(0);
+        addChild(imgBtn, 1);
+        imgBtn->setUserData((void*)this);//set buttons user pointer to this layout
     }
 
     return true;
@@ -372,6 +374,10 @@ void RbEntryLayout::setup(Size size, std::string name)
 
     {
         _spwnBtn->setPosition(Vec2(s.width - 50, s.height / 2));
+    }
+
+    {
+        imgBtn->setPosition(Vec2(s.width - 50, s.height / 2));
     }
 }
 

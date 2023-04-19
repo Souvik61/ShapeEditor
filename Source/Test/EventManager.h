@@ -39,6 +39,7 @@ public:
 	void onButtonPressFromRbPanel(std::string);
 	void onAListingClickedFromRbPanel(std::string n);
 	void onSpwnButtonFromRbPanel(std::string n);
+	void onImgButtonFromRbPanel(std::string n);
 	//Rbpanel individual button
 	void onAddButtonPressedOnRbPanel();
 	void onDelButtonPressedOnRbPanel();

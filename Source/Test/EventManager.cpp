@@ -108,6 +108,11 @@ void EventManager::onSpwnButtonFromRbPanel(std::string n)
 
 }
 
+void EventManager::onImgButtonFromRbPanel(std::string n)
+{
+	CCLOG("Img button");
+}
+
 void EventManager::onAddButtonPressedOnRbPanel()
 {
 	if (oManager->prjManager->isProjectLoaded())

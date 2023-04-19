@@ -41,6 +41,11 @@ void RbListController::addSpwnBtnListener(std::function<void(std::string)> callb
     OnASpawnClicked = callback;
 }
 
+void RbListController::addImgBtnListener(std::function<void(std::string)> callback)
+{
+    OnAImgClicked = callback;
+}
+
 void RbListController::rbSpawnCallback(Ref* ref, ui::Widget::TouchEventType touchType)
 {
     if (touchType == ui::Widget::TouchEventType::ENDED)
@@ -50,6 +55,17 @@ void RbListController::rbSpawnCallback(Ref* ref, ui::Widget::TouchEventType touc
         //t->removeFromParent();
         if (OnASpawnClicked)
             OnASpawnClicked(t1->listingName);
+    }
+}
+
+void RbListController::rbImgCallback(Ref* ref, ui::Widget::TouchEventType touchType)
+{
+    if (touchType == ui::Widget::TouchEventType::ENDED)
+    {
+        auto t = dynamic_cast<ui::Button*>(ref);
+        auto t1 = static_cast<RbEntryLayout*>(t->getUserData());
+        if (OnAImgClicked)
+            OnAImgClicked(t1->listingName);
     }
 }
 
