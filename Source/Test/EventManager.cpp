@@ -111,6 +111,14 @@ void EventManager::onSpwnButtonFromRbPanel(std::string n)
 void EventManager::onImgButtonFromRbPanel(std::string n)
 {
 	CCLOG("Img button");
+	if (oManager->prjManager->isProjectLoaded())
+	{
+		_dialogSystem->showRenameDialog();
+		//oManager->editorPanel->pauseInput(true);
+		//oManager->uiSystem->editPanelUI->pauseInput(true);
+		currentState = State::WAIT_FOR_REN;
+	}
+
 }
 
 void EventManager::onAddButtonPressedOnRbPanel()
