@@ -14,7 +14,7 @@ class EventManager : public ax::Node
 {
 
 public:
-	enum State { NONE, WAIT_FOR_ADD, WAIT_FOR_REN };
+	enum State { NONE, WAIT_FOR_ADD, WAIT_FOR_REN, WAIT_FOR_IMG };
 public:
 	State currentState;
 

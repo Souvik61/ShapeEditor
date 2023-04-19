@@ -4,8 +4,6 @@
 #include "cocos2d.h"
 #include "ui/CocosGUI.h"
 
-USING_NS_CC;
-
 //        /*Visible Size*/
 // _______________________________
 //| /*Dialog Prompt               |
@@ -20,42 +18,65 @@ USING_NS_CC;
 
 
 //The prompt window layout itself.
-class DialogPromptWindow : public ui::Layout
+//Aka the Rename window
+class DialogPromptWindow : public ax::ui::Layout
 {
-	EventListenerTouchOneByOne* _tListener;
+	ax::EventListenerTouchOneByOne* _tListener;
 public:
-	ui::TextField* _textField;
-	ui::ImageView* _tipImg;
-	ui::Text* tipText;//Warning text
+
+	ax::ui::Text* _windowNameTextField;
+	ax::ui::TextField* _textField;
+	ax::ui::ImageView* _tipImg;
+	ax::ui::Text* tipText;//Warning text
 	std::function<void(std::string)> onAButtonClicked; //Listen to this event for button press event
 
 	virtual bool init() override;
 	CREATE_FUNC(DialogPromptWindow);
 	void runPromptAnim();
 
+	//Set window display name
+	void setWindowName(std::string n);
 	void showWarning(std::string warning);
 	void hideWarning() { _tipImg->setVisible(false); tipText->setVisible(false); }
 
 	//Events
-	void onButtonClicked(Ref*, Widget::TouchEventType);
-
-	bool onTouchBegan(Touch*, Event*);
+	void onButtonClicked(ax::Ref*, ax::ui::Widget::TouchEventType);
+	bool onTouchBegan(ax::Touch*, ax::Event*);
 };
 
-//Dialog prompt
+//Image select windows
+class ImageSelectDialogWindow : public ax::ui::Layout
+{
+	ax::EventListenerTouchOneByOne* _tListener;
+public:
+	ax::ui::Text* _windowNameTextField;
+	ax::ui::TextField* _textField;
+	std::function<void(std::string)> OnAButtonClicked; //Listen to this event for button press event
+
+	virtual bool init() override;
+	CREATE_FUNC(ImageSelectDialogWindow);
+	void runPromptAnim();
+
+	//Events
+	void onButtonClicked(ax::Ref*, ax::ui::Widget::TouchEventType);
+	bool onTouchBegan(ax::Touch*, ax::Event*);
+
+};
+
+//Dialog prompt (encapsualtor)
 //This fills entire screen
 //It is the SceneGraph parent of DialogPromptWindow
-class DialogPrompt : public cocos2d::Node
+class DialogPrompt : public ax::Node
 {
 public:
 	DialogPromptWindow* _promptWindow;
 
-	EventListenerTouchOneByOne* _tListener;
+	ax::EventListenerTouchOneByOne* _tListener;
 	virtual bool init() override;
 	CREATE_FUNC(DialogPrompt);
 
 	//Events
-	bool onTouchBegan(Touch*, Event*);
+	bool onTouchBegan(ax::Touch*, ax::Event*);
 };
 
 #endif // __DIALOG_PROMPT_H__

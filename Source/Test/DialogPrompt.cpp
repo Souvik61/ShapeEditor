@@ -1,11 +1,12 @@
 #include "DialogPrompt.h"
 //#include "../Helpers.h"
 
+USING_NS_AX;
 USING_NS_CC::ui;
 
-//--------------------------------
+//-------------------
 //Dialog Prompt Node
-//--------------------------------
+//-------------------
 
 bool DialogPrompt::init()
 {
@@ -38,9 +39,120 @@ bool DialogPrompt::onTouchBegan(Touch* t, Event* e)
     return true;
 }
 
-//--------------------------------
+//-----------------------------
+//Image Select Dialog Window
+//-----------------------------
+
+bool ImageSelectDialogWindow::init()
+{
+    if (!Layout::init())
+        return false;
+
+    Size s = Size(360, 225);
+    setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+    //setBackGroundImage("Sprites/background.png");
+    setBackGroundImage("Sprites/newicons/round_purple_sbright.png");
+    setBackGroundImageCapInsets(Rect(16, 16, 32, 32));
+    setBackGroundImageScale9Enabled(true);
+    setContentSize(s);
+
+    Vec2 pos;
+
+    //Setup touch listener
+    {
+        _tListener = EventListenerTouchOneByOne::create();
+        _tListener->setSwallowTouches(true);
+        _tListener->onTouchBegan = CC_CALLBACK_2(ImageSelectDialogWindow::onTouchBegan, this);
+        _eventDispatcher->addEventListenerWithSceneGraphPriority(_tListener, this);
+    }
+    //Set Window displaytext
+    {
+        auto t = Text::create("Select Image ...", "fonts/arial.ttf", 45);
+        t->setTextColor(Color4B::BLACK);
+        t->enableShadow(Color4B::WHITE);
+        addChild(t);
+        _windowNameTextField = t;
+        t->setPosition(Vec2(s.width / 2, s.height - (t->getContentSize().height / 2)));
+    }
+    //Set text field background
+    {
+        Scale9Sprite* sp = Scale9Sprite::create("Sprites/buttonBackground.png");
+        sp->setContentSize(Size(200, 40));
+        sp->setCapInsets(Rect(3, 3, 10, 10));
+        sp->setPosition(s / 2);
+        addChild(sp);
+        pos = sp->getPosition();
+    }
+    // Create the textfield
+    {
+        _textField = TextField::create("Type here", "fonts/arial.ttf", 30);
+        _textField->setPosition(s / 2);
+        //textField->addEventListener(CC_CALLBACK_2(UITextFieldTest::textFieldEvent, this));
+        _textField->setMaxLengthEnabled(true);
+        _textField->setMaxLength(8);//Maximum name size 8 chars.
+        _textField->setCursorEnabled(true);
+        addChild(_textField);
+    }
+    //Create ok button
+    {
+        //auto _okBtn = Button::create("Sprites/background1.png");
+        //_okBtn->setTitleText("Ok");
+        //_okBtn->getTitleRenderer()->enableBold();
+        //_okBtn->setTitleFontSize(25);
+        //_okBtn->setScale9Enabled(true);
+        //_okBtn->setCapInsets(Rect(3, 3, 10, 10));
+        //_okBtn->setContentSize(Size(100, 35));
+        //addChild(_okBtn, 0, "ok");
+        //_okBtn->setPosition(Vec2(s.width / 4, 30));
+        //_okBtn->addTouchEventListener(CC_CALLBACK_2(DialogPromptWindow::onButtonClicked, this));
+
+    }
+    //Create cancel button
+    {
+        //auto _cancelBtn = Button::create("Sprites/background1.png");
+        //_cancelBtn->setTitleText("Cancel");
+        //_cancelBtn->getTitleRenderer()->enableBold();
+        //_cancelBtn->setTitleFontSize(25);
+        //_cancelBtn->setScale9Enabled(true);
+        //_cancelBtn->setCapInsets(Rect(3, 3, 10, 10));
+        //_cancelBtn->setContentSize(Size(100, 35));
+        //addChild(_cancelBtn, 0, "cancel");
+        //_cancelBtn->setPosition(Vec2(s.width - s.width / 4, 30));
+        //_cancelBtn->addTouchEventListener(CC_CALLBACK_2(DialogPromptWindow::onButtonClicked, this));
+    }
+    
+    return true;
+}
+
+void ImageSelectDialogWindow::runPromptAnim()
+{
+    auto a = ScaleTo::create(0.09, 1.1f);
+    auto b = ScaleTo::create(0.09, 1);
+    runAction(Sequence::create(a, b, nullptr));
+}
+
+void ImageSelectDialogWindow::onButtonClicked(ax::Ref*, ax::ui::Widget::TouchEventType)
+{
+}
+
+bool ImageSelectDialogWindow::onTouchBegan(ax::Touch* t, ax::Event* e)
+{
+    auto target = static_cast<ImageSelectDialogWindow*>(e->getCurrentTarget());
+    Vec2 locationInNode = target->convertToNodeSpace(t->getLocation());
+    Size s = target->getContentSize();
+    Rect rect = Rect(0, 0, s.width, s.height);
+
+    if (rect.containsPoint(locationInNode))
+    {
+        return true;
+    }
+    target->runPromptAnim();
+    return true;
+}
+
+//---------------------
 //Dialog Prompt Window
-//--------------------------------
+//---------------------
 
 bool DialogPromptWindow::init()
 {
@@ -69,6 +181,7 @@ bool DialogPromptWindow::init()
         t->setTextColor(Color4B::BLACK);
         t->enableShadow(Color4B::WHITE);
         addChild(t);
+        _windowNameTextField = t;
         t->setPosition(Vec2(s.width / 2, s.height - (t->getContentSize().height / 2)));
     }
     //Set text field background
@@ -143,6 +256,11 @@ void DialogPromptWindow::runPromptAnim()
     auto b = ScaleTo::create(0.09, 1);
     //this->runAction(a);
     this->runAction(Sequence::create(a, b, nullptr));
+}
+
+void DialogPromptWindow::setWindowName(std::string n)
+{
+    _windowNameTextField->setString(n);
 }
 
 void DialogPromptWindow::showWarning(std::string warning)

@@ -9,9 +9,9 @@
 #include "Test/EditorManager.h"
 #include "Test/RbListController.h"
 
-//------------------------
+//---------------
 //Event Manager
-//------------------------
+//---------------
 
 EventManager::EventManager() :
 	_dialogSystem(nullptr), oManager(nullptr), currentState(State::NONE)
@@ -116,7 +116,7 @@ void EventManager::onImgButtonFromRbPanel(std::string n)
 		_dialogSystem->showRenameDialog();
 		//oManager->editorPanel->pauseInput(true);
 		//oManager->uiSystem->editPanelUI->pauseInput(true);
-		currentState = State::WAIT_FOR_REN;
+		currentState = State::WAIT_FOR_IMG;
 	}
 
 }

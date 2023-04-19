@@ -121,6 +121,7 @@ file(GLOB_RECURSE GAME_HEADER
 	Source/Test/TestModule.h
 	Source/Test/UISubsystem.h
 	Source/Test/UtilityClasses.h
+	Source/TestScenes/MiscTesting.h
 	Source/TestScenes/TestScene8.h
 	Source/TestScenes/TestScene9.h
 	Source/TestScenes/TestScene10.h
@@ -189,6 +190,7 @@ file(GLOB_RECURSE GAME_SOURCE
 	Source/Test/TestModule.cpp
 	Source/Test/UISubsystem.cpp
 	Source/Test/UtilityClasses.cpp
+	Source/TestScenes/MiscTesting.cpp
 	Source/TestScenes/TestScene8.cpp
 	Source/TestScenes/TestScene9.cpp
 	Source/TestScenes/TestScene10.cpp
