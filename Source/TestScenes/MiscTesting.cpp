@@ -253,6 +253,7 @@ void MiscTesting::menuCloseCallback(Ref* pSender)
 {
     DialogWindowSystem* diaSystem = getChildByName<DialogWindowSystem*>("DS");
 
-    diaSystem->showRenameDialog();
+    //diaSystem->showRenameDialog();
+    diaSystem->showImgSelectionDialog();
 
 }

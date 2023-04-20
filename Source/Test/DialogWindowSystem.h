@@ -9,7 +9,8 @@
 class DialogWindowSystem : public ax::Node
 {
 public:
-	std::function<void(std::string)> onRenameWindowBtnEvent;
+	std::function<void(std::string)> OnRenameWindowBtnEvent;
+	std::function<void(std::string)> OnImgWindowBtnEvent;
 	
 public:
 	DialogPrompt* _diaPrompt;
@@ -22,13 +23,16 @@ public:
 	void showRenameDialog();
 	void showImgSelectionDialog();
 	
-	bool isShowingDialog();
+	bool isShowingADialog();
 	void closeDialog();
 	//will be deprecated soon
 	void closeRenameDialog();
 	
 	DialogPrompt* getCurrentDialog();
+
+private:
 	void onRenameWinBtnPress(std::string);
+	void onImgSelWinBtnPress(std::string);
 
 };
 

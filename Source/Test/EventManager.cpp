@@ -56,7 +56,7 @@ void EventManager::onExit()
 void EventManager::setDialogWindowSystem(DialogWindowSystem* dS)
 {
 	_dialogSystem = dS;
-	_dialogSystem->onRenameWindowBtnEvent = CC_CALLBACK_1(EventManager::onBtnPressFromWindow, this);
+	_dialogSystem->OnRenameWindowBtnEvent = CC_CALLBACK_1(EventManager::onBtnPressFromWindow, this);
 }
 
 //------------------
@@ -418,8 +418,9 @@ void EventManager::onLoadFromDisk()
 void EventManager::addRbEntry()
 {
 	//Determine if given name is valid. If valid add to list else show an error.
-		//Get string from rename window
-	auto g = oManager->dialogWindowSystem->getCurrentDialog()->_promptWindow->_textField->getString();
+	//Get string from rename window
+	auto f = static_cast<DialogPromptWindow*>(oManager->dialogWindowSystem->getCurrentDialog()->dialogWindow);
+	auto g = f->_textField->getString();
 	
 	std::string n{ g };
 
@@ -437,7 +438,9 @@ void EventManager::addRbEntry()
 		auto msg = oManager->rbManager->getErrorMessage(n);
 		std::string msgStr{ msg };
 
-		oManager->dialogWindowSystem->getCurrentDialog()->_promptWindow->showWarning(msgStr);
+		auto w = static_cast<DialogPromptWindow*>(oManager->dialogWindowSystem->getCurrentDialog()->dialogWindow);
+		w->showWarning(msgStr);
+
 		currentState = State::WAIT_FOR_ADD;
 	}
 }
@@ -446,7 +449,9 @@ void EventManager::renRbEntry()
 {
 	//Determine if given name is valid. If valid rename else show an error.
 	//Get string from rename window
-	auto g = oManager->dialogWindowSystem->getCurrentDialog()->_promptWindow->_textField->getString();
+
+	auto f = static_cast<DialogPromptWindow*>(oManager->dialogWindowSystem->getCurrentDialog()->dialogWindow);
+	auto g = f->_textField->getString();
 	
 	std::string gStr{ g };
 
@@ -470,7 +475,8 @@ void EventManager::renRbEntry()
 	else
 	{
 		auto msg = oManager->rbManager->getErrorMessage(gStr);
-		oManager->dialogWindowSystem->getCurrentDialog()->_promptWindow->showWarning(msg);
+		auto w = static_cast<DialogPromptWindow*>(oManager->dialogWindowSystem->getCurrentDialog()->dialogWindow);
+		w->showWarning(msg);
 		currentState = State::WAIT_FOR_REN;
 	}
 }

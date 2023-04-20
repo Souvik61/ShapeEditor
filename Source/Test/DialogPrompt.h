@@ -9,17 +9,24 @@
 //| /*Dialog Prompt               |
 //|       _________________       |
 //|      |                 |      |
-//|      |/*Dialog Prompt*/|      |
-//|      |/*Window*/       |      |
+//|      |/*Dialog Window*/|      |
+//|      |                 |      |
 //|      |                 |      |
 //|      |_________________|      |
 //|                               |
 //|_______________________________|
 
 
+//Base Layout class of Dialog Window
+class DialogWindowBase : public ax::ui::Layout
+{
+
+
+};
+
 //The prompt window layout itself.
-//Aka the Rename window
-class DialogPromptWindow : public ax::ui::Layout
+//Its name should be RenameDialogWindow
+class DialogPromptWindow : public DialogWindowBase
 {
 	ax::EventListenerTouchOneByOne* _tListener;
 public:
@@ -28,7 +35,7 @@ public:
 	ax::ui::TextField* _textField;
 	ax::ui::ImageView* _tipImg;
 	ax::ui::Text* tipText;//Warning text
-	std::function<void(std::string)> onAButtonClicked; //Listen to this event for button press event
+	std::function<void(std::string)> OnAButtonClicked; //Listen to this event for button press event
 
 	virtual bool init() override;
 	CREATE_FUNC(DialogPromptWindow);
@@ -45,7 +52,7 @@ public:
 };
 
 //Image select windows
-class ImageSelectDialogWindow : public ax::ui::Layout
+class ImageSelectDialogWindow : public DialogWindowBase
 {
 	ax::EventListenerTouchOneByOne* _tListener;
 public:
@@ -69,7 +76,8 @@ public:
 class DialogPrompt : public ax::Node
 {
 public:
-	DialogPromptWindow* _promptWindow;
+	//Current displaying dialog window
+	DialogWindowBase* dialogWindow;
 
 	ax::EventListenerTouchOneByOne* _tListener;
 	virtual bool init() override;
