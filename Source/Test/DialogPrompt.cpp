@@ -104,11 +104,9 @@ bool ImageSelectDialogWindow::init()
             text->setTextHorizontalAlignment(TextHAlignment::LEFT);
             textBoxLayout->addChild(text);
             text->setPosition(Vec2(7, 12.5));
-
+            pathTextDisplay = text;
             //::Helper::makeBound(textBoxLayout);
             //::Helper::makeBound(text);
-
-            //pp_text = text;
             pos = textBoxLayout->getPosition();
         }
 
@@ -139,18 +137,17 @@ bool ImageSelectDialogWindow::init()
         browseBtn->addTouchEventListener(CC_CALLBACK_2(ImageSelectDialogWindow::onButtonClicked, this));
         browseBtn->setPosition(Vec2(pos.x + 50, pos.y - 45));
     }
-    
-    //Create cancel button
+    //Create ok button
     {
         auto cancelBtn = Button::create("Sprites/newicons/round_purple.png", "Sprites/newicons/round_purple_pressed.png");
-        cancelBtn->setTitleText("Cancel");
+        cancelBtn->setTitleText("Ok");
         cancelBtn->setTitleFontSize(22);
         cancelBtn->setScale9Enabled(true);
         cancelBtn->setCapInsets(Rect(16, 16, 32, 32));
-        cancelBtn->setContentSize(Size(85, 30));
-        addChild(cancelBtn, 1, "browse");
+        cancelBtn->setContentSize(Size(75, 30));
+        addChild(cancelBtn, 1, "ok");
         cancelBtn->addTouchEventListener(CC_CALLBACK_2(ImageSelectDialogWindow::onButtonClicked, this));
-        cancelBtn->setPosition(Vec2(s.width - s.width / 4, 30));
+        cancelBtn->setPosition(Vec2(s.width / 2, 30));
 
     }
 

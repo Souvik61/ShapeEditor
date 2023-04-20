@@ -65,6 +65,8 @@ public:
 
     int displayConfirmSaveAsMessageBox();
 
+    int OpenWindowsImageSelectionDialog();
+
     int displayHelpText();
 
 };

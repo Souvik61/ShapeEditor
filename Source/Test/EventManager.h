@@ -67,6 +67,12 @@ public:
 	void onRenameOkBtnPress();
 	void onRenameCancelBtnPress();
 
+	//ImageSelectWindow Events
+	void onBtnPressFromImgSelectWindow(std::string);
+	void onImgSelectBrowseBtnPress();
+	void onImgSelectClearBtnPress();
+	void onImgSelectOkBtnPress();
+
 	//On tab changed event
 	void onTabChanged(int index);
 

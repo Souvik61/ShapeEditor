@@ -179,8 +179,8 @@ bool AppDelegate::applicationDidFinishLaunching() {
     //auto scene = TestScene10::createScene();
     //auto scene = TestScene11::createScene();
     //auto scene = TestScene12::createScene();
-    //auto scene = TestScene13::createScene();
-    auto scene = MiscTesting::createScene();
+    auto scene = TestScene13::createScene();
+    //auto scene = MiscTesting::createScene();
 
     // run
     director->runWithScene(scene);
@@ -224,6 +224,11 @@ int AppDelegate::displayConfirmSaveAsMessageBox()
     int msgboxID = MessageBox(hnd, L"Unsaved changes remain, save before exiting?", L"Confirm Action", MB_ICONEXCLAMATION | MB_YESNOCANCEL);
 
     return msgboxID;
+}
+
+int AppDelegate::OpenWindowsImageSelectionDialog()
+{
+    return 0;
 }
 
 int AppDelegate::displayHelpText()

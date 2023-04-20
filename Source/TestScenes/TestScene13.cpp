@@ -81,7 +81,7 @@ bool TestScene13::init()
     //Add dialog system
     {
         auto d = DialogWindowSystem::create();
-        addChild(d, 11);
+        addChild(d, 1000);
         _manager->dialogWindowSystem = d;
         _manager->eventManager->_dialogSystem = d;
         _manager->eventManager->setDialogWindowSystem(d);

@@ -28,6 +28,8 @@ void DialogWindowSystem::showRenameDialog()
 	auto dialogWindow = DialogPromptWindow::create();
 	_diaPrompt->addChild(dialogWindow, 1);
 	dialogWindow->setPosition(_diaPrompt->getContentSize() / 2);
+	_diaPrompt->dialogWindow = dialogWindow;
+
 	//Link onRenameWinBtnPress to promptWindow btn press
 	dialogWindow->OnAButtonClicked = CC_CALLBACK_1(DialogWindowSystem::onRenameWinBtnPress, this);
 
@@ -48,6 +50,8 @@ void DialogWindowSystem::showImgSelectionDialog()
 	auto dialogWindow = ImageSelectDialogWindow::create();
 	_diaPrompt->addChild(dialogWindow, 1);
 	dialogWindow->setPosition(_diaPrompt->getContentSize() / 2);
+	_diaPrompt->dialogWindow = dialogWindow;//Later add a useful function
+
 	//Link onRenameWinBtnPress to promptWindow btn press
 	dialogWindow->OnAButtonClicked = CC_CALLBACK_1(DialogWindowSystem::onImgSelWinBtnPress, this);
 }

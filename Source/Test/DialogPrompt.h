@@ -57,7 +57,7 @@ class ImageSelectDialogWindow : public DialogWindowBase
 	ax::EventListenerTouchOneByOne* _tListener;
 public:
 	ax::ui::Text* _windowNameTextField;
-	ax::ui::TextField* _textField;
+	ax::ui::Text* pathTextDisplay;
 	std::function<void(std::string)> OnAButtonClicked; //Listen to this event for button press event
 
 	virtual bool init() override;

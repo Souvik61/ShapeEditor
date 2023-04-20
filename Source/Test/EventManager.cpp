@@ -57,6 +57,7 @@ void EventManager::setDialogWindowSystem(DialogWindowSystem* dS)
 {
 	_dialogSystem = dS;
 	_dialogSystem->OnRenameWindowBtnEvent = CC_CALLBACK_1(EventManager::onBtnPressFromWindow, this);
+	_dialogSystem->OnImgWindowBtnEvent = CC_CALLBACK_1(EventManager::onBtnPressFromImgSelectWindow, this);
 }
 
 //------------------
@@ -113,7 +114,8 @@ void EventManager::onImgButtonFromRbPanel(std::string n)
 	CCLOG("Img button");
 	if (oManager->prjManager->isProjectLoaded())
 	{
-		_dialogSystem->showRenameDialog();
+		//_dialogSystem->showRenameDialog();
+		_dialogSystem->showImgSelectionDialog();
 		//oManager->editorPanel->pauseInput(true);
 		//oManager->uiSystem->editPanelUI->pauseInput(true);
 		currentState = State::WAIT_FOR_IMG;
@@ -235,6 +237,43 @@ void EventManager::onRenameOkBtnPress()
 void EventManager::onRenameCancelBtnPress()
 {
 	_dialogSystem->closeRenameDialog();
+	//oManager->editorPanel->pauseInput(false);
+	//oManager->uiSystem->editPanelUI->pauseInput(false);
+	currentState = State::NONE;
+}
+
+//---------------------------
+//ImageSelect Window events
+//---------------------------
+
+void EventManager::onBtnPressFromImgSelectWindow(std::string s)
+{
+	CCLOG("%s", s.c_str());
+	if (s == "browse")
+		onImgSelectBrowseBtnPress();
+	else if (s == "clear")
+		onImgSelectClearBtnPress();
+	else
+		onImgSelectOkBtnPress();
+}
+
+void EventManager::onImgSelectBrowseBtnPress()
+{
+	std::string fP = FileDialogs::openFile("PNG (*.png)\0*.png\0");
+
+	auto f = static_cast<ImageSelectDialogWindow*>(oManager->dialogWindowSystem->getCurrentDialog()->dialogWindow);
+	f->pathTextDisplay->setString(fP);
+}
+
+void EventManager::onImgSelectClearBtnPress()
+{
+	auto f = static_cast<ImageSelectDialogWindow*>(oManager->dialogWindowSystem->getCurrentDialog()->dialogWindow);
+	f->pathTextDisplay->setString("none");
+}
+
+void EventManager::onImgSelectOkBtnPress()
+{
+	_dialogSystem->closeDialog();
 	//oManager->editorPanel->pauseInput(false);
 	//oManager->uiSystem->editPanelUI->pauseInput(false);
 	currentState = State::NONE;
