@@ -157,7 +157,7 @@ std::string JsonIoSystem::newSerialize()
     dynObjectArr.SetArray();
     doc.AddMember("dynamicObjects", dynObjectArr, doc.GetAllocator());
 
-    // 3. Stringify the DOM
+    // Stringify the DOM
     StringBuffer buffer;
     Writer<StringBuffer> writer(buffer);
     doc.Accept(writer);
@@ -174,9 +174,14 @@ void JsonIoSystem::setupJSONValFromRbIter(rapidjson::Value& rbObj, RigidBodyMode
     }
     
     //Add imgPath key:val pair
-    rbObj.AddMember("imagePath", NULL, doc.GetAllocator());
-    rbObj["imagePath"].SetNull();
-    
+    {
+        auto imgStr = model->getImagePath();
+
+        rapidjson::Value v; v.SetString(imgStr.c_str(), doc.GetAllocator());
+        rbObj.AddMember("imagePath", v, doc.GetAllocator());
+        //rbObj["imagePath"].SetNull();
+    }
+
     //Add origin key:val pair
     {
         rapidjson::Value orgObj;
@@ -305,6 +310,14 @@ void JsonIoSystem::setupProject(rapidjson::Document& doc)
         _oManager->rbManager->addARigidBodyEntry(name);
 
         RigidBodyModel* rbModel = _oManager->rbManager->getModel(name);
+
+        //Parse image path
+        {
+            if (rbDOM["imagePath"].IsString())//To set the compatability with previous versions
+            {
+                rbModel->setImagePath(rbDOM["imagePath"].GetString());
+            }
+        }
 
         //Parse origin point
         {
