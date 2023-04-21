@@ -124,7 +124,7 @@ void EventManager::onImgButtonFromRbPanel(std::string n)
 		_dialogSystem->showImgSelectionDialog();
 		auto f = static_cast<ImageSelectDialogWindow*>(oManager->dialogWindowSystem->getCurrentDialog()->dialogWindow);
 		f->pathTextDisplay->setString(imgPath);
-		//oManager->editorPanel->pauseInput(true);
+		oManager->editSystem->pauseInput(true);
 		//oManager->uiSystem->editPanelUI->pauseInput(true);
 		currentState = State::WAIT_FOR_IMG;
 	}
@@ -154,7 +154,7 @@ void EventManager::onRenButtonPressedOnRbPanel()
 	if (oManager->prjManager->isProjectLoaded())
 	{
 		_dialogSystem->showRenameDialog();
-		//oManager->editorPanel->pauseInput(true);
+		oManager->editSystem->pauseInput(true);
 		//oManager->uiSystem->editPanelUI->pauseInput(true);
 		currentState = State::WAIT_FOR_REN;
 	}
@@ -245,7 +245,7 @@ void EventManager::onRenameOkBtnPress()
 void EventManager::onRenameCancelBtnPress()
 {
 	_dialogSystem->closeRenameDialog();
-	//oManager->editorPanel->pauseInput(false);
+	oManager->editSystem->pauseInput(false);
 	//oManager->uiSystem->editPanelUI->pauseInput(false);
 	currentState = State::NONE;
 }
@@ -291,8 +291,7 @@ void EventManager::onImgSelectOkBtnPress()
 	oManager->rbManager->getModel(s)->setImagePath(imPath);
 
 	_dialogSystem->closeDialog();
-	//oManager->editorPanel->pauseInput(false);
-	//oManager->uiSystem->editPanelUI->pauseInput(false);
+	oManager->editSystem->pauseInput(false);
 	currentState = State::NONE;
 	
 	buffer["currentImgSelectInvokerName"] = "";
@@ -487,7 +486,7 @@ void EventManager::addRbEntry()
 	{
 		oManager->rbManager->addARigidBodyEntry(n);
 		oManager->dialogWindowSystem->closeRenameDialog();
-		//oManager->editorPanel->pauseInput(false);
+		oManager->editSystem->pauseInput(false);
 		//oManager->uiSystem->editPanelUI->pauseInput(false);
 		currentState = State::NONE;
 	}
@@ -526,7 +525,7 @@ void EventManager::renRbEntry()
 		oManager->rbManager->renameSelectedModel(gStr);
 		//oManager->rbManager->selectModel(g);
 		oManager->dialogWindowSystem->closeRenameDialog();
-		//oManager->editorPanel->pauseInput(false);
+		oManager->editSystem->pauseInput(false);
 		//oManager->uiSystem->editPanelUI->pauseInput(false);
 		currentState = State::NONE;
 	}
@@ -538,7 +537,6 @@ void EventManager::renRbEntry()
 		currentState = State::WAIT_FOR_REN;
 	}
 }
-
 
 //-----------
 //Others

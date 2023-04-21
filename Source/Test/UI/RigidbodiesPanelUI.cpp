@@ -160,6 +160,8 @@ void RigidbodiesPanelUI::deleteEntry(std::string n)
     //Remove item layout from list
     auto a = _rbLayoutMap.at(n);
     _listView->removeItem(_listView->getIndex(a));
+    //Remove from layout map
+    _rbLayoutMap.erase(n);
 }
 
 void RigidbodiesPanelUI::selectEntry(std::string name)

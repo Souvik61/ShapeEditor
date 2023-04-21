@@ -115,6 +115,14 @@ void EditorManager::resetPointSpace()
 	//pointsNode->setPosition(editorUI->getWorldViewPortMidpoint());
 }
 
+void EditorManager::pauseInput(bool pause)
+{
+    if (pause)
+        editorUI->_screenInterface->pauseInput();
+    else
+        editorUI->_screenInterface->unpauseInput();
+}
+
 void EditorManager::validateNearestPoint(const Vec2& pt)
 {
     RigidBodyModel* model = rbManager->getSelectedModel();

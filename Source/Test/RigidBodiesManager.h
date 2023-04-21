@@ -42,15 +42,16 @@ public:
 
     void clearModels();
 
-    bool selectModel(std::string);
-
     void removeSelectedModel();
 
     void removeModel(std::string name);
 
-    void selectModel(RigidBodyModel* model) { _selectedModel = model; }
+    //Select model by name
+    bool selectModel(std::string name);
 
-    void selectModelByIndex(int i) { _selectedModel = _rbModels.at(i); }
+    void selectModel(RigidBodyModel* model);
+
+    void selectModelByIndex(int i);
 
     RigidBodyModel* getModel(std::string name);
 

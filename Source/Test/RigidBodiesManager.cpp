@@ -10,6 +10,7 @@ RigidBodiesManager::RigidBodiesManager() :_selectedModel(nullptr), selectedModel
 
 }
 
+
 RigidBodyModel* RigidBodiesManager::getModel(string name)
 {
     for (auto it = _rbModelsMap.begin(); it != _rbModelsMap.end(); it++)
@@ -77,6 +78,21 @@ bool RigidBodiesManager::selectModel(std::string name)
         return true;
     }
     return false;
+}
+
+void RigidBodiesManager::selectModel(RigidBodyModel* model)
+{
+    auto n = model->getName();
+    selectModel(n);
+}
+
+void RigidBodiesManager::selectModelByIndex(int i)
+{
+    auto it = _rbModelsMap.begin();
+    for (size_t j = 0; j < i; j++)
+        it++;
+
+    selectModel(it.value()->getName());
 }
 
 void RigidBodiesManager::removeSelectedModel()

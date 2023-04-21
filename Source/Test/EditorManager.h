@@ -80,6 +80,9 @@ public:
 
 	void resetPointSpace();
 
+	//Enables input processing
+	void pauseInput(bool pause);
+
 	PointSpaceNode* getPointsSpace() { return pointsNode; }
 
 	//Given a point in logic space calculate the nearest point in rigidbody
