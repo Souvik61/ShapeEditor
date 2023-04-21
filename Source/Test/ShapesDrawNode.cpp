@@ -5,6 +5,7 @@
 #include "Test/UI/EditorScreenInterface.h"
 #include "Test/UI/EditorPanelUI.h"
 
+using namespace std;
 USING_NS_CC;
 
 bool ShapesDrawNode::init()

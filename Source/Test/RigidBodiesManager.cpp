@@ -3,6 +3,7 @@
 #include "Test/UI/EditorPanelUI.h"
 #include "ShapeModel.h"
 
+using namespace std;
 
 RigidBodiesManager::RigidBodiesManager() :_selectedModel(nullptr), selectedModelName("")
 {
@@ -111,7 +112,7 @@ void RigidBodiesManager::removeModel(std::string name)
 }
 
 //Add entry
-void RigidBodiesManager::addARigidBodyEntry(string name)
+void RigidBodiesManager::addARigidBodyEntry(std::string name)
 {
     auto model = RigidBodyModel::create();
     model->name = name;
@@ -303,7 +304,7 @@ void RigidBodiesManager::onMouseDownAtPositionCreate(Vec2 pos)
 
 //List events
 
-void RigidBodiesManager::onEntryAdded(string n)
+void RigidBodiesManager::onEntryAdded(std::string n)
 {
     for (int i = 0; i < _onEntryAddedListenerList.size(); i++)
     {

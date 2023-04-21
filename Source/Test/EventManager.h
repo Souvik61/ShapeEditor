@@ -16,6 +16,9 @@ class EventManager : public ax::Node
 public:
 	enum State { NONE, WAIT_FOR_ADD, WAIT_FOR_REN, WAIT_FOR_IMG };
 public:
+	//A global associative map that can store different info like $_POST in PHP
+	std::map<std::string, std::string> buffer;
+
 	State currentState;
 
 	ProjectPanelUI* panelUI;
@@ -103,6 +106,5 @@ public:
 
 private:
 	ax::EventListenerCustom* _listener;
-
 };
 #endif // __EVENT_MANAGER_H__

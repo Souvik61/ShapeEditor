@@ -7,6 +7,7 @@
 #include "PointArrayDelegate.h"
 #include "OverallManager.h"
 
+using namespace std;
 USING_NS_CC;
 
 bool NewShapesDrawNode::init()

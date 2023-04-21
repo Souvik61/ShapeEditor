@@ -34,8 +34,8 @@ void NewEditionInputProcessor::processZooming(CustomMouseEvent e)
 {
     float scrDt = e.mEvent->getScrollY() * -0.1f;
     float sc = _editorPanel->oManager->spaceConv->scale + scrDt;
-    sc = max(0.1f, sc);
-    sc = min(10.0f, sc);
+    sc = std::max(0.1f, sc);
+    sc = std::min(10.0f, sc);
 
     _editorPanel->oManager->buffDelegate->applyScale(sc);
     _editorPanel->oManager->buffDelegate->refreshMat();

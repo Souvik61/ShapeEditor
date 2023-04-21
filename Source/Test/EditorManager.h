@@ -68,12 +68,15 @@ public:
 	ax::Camera* editorCam;
 	ax::Sprite* backgroundSpriteDraw;//This is drawn in RenderTex
 	CamDelegate* camDelegate;
+	std::string bgSpritePath = "";
 public:
 	virtual bool init();
 	//virtual void onEnter() override;
 	virtual void update(float dt) override;
-    // implement the "static create()" method manually
     CREATE_FUNC(EditorManager);
+
+	void updateBackgroundImage();
+
 
 	void resetPointSpace();
 

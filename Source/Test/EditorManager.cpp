@@ -29,7 +29,7 @@ bool EditorManager::init()
     //changeMode(EditorMode::VIEW);
 
     //Patch change later
-    backgroundSpriteDraw = Sprite::create("HelloWorld.png");
+    backgroundSpriteDraw = Sprite::create();
     backgroundSpriteDraw->setOpacity(127);
     backgroundSpriteDraw->setCameraMask((unsigned short)CameraFlag::USER2);
     backgroundSpriteDraw->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
@@ -43,9 +43,12 @@ void EditorManager::update(float dt)
 {
     Node::update(dt);
 
+    //Put this code somewhere else
+    updateBackgroundImage();
+
+
     //Position draw nodes and rendered sprite correctly
     {
-
         //Calculate sprite scale factor
         Vec2 spSize = backgroundSpriteDraw->getContentSize();
         float scF = 500 / spSize.width;//Will change from constant 500 later
@@ -77,6 +80,33 @@ void EditorManager::update(float dt)
         }
         editorUI->editTab->_rend->end();
         camDelegate->setVisitingCamera(nullptr);
+    }
+}
+
+void EditorManager::updateBackgroundImage()
+{
+    if (rbManager->getSelectedModel() == nullptr) return;
+
+    //If current selected rigidbody's imgPath != displayed image change it
+    if (!rbManager->getSelectedModel()->isImagePathValid()) return;
+
+    auto a = bgSpritePath;
+    auto b = rbManager->getSelectedModel()->getImagePath();
+
+    //If 2 image paths do not match
+    if (a != b)
+    {
+        bgSpritePath = b;
+        if (b == "") 
+        {
+            backgroundSpriteDraw->init();//Clear background sprite
+        }
+        else
+        {
+            backgroundSpriteDraw->initWithFile(b);
+        }
+        backgroundSpriteDraw->setOpacity(127);
+        backgroundSpriteDraw->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
     }
 }
 
@@ -164,8 +194,8 @@ void EditorManager::selectPointsInMouseSelection()
     if (mSel.isValid()) 
     {
         Rect rect(
-            min(p1.x, p2.x),
-            min(p1.y, p2.y),
+            std::min(p1.x, p2.x),
+            std::min(p1.y, p2.y),
             abs(p2.x - p1.x),
             abs(p2.y - p1.y)
         );

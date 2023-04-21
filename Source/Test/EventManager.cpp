@@ -8,6 +8,7 @@
 #include "StateTracker.h"
 #include "Test/EditorManager.h"
 #include "Test/RbListController.h"
+#include "RigidBodyModel.h"
 
 //---------------
 //Event Manager
@@ -114,7 +115,9 @@ void EventManager::onImgButtonFromRbPanel(std::string n)
 	CCLOG("Img button");
 	if (oManager->prjManager->isProjectLoaded())
 	{
-		//_dialogSystem->showRenameDialog();
+		//Keep this in buffer to acces later
+		buffer["currentImgSelectInvokerName"] = n;
+
 		_dialogSystem->showImgSelectionDialog();
 		//oManager->editorPanel->pauseInput(true);
 		//oManager->uiSystem->editPanelUI->pauseInput(true);
@@ -273,10 +276,18 @@ void EventManager::onImgSelectClearBtnPress()
 
 void EventManager::onImgSelectOkBtnPress()
 {
+	auto s = buffer["currentImgSelectInvokerName"];
+
+	//Set image path of model
+	auto f = static_cast<ImageSelectDialogWindow*>(oManager->dialogWindowSystem->getCurrentDialog()->dialogWindow);
+	oManager->rbManager->getModel(s)->setImagePath(std::string(f->pathTextDisplay->getString()));
+
 	_dialogSystem->closeDialog();
 	//oManager->editorPanel->pauseInput(false);
 	//oManager->uiSystem->editPanelUI->pauseInput(false);
 	currentState = State::NONE;
+	
+	buffer["currentImgSelectInvokerName"] = "";
 }
 
 //---------------
