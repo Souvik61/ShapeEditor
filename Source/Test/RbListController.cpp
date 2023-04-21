@@ -24,6 +24,12 @@ void RbListController::syncUIwithRbManager()
 {
     rbUI->clearAllEntries();
 
+    if (rbMan->_rbModelsMap.empty())
+    {
+        rbUI->_rbToolbarLayout->_delRbBtn->setBright(false);
+        rbUI->_rbToolbarLayout->_renRbBtn->setBright(false);
+    }
+
     for each (auto var in rbMan->_rbModelsMap)
     {
         rbUI->addEntry(var.first);

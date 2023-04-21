@@ -487,7 +487,6 @@ void EventManager::addRbEntry()
 		oManager->rbManager->addARigidBodyEntry(n);
 		oManager->dialogWindowSystem->closeRenameDialog();
 		oManager->editSystem->pauseInput(false);
-		//oManager->uiSystem->editPanelUI->pauseInput(false);
 		currentState = State::NONE;
 	}
 	else
