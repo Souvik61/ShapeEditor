@@ -112,13 +112,18 @@ void EventManager::onSpwnButtonFromRbPanel(std::string n)
 
 void EventManager::onImgButtonFromRbPanel(std::string n)
 {
-	CCLOG("Img button");
+	//CCLOG("Img button");
 	if (oManager->prjManager->isProjectLoaded())
 	{
-		//Keep this in buffer to acces later
+		//Keep this in buffer to access later
 		buffer["currentImgSelectInvokerName"] = n;
 
+		auto imgPath = oManager->rbManager->getModel(n)->getImagePath();
+		imgPath = imgPath == "" ? "none" : imgPath;
+
 		_dialogSystem->showImgSelectionDialog();
+		auto f = static_cast<ImageSelectDialogWindow*>(oManager->dialogWindowSystem->getCurrentDialog()->dialogWindow);
+		f->pathTextDisplay->setString(imgPath);
 		//oManager->editorPanel->pauseInput(true);
 		//oManager->uiSystem->editPanelUI->pauseInput(true);
 		currentState = State::WAIT_FOR_IMG;
@@ -280,7 +285,10 @@ void EventManager::onImgSelectOkBtnPress()
 
 	//Set image path of model
 	auto f = static_cast<ImageSelectDialogWindow*>(oManager->dialogWindowSystem->getCurrentDialog()->dialogWindow);
-	oManager->rbManager->getModel(s)->setImagePath(std::string(f->pathTextDisplay->getString()));
+
+	std::string imPath = std::string(f->pathTextDisplay->getString());
+	imPath = (imPath == "none") ? "" : imPath;//If image path == none change to ""
+	oManager->rbManager->getModel(s)->setImagePath(imPath);
 
 	_dialogSystem->closeDialog();
 	//oManager->editorPanel->pauseInput(false);
