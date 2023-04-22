@@ -21,7 +21,7 @@ public:
 	void onEnter() override;
 	CREATE_FUNC(RbListController);
 
-	void syncUIwithRbManager();
+	void syncToolbarWithRbManager();
 
 	//In spawn mode all spawn buttons of rbentrylayout is enabled
 	void enableSpawnMode(bool en);
@@ -36,6 +36,7 @@ public:
 	void entryAddedCallback(std::string);
 	void entryDeletedCallback(std::string);
 	void entrySelectedCallback(std::string);
+	void rbManagerStateChangeCallback();
 
 private:
 	std::function<void(std::string)> OnASpawnClicked;

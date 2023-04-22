@@ -18,22 +18,16 @@ bool RbListController::init()
 void RbListController::onEnter()
 {
     Node::onEnter();
+
+    syncToolbarWithRbManager();
+
 }
 
-void RbListController::syncUIwithRbManager()
+void RbListController::syncToolbarWithRbManager()
 {
-    rbUI->clearAllEntries();
-
-    if (rbMan->_rbModelsMap.empty())
-    {
-        rbUI->_rbToolbarLayout->_delRbBtn->setBright(false);
-        rbUI->_rbToolbarLayout->_renRbBtn->setBright(false);
-    }
-
-    for each (auto var in rbMan->_rbModelsMap)
-    {
-        rbUI->addEntry(var.first);
-    }
+    rbUI->_rbToolbarLayout->_addRbBtn->setEnabled(rbMan->inState.canAdd);
+    rbUI->_rbToolbarLayout->_delRbBtn->setEnabled(rbMan->inState.canDelete);
+    rbUI->_rbToolbarLayout->_renRbBtn->setEnabled(rbMan->inState.canRename);
 }
 
 void RbListController::enableSpawnMode(bool en)
@@ -83,7 +77,6 @@ void RbListController::rbImgCallback(Ref* ref, ui::Widget::TouchEventType touchT
 //Callbacks from Rigidbodies Manager
 //-------------------------------------
 
-
 void RbListController::entryAddedCallback(std::string s)
 {
     rbUI->addEntry(s);
@@ -97,4 +90,11 @@ void RbListController::entryDeletedCallback(std::string s)
 void RbListController::entrySelectedCallback(std::string s)
 {
     rbUI->selectEntry(s);
+}
+
+void RbListController::rbManagerStateChangeCallback()
+{
+    rbUI->_rbToolbarLayout->_addRbBtn->setEnabled(rbMan->inState.canAdd);
+    rbUI->_rbToolbarLayout->_delRbBtn->setEnabled(rbMan->inState.canDelete);
+    rbUI->_rbToolbarLayout->_renRbBtn->setEnabled(rbMan->inState.canRename);
 }

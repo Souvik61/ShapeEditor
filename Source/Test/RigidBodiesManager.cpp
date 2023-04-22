@@ -1,6 +1,7 @@
 #include "RigidBodiesManager.h"
 #include "RigidBodyModel.h"
 #include "Test/UI/EditorPanelUI.h"
+#include "OverallManager.h"
 #include "ShapeModel.h"
 
 using namespace std;
@@ -21,7 +22,6 @@ RigidBodyModel* RigidBodiesManager::getModel(string name)
     return nullptr;
 }
 
-
 void RigidBodiesManager::renameSelectedModel(std::string n)
 {
     auto selModel = getSelectedModel();//Get current selected model
@@ -40,6 +40,14 @@ void RigidBodiesManager::setInputModuleUI(EditorPanelUI* panel)
 {
     //panel->setRigidBodyManager(this);
     _editPanel = panel;
+}
+
+void RigidBodiesManager::internalUpdate()
+{
+    inState.canDelete = inState.canRename = !_rbModelsMap.empty();
+    inState.canAdd = oManager->prjManager->isProjectLoaded();
+
+    onStateChanged();
 }
 
 void RigidBodiesManager::computeAllRigidBodies()
@@ -111,6 +119,8 @@ void RigidBodiesManager::removeSelectedModel()
     }
     else
         selectModel("");
+
+    internalUpdate();
 }
 
 void RigidBodiesManager::removeModel(std::string name)
@@ -125,6 +135,9 @@ void RigidBodiesManager::removeModel(std::string name)
     }
     else
         selectModel("");
+
+    internalUpdate();
+
 }
 
 //Add entry
@@ -137,6 +150,8 @@ void RigidBodiesManager::addARigidBodyEntry(std::string name)
 
     selectedModelName = name;
 
+    internalUpdate();
+
     //Callback all listeners
     onEntryAdded(name);
 }
@@ -146,6 +161,8 @@ void RigidBodiesManager::addARigidBodyEntry(std::string name, RigidBodyModel* mo
     model->name = name;
     _rbModels.pushBack(model);
     _rbModelsMap.insert(name, model);
+
+    internalUpdate();
 
     //Callback all listeners
     onEntryAdded(name);
@@ -316,6 +333,15 @@ void RigidBodiesManager::onMouseDownAtPositionCreate(Vec2 pos)
         }
     }
 
+}
+
+void RigidBodiesManager::onStateChanged()
+{
+    //Call all the callbacks
+    for (int i = 0; i < OnStateChangedListenerList.size(); i++)
+    {
+        OnStateChangedListenerList[i]();
+    }
 }
 
 //List events

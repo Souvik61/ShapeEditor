@@ -57,6 +57,8 @@ bool TestScene13::init()
     _manager->rbManager->setInputModuleUI(_uiSystem->editPanelUI);
     prjManager->jIOSystem->setOverallManager(_manager);
 
+    rbManager->oManager = _manager;
+
     auto rBListCtrl = RbListController::create();
     addChild(rBListCtrl);
     rBListCtrl->rbMan = rbManager;
@@ -65,6 +67,7 @@ bool TestScene13::init()
     _manager->rbManager->_onEntryAddedListenerList.push_back(CC_CALLBACK_1(RbListController::entryAddedCallback, rBListCtrl));
     _manager->rbManager->onEntryDeletedListenerList.push_back(CC_CALLBACK_1(RbListController::entryDeletedCallback, rBListCtrl));
     _manager->rbManager->onSelChangedListenerList.push_back(CC_CALLBACK_1(RbListController::entrySelectedCallback, rBListCtrl));
+    _manager->rbManager->OnStateChangedListenerList.push_back(CC_CALLBACK_0(RbListController::rbManagerStateChangeCallback, rBListCtrl));
 
     //Add event manager
     auto eM = EventManager::create();

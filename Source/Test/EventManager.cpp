@@ -151,7 +151,7 @@ void EventManager::onDelButtonPressedOnRbPanel()
 
 void EventManager::onRenButtonPressedOnRbPanel()
 {
-	if (oManager->prjManager->isProjectLoaded())
+	if (oManager->prjManager->isProjectLoaded() && oManager->rbManager->getSelectedModel() != nullptr)
 	{
 		_dialogSystem->showRenameDialog();
 		oManager->editSystem->pauseInput(true);
@@ -458,12 +458,14 @@ void EventManager::onLoadFromDisk()
 	{
 		oManager->rbManager->clearModels();
 		oManager->prjManager->loadFileNew(fP);
+		oManager->rbManager->internalUpdate();
 		
 		//Set ui panel display of project name
 		std::string a = oManager->prjManager->projectName;
 		oManager->uiSystem->prjPanelUI->setProjectNameText(a);
 
 		oManager->rbManager->selectModelByIndex(0);
+		
 	}
 
 }
