@@ -101,7 +101,11 @@ void EventManager::onSpwnButtonFromRbPanel(std::string n)
 	//Spawn n in b2d world :-)
 	//CCLOG("Spawn %s",n.c_str());
 	
-	bool res = oManager->spwnManager->spawnBody(n, Vec2(500, 500));
+	Vec2 a = oManager->uiSystem->editPanelUI->playTab->spawnPointer->getPosition();
+	Vec2 b = oManager->uiSystem->editPanelUI->playTab->spawnPointer->convertToWorldSpace(a);
+	Vec2 c = oManager->b2dManager->convertTouchToWorldNew(b);
+
+	bool res = oManager->spwnManager->spawnBody(n, c);
 
 	if (!res) {
 		//CCLOG("Error in shape data!");

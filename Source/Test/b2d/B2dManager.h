@@ -33,6 +33,13 @@ public:
 	B2DManager();
 
 	ax::Vec2 convertTouchToWorld(const ax::Vec2& v) { return v + camOffset; };
+
+	ax::Vec2 convertTouchToWorldNew(const ax::Vec2& v) 
+	{ 
+		ax::Vec3 a = b2Cam->unprojectGL(ax::Vec3(v.x, v.y, 0));
+		return ax::Vec2(a.x, a.y);
+	};
+
 	//Mouse Inputs
 	void onMouseDown(ax::EventMouse* event);
 	void onMouseMove(ax::EventMouse* event);

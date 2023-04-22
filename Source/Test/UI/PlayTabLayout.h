@@ -17,6 +17,7 @@ public:
 	ax::Size viewSize;
 	ax::EventListenerMouse* mListen;
 	B2DManager* bManager;
+	ax::Sprite* spawnPointer;
 
 	PlayTabCtrlPanel* pCtrlPanel;
 public:
