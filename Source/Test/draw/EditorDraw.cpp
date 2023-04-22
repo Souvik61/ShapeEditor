@@ -60,6 +60,7 @@ void EditorDraw::drawModels()
     drawSelectedVerts();
     drawSelectionBox();
     drawUnitVectors();
+    drawMousePointers();
 
     //Draw nearest point to the mouse pointer
     if (editManager->nearestPoint != nullptr) {
@@ -103,6 +104,17 @@ void EditorDraw::positionSprites()
     a.set(0, 500);
     editManager->oManager->spaceConv->applyT(&a);
     v01->setPosition(a);
+
+}
+
+void EditorDraw::drawMousePointers()
+{
+    if (editManager->_mode != EditorMode::CREATE)return;
+
+    //Draw mouse pointer
+    Vec2 a = editManager->mouseLocation;
+    Size dotSize(5, 5);
+    _vertDraw->drawRect(a - dotSize, a + dotSize, Color4F::BLUE);
 
 }
 

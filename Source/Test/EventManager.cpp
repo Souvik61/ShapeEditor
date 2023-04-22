@@ -419,6 +419,8 @@ void EventManager::onNewProject()
 	{
 		oManager->rbManager->clearModels();//Clear existing models in buffer.
 		oManager->prjManager->setProjectPath(fP);
+		oManager->rbManager->internalUpdate();
+
 		std::string a = oManager->prjManager->projectName;
 		oManager->uiSystem->prjPanelUI->setProjectNameText(a);
 	}

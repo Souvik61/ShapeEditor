@@ -43,13 +43,13 @@ public:
 class EditorManager : public ax::Node
 {
 public:
-
 	std::vector<ax::Vec2*> selectedPoints;
 	//Pointer to the nearest point
 	//It directly points to the rigidbody model's vertices array
 	ax::Vec2* nearestPoint;
 	ax::Vec2 prevMousePoint;
-
+	//Mouse location in global coord
+	ax::Vec2 mouseLocation;
 	//Represents current mouse selection
 	//The points in screen space
 	MouseSelection mSel;

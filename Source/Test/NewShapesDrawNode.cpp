@@ -144,12 +144,11 @@ void NewShapesDrawNode::drawShapes()
             }
             else { //Else
                 bV->set(vs[vs.size() - 1]);
-                //pDelegate->applyTransform(bV);
                 
                 //_editPanelUI->oManager->buffDelegate->applyNewTransform(bV);
                 _editPanelUI->oManager->spaceConv->applyT(bV);
                 
-                //_shapeDraw->drawLine(_editPanelUI->_screenInterface->_currentPointerLoc, *bV, Color4F::GRAY);
+                _shapeDraw->drawLine(_editPanelUI->editManager->mouseLocation, *bV, Color4F::GRAY);
             }
         }
         break;

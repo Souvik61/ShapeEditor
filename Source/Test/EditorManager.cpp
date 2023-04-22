@@ -46,9 +46,9 @@ void EditorManager::update(float dt)
     //Put this code somewhere else
     updateBackgroundImage();
 
-
     //Position draw nodes and rendered sprite correctly
     {
+        //Do not do this calculation every frame
         //Calculate sprite scale factor
         Vec2 spSize = backgroundSpriteDraw->getContentSize();
         float scF = 500 / spSize.width;//Will change from constant 500 later
@@ -297,13 +297,14 @@ void EditorManager::onMouseMoved(EventMouse* e)
 {
     //_mousePointer->setOpacity(255);
     //_mousePointer->setPosition(e->getLocationInView());
-
+    mouseLocation = e->getLocationInView();
+    
     //Send event to rigidbodies manager
     CustomMouseEvent mEve = { CustomMouseEvent::EventType::MOVED,e };
-    //_rbManager->onMouseInteractionFromEditor(mEve, _mode);
 
     if (_currentInputProcessor)
         _currentInputProcessor->onMouseMoved(mEve); //Send event to input processor
+
     prevMousePoint = e->getLocationInView();
 }
 
