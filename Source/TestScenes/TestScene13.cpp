@@ -171,6 +171,7 @@ bool TestScene13::init()
 
         Vec3 p = getDefaultCamera()->getPosition3D();
         //cam->setPosition(c + Vec2(0, 0));
+        cam->setPosition(Vec2(-140, 250));
         cam->setPositionZ(p.z);
 
         //Add a pointer to show spawn point
@@ -179,7 +180,17 @@ bool TestScene13::init()
         camPointer->setCameraMask((unsigned short)CameraFlag::USER1, true);
         //camPointer->setPositionX(5);
         //camPointer->setPositionY(5);
-        addChild(camPointer, 2, "sp_pointer");
+        //addChild(camPointer, 2, "sp_pointer");
+
+
+        //Add a flag to show world origin
+        auto flag = Sprite::create("Sprites/flag_red.png");
+        flag->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
+        flag->setScale(0.4f);
+        flag->setCameraMask((unsigned short)CameraFlag::USER1, true);
+        //camPointer->setPositionX(5);
+        //camPointer->setPositionY(5);
+        addChild(flag, 2, "flag");
 
 
         //Sky

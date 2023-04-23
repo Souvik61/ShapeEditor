@@ -13,6 +13,12 @@ using namespace rb;
 
 bool SpawnManager::spawnBody(std::string name, ax::Vec2 pos)
 {
+	//If we try to spawn below ground prevent it
+	if (pos.y < 0)
+	{
+		pos.y = 10;
+	}
+
 	//Get model
 	auto rbModel = rbManager->getModel(name);
 
