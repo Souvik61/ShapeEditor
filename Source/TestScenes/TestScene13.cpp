@@ -95,7 +95,7 @@ bool TestScene13::init()
     {
         shapeDraw1->setRbManager(_manager->rbManager);
         shapeDraw1->setEditorPanel(_manager->uiSystem->editPanelUI);
-        addChild(shapeDraw1, 100);
+        addChild(shapeDraw1, 13);
         //_manager->uiSystem->editPanelUI->setDrawNode(shapeDraw1);
     }
 
@@ -111,7 +111,7 @@ bool TestScene13::init()
 
         //New Editor draw
         auto eDraw = EditorDraw::create();
-        addChild(eDraw, 50);
+        addChild(eDraw, 13);
         eDraw->editManager = editM;
         editM->drawer = eDraw;
 

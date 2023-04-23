@@ -319,6 +319,7 @@ void EventManager::onTabChanged(int index)
 
 		//Patch!!
 		oManager->backGrid->setVisible(false);
+		oManager->editSystem->editorCam->setVisible(false);
 
 	}
 	else
@@ -335,7 +336,7 @@ void EventManager::onTabChanged(int index)
 		
 		//Patch!!
 		oManager->backGrid->setVisible(true);
-
+		oManager->editSystem->editorCam->setVisible(true);
 	}
 }
 
