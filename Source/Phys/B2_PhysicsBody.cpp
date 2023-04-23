@@ -50,6 +50,7 @@ bool B2PhysicsBody::init(b2Body* body,B2WorldNode* world)
 
 void rb::B2PhysicsBody::onAdd()
 {
+    getOwner()->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
     updateTransform();
 }
 

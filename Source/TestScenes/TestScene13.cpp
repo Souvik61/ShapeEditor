@@ -170,7 +170,7 @@ bool TestScene13::init()
         Vec2 c = a - mid;
 
         Vec3 p = getDefaultCamera()->getPosition3D();
-        cam->setPosition(c + Vec2(0, 0));
+        //cam->setPosition(c + Vec2(0, 0));
         cam->setPositionZ(p.z);
 
         //Add a pointer to show spawn point
@@ -419,9 +419,24 @@ void TestScene13::menuCloseCallback(Ref* pSender)
     //addChild(l, 100);
     //_manager->editSystem->rendTexVisitNodes.push_back(l);
 
-    Vec2 a = _manager->editSystem->convertGlobalScreenSpaceToEditCamCoord(Vec2(0, 0));
-    Vec2 b = _manager->editSystem->convertGlobalScreenSpaceToEditCamCoord(Vec2(500, 0));
-    Vec2 c = b - a;
-    CCLOG("%f;%f", c.x, c.y);
+    //Vec2 a = _manager->editSystem->convertGlobalScreenSpaceToEditCamCoord(Vec2(0, 0));
+    //Vec2 b = _manager->editSystem->convertGlobalScreenSpaceToEditCamCoord(Vec2(500, 0));
+    //Vec2 c = b - a;
+    //CCLOG("%f;%f", c.x, c.y);
+
+    //auto a = _uiSystem->editPanelUI->playTab->spawnPointer;
+    //
+    //Vec2 b = a->getParent()->convertToWorldSpace(a->getPosition());
+    //
+    ////Testing
+    //auto l = DrawNode::create();
+    ////l->setCameraMask((unsigned short)CameraFlag::USER2);
+    //l->drawDot(Vec2::ZERO, 10, Color4B::RED);
+    //l->setPosition(b);
+    //addChild(l, 100);
+
+    //Vec2 c = b2Cam->projectGL(Vec3(640, 360, 0));
+
+    //CCLOG("%f;%f", c.x, c.y);
 
 }

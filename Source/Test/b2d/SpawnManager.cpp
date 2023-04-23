@@ -29,6 +29,13 @@ bool SpawnManager::spawnBody(std::string name, ax::Vec2 pos)
 	n->addComponent(rB);
 	runningScene->addChild(n);
 
+	//Testing
+	//auto l = DrawNode::create();
+	//l->setCameraMask((unsigned short)CameraFlag::USER1);
+	//l->drawDot(Vec2::ZERO, 10, Color4B::RED);
+	//l->setPosition(pos);
+	//runningScene->addChild(l, 100);
+
 	return true;
 }
 

@@ -101,8 +101,8 @@ void EventManager::onSpwnButtonFromRbPanel(std::string n)
 	//Spawn n in b2d world :-)
 	//CCLOG("Spawn %s",n.c_str());
 	
-	Vec2 a = oManager->uiSystem->editPanelUI->playTab->spawnPointer->getPosition();
-	Vec2 b = oManager->uiSystem->editPanelUI->playTab->spawnPointer->convertToWorldSpace(a);
+	auto a = oManager->uiSystem->editPanelUI->playTab->spawnPointer;
+	Vec2 b = a->getParent()->convertToWorldSpace(a->getPosition());
 	Vec2 c = oManager->b2dManager->convertTouchToWorldNew(b);
 
 	bool res = oManager->spwnManager->spawnBody(n, c);
