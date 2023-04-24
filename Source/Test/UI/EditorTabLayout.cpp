@@ -80,7 +80,7 @@ void EditorTabLayout::initLayout()
     //Draw checkered background
     {
         auto bG = BackGrid::create();
-        //bG->setVisible(false);
+        bG->setVisible(false);
         addChild(bG, 2);
         bG->setContentSize(viewSize);
 

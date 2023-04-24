@@ -95,7 +95,7 @@ bool TestScene13::init()
     {
         shapeDraw1->setRbManager(_manager->rbManager);
         shapeDraw1->setEditorPanel(_manager->uiSystem->editPanelUI);
-        addChild(shapeDraw1, 13);
+        addChild(shapeDraw1, 10);
         //_manager->uiSystem->editPanelUI->setDrawNode(shapeDraw1);
     }
 
@@ -111,7 +111,7 @@ bool TestScene13::init()
 
         //New Editor draw
         auto eDraw = EditorDraw::create();
-        addChild(eDraw, 13);
+        addChild(eDraw, 9);
         eDraw->editManager = editM;
         editM->drawer = eDraw;
 
@@ -227,7 +227,7 @@ bool TestScene13::init()
     //This means all things are inited.
     _manager->init();
 
-    addCloseButton();
+    //addCloseButton();
     
     return true;
 }
@@ -377,13 +377,13 @@ void TestScene13::addB2DSystem()
 void TestScene13::addGridDraw()
 {
     auto bG = BackGrid::create();
-    bG->setVisible(false);
+    //bG->setVisible(false);
     addChild(bG, -2);
 
     bG->gridSize = visibleSize;//Set total grid size
-    bG->cellSize.setSize(10, 10);//Set cell size
+    bG->cellSize.set(10, 10);//Set cell size
 
-    //bG->validateGrid();
+    bG->validateGrid();
 
     _manager->backGrid = bG;
 }
