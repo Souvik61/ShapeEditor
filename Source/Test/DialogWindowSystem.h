@@ -4,13 +4,13 @@
 #include "cocos2d.h"
 #include "DialogPrompt.h"
 
-USING_NS_CC;
-
 //Responsible for the prompt window system
-class DialogWindowSystem : public Node
+//Use this class to show different dialogs
+class DialogWindowSystem : public ax::Node
 {
 public:
-	std::function<void(std::string)> onRenameWindowBtnEvent;
+	std::function<void(std::string)> OnRenameWindowBtnEvent;
+	std::function<void(std::string)> OnImgWindowBtnEvent;
 	
 public:
 	DialogPrompt* _diaPrompt;
@@ -18,11 +18,21 @@ public:
 	bool init() override;
 	CREATE_FUNC(DialogWindowSystem);
 
+	//Different Dialog windows
+
 	void showRenameDialog();
-	bool isShowingDialog();
+	void showImgSelectionDialog();
+	
+	bool isShowingADialog();
+	void closeDialog();
+	//will be deprecated soon
 	void closeRenameDialog();
+	
 	DialogPrompt* getCurrentDialog();
+
+private:
 	void onRenameWinBtnPress(std::string);
+	void onImgSelWinBtnPress(std::string);
 
 };
 

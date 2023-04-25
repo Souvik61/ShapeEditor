@@ -4,27 +4,20 @@
 #include "cocos2d.h"
 #include "ShapeModel.h"
 
-using namespace std;
-USING_NS_CC;
-
 class ShapeModel;
 class PolygonModel;
 class CircleModel;
 
-class RigidBodyModel : public Ref
+class RigidBodyModel : public ax::Ref
 {
 public:
-    std::string PROP_NAME = "name";
-    std::string PROP_IMAGEPATH = "imagePath";
-    std::string PROP_PHYSICS = "physics";
+    ax::Vec2 origin;
+    ax::Vector<ShapeModel*> _shapes;
+    ax::Vector<PolygonModel*> _polygons;
+    ax::Vector<CircleModel*> _circles;
+    std::string name = "unamed";
 
-    Vec2 origin;
-    Vector<ShapeModel*> _shapes;
-    Vector<PolygonModel*> _polygons;
-    Vector<CircleModel*> _circles;
-    string name = "unamed";
-    string imagePath;
-    bool _imgPathValid = true;
+    std::string imagePath;
     bool _shapesValid = false;//Flag to tell if shapes are valid polygons
 
     bool _isPhysDirty;//Flag to track if physics shape are dirty, if dirty computePhysics
@@ -34,22 +27,19 @@ public:
 
     bool init();
 
-    Vec2 getOrigin() { return origin; }
+    ax::Vec2 getOrigin() { return origin; }
 
-    void setName(string name) {
+    void setName(std::string name) {
         this->name = name;
     }
 
-    string getName() { return name; }
+    std::string getName() { return name; }
 
-    void setImagePath(string imagePath) {
-        //this->imagePath = imagePath;
-        //this->isImagePathValid = imagePath == null ? true : Ctx.io.getImageFile(imagePath).isFile();
-    }
+    void setImagePath(std::string imagePath);
 
-    string getImagePath() { return imagePath; }
+    std::string getImagePath() { return imagePath; }
 
-    bool isImagePathValid() { return _imgPathValid; }
+    bool isImagePathValid();
 
     void clear() {
         _shapes.clear();

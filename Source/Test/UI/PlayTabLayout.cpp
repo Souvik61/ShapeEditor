@@ -23,7 +23,6 @@ void PlayTabLayout::initLayout()
 {
     Size s = getContentSize();
 
-
     //Init clipping node
     auto _clipNode = ClippingNode::create();
     _clipNode->setContentSize(s);
@@ -38,7 +37,7 @@ void PlayTabLayout::initLayout()
 
     _clipStencil->drawSolidRect(Vec2::ZERO, Vec2(s.width - 20, s.height - 20), Color4F::MAGENTA);
     _clipStencil->setContentSize(Size(s.width - 20, s.height - 50));
-    viewSize.setSize(s.width - 20, s.height - 50);
+    viewSize.set(s.width - 20, s.height - 50);
 
     //Add a black border
     auto border = DrawNode::create();
@@ -78,6 +77,16 @@ void PlayTabLayout::initLayout()
 
         pCtrlPanel->setPosition(Vec2(s.width / 2, 25));
     }
+
+    //Add spawn pointer
+    {
+        Vec2 v = getContentSize();
+        spawnPointer = Sprite::create("Sprites/ui/crosshair.png");
+        spawnPointer->setScale(0.3f);
+        addChild(spawnPointer, 1);
+        spawnPointer->setPosition(v / 2);
+    }
+
 
 }
 

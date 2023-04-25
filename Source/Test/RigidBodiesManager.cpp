@@ -1,13 +1,16 @@
 #include "RigidBodiesManager.h"
 #include "RigidBodyModel.h"
 #include "Test/UI/EditorPanelUI.h"
+#include "OverallManager.h"
 #include "ShapeModel.h"
 
+using namespace std;
 
 RigidBodiesManager::RigidBodiesManager() :_selectedModel(nullptr), selectedModelName("")
 {
 
 }
+
 
 RigidBodyModel* RigidBodiesManager::getModel(string name)
 {
@@ -18,7 +21,6 @@ RigidBodyModel* RigidBodiesManager::getModel(string name)
     }
     return nullptr;
 }
-
 
 void RigidBodiesManager::renameSelectedModel(std::string n)
 {
@@ -38,6 +40,14 @@ void RigidBodiesManager::setInputModuleUI(EditorPanelUI* panel)
 {
     //panel->setRigidBodyManager(this);
     _editPanel = panel;
+}
+
+void RigidBodiesManager::internalUpdate()
+{
+    inState.canDelete = inState.canRename = !_rbModelsMap.empty();
+    inState.canAdd = oManager->prjManager->isProjectLoaded();
+
+    onStateChanged();
 }
 
 void RigidBodiesManager::computeAllRigidBodies()
@@ -78,6 +88,21 @@ bool RigidBodiesManager::selectModel(std::string name)
     return false;
 }
 
+void RigidBodiesManager::selectModel(RigidBodyModel* model)
+{
+    auto n = model->getName();
+    selectModel(n);
+}
+
+void RigidBodiesManager::selectModelByIndex(int i)
+{
+    auto it = _rbModelsMap.begin();
+    for (size_t j = 0; j < i; j++)
+        it++;
+
+    selectModel(it.value()->getName());
+}
+
 void RigidBodiesManager::removeSelectedModel()
 {
     if (selectedModelName.empty())
@@ -94,6 +119,8 @@ void RigidBodiesManager::removeSelectedModel()
     }
     else
         selectModel("");
+
+    internalUpdate();
 }
 
 void RigidBodiesManager::removeModel(std::string name)
@@ -108,10 +135,13 @@ void RigidBodiesManager::removeModel(std::string name)
     }
     else
         selectModel("");
+
+    internalUpdate();
+
 }
 
 //Add entry
-void RigidBodiesManager::addARigidBodyEntry(string name)
+void RigidBodiesManager::addARigidBodyEntry(std::string name)
 {
     auto model = RigidBodyModel::create();
     model->name = name;
@@ -119,6 +149,8 @@ void RigidBodiesManager::addARigidBodyEntry(string name)
     _rbModelsMap.insert(name, model);
 
     selectedModelName = name;
+
+    internalUpdate();
 
     //Callback all listeners
     onEntryAdded(name);
@@ -129,6 +161,8 @@ void RigidBodiesManager::addARigidBodyEntry(std::string name, RigidBodyModel* mo
     model->name = name;
     _rbModels.pushBack(model);
     _rbModelsMap.insert(name, model);
+
+    internalUpdate();
 
     //Callback all listeners
     onEntryAdded(name);
@@ -301,9 +335,18 @@ void RigidBodiesManager::onMouseDownAtPositionCreate(Vec2 pos)
 
 }
 
+void RigidBodiesManager::onStateChanged()
+{
+    //Call all the callbacks
+    for (int i = 0; i < OnStateChangedListenerList.size(); i++)
+    {
+        OnStateChangedListenerList[i]();
+    }
+}
+
 //List events
 
-void RigidBodiesManager::onEntryAdded(string n)
+void RigidBodiesManager::onEntryAdded(std::string n)
 {
     for (int i = 0; i < _onEntryAddedListenerList.size(); i++)
     {

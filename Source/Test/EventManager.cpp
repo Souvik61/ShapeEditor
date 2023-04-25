@@ -8,10 +8,11 @@
 #include "StateTracker.h"
 #include "Test/EditorManager.h"
 #include "Test/RbListController.h"
+#include "RigidBodyModel.h"
 
-//------------------------
+//---------------
 //Event Manager
-//------------------------
+//---------------
 
 EventManager::EventManager() :
 	_dialogSystem(nullptr), oManager(nullptr), currentState(State::NONE)
@@ -56,7 +57,8 @@ void EventManager::onExit()
 void EventManager::setDialogWindowSystem(DialogWindowSystem* dS)
 {
 	_dialogSystem = dS;
-	_dialogSystem->onRenameWindowBtnEvent = CC_CALLBACK_1(EventManager::onBtnPressFromWindow, this);
+	_dialogSystem->OnRenameWindowBtnEvent = CC_CALLBACK_1(EventManager::onBtnPressFromWindow, this);
+	_dialogSystem->OnImgWindowBtnEvent = CC_CALLBACK_1(EventManager::onBtnPressFromImgSelectWindow, this);
 }
 
 //------------------
@@ -99,11 +101,36 @@ void EventManager::onSpwnButtonFromRbPanel(std::string n)
 	//Spawn n in b2d world :-)
 	//CCLOG("Spawn %s",n.c_str());
 	
-	bool res = oManager->spwnManager->spawnBody(n, Vec2(500, 500));
+	auto a = oManager->uiSystem->editPanelUI->playTab->spawnPointer;
+	Vec2 b = a->getParent()->convertToWorldSpace(a->getPosition());
+	Vec2 c = oManager->b2dManager->convertTouchToWorldNew(b);
+
+	bool res = oManager->spwnManager->spawnBody(n, c);
 
 	if (!res) {
 		//CCLOG("Error in shape data!");
 		oManager->uiSystem->notifSys->showNotification("Error in shape data!");
+	}
+
+}
+
+void EventManager::onImgButtonFromRbPanel(std::string n)
+{
+	//CCLOG("Img button");
+	if (oManager->prjManager->isProjectLoaded())
+	{
+		//Keep this in buffer to access later
+		buffer["currentImgSelectInvokerName"] = n;
+
+		auto imgPath = oManager->rbManager->getModel(n)->getImagePath();
+		imgPath = imgPath == "" ? "none" : imgPath;
+
+		_dialogSystem->showImgSelectionDialog();
+		auto f = static_cast<ImageSelectDialogWindow*>(oManager->dialogWindowSystem->getCurrentDialog()->dialogWindow);
+		f->pathTextDisplay->setString(imgPath);
+		oManager->editSystem->pauseInput(true);
+		//oManager->uiSystem->editPanelUI->pauseInput(true);
+		currentState = State::WAIT_FOR_IMG;
 	}
 
 }
@@ -128,10 +155,10 @@ void EventManager::onDelButtonPressedOnRbPanel()
 
 void EventManager::onRenButtonPressedOnRbPanel()
 {
-	if (oManager->prjManager->isProjectLoaded())
+	if (oManager->prjManager->isProjectLoaded() && oManager->rbManager->getSelectedModel() != nullptr)
 	{
 		_dialogSystem->showRenameDialog();
-		//oManager->editorPanel->pauseInput(true);
+		oManager->editSystem->pauseInput(true);
 		//oManager->uiSystem->editPanelUI->pauseInput(true);
 		currentState = State::WAIT_FOR_REN;
 	}
@@ -222,9 +249,56 @@ void EventManager::onRenameOkBtnPress()
 void EventManager::onRenameCancelBtnPress()
 {
 	_dialogSystem->closeRenameDialog();
-	//oManager->editorPanel->pauseInput(false);
+	oManager->editSystem->pauseInput(false);
 	//oManager->uiSystem->editPanelUI->pauseInput(false);
 	currentState = State::NONE;
+}
+
+//---------------------------
+//ImageSelect Window events
+//---------------------------
+
+void EventManager::onBtnPressFromImgSelectWindow(std::string s)
+{
+	CCLOG("%s", s.c_str());
+	if (s == "browse")
+		onImgSelectBrowseBtnPress();
+	else if (s == "clear")
+		onImgSelectClearBtnPress();
+	else
+		onImgSelectOkBtnPress();
+}
+
+void EventManager::onImgSelectBrowseBtnPress()
+{
+	std::string fP = FileDialogs::openFile("PNG (*.png)\0*.png\0");
+
+	auto f = static_cast<ImageSelectDialogWindow*>(oManager->dialogWindowSystem->getCurrentDialog()->dialogWindow);
+	f->pathTextDisplay->setString(fP);
+}
+
+void EventManager::onImgSelectClearBtnPress()
+{
+	auto f = static_cast<ImageSelectDialogWindow*>(oManager->dialogWindowSystem->getCurrentDialog()->dialogWindow);
+	f->pathTextDisplay->setString("none");
+}
+
+void EventManager::onImgSelectOkBtnPress()
+{
+	auto s = buffer["currentImgSelectInvokerName"];
+
+	//Set image path of model
+	auto f = static_cast<ImageSelectDialogWindow*>(oManager->dialogWindowSystem->getCurrentDialog()->dialogWindow);
+
+	std::string imPath = std::string(f->pathTextDisplay->getString());
+	imPath = (imPath == "none") ? "" : imPath;//If image path == none change to ""
+	oManager->rbManager->getModel(s)->setImagePath(imPath);
+
+	_dialogSystem->closeDialog();
+	oManager->editSystem->pauseInput(false);
+	currentState = State::NONE;
+	
+	buffer["currentImgSelectInvokerName"] = "";
 }
 
 //---------------
@@ -245,6 +319,7 @@ void EventManager::onTabChanged(int index)
 
 		//Patch!!
 		oManager->backGrid->setVisible(false);
+		oManager->editSystem->editorCam->setVisible(false);
 
 	}
 	else
@@ -261,7 +336,7 @@ void EventManager::onTabChanged(int index)
 		
 		//Patch!!
 		oManager->backGrid->setVisible(true);
-
+		oManager->editSystem->editorCam->setVisible(true);
 	}
 }
 
@@ -349,6 +424,8 @@ void EventManager::onNewProject()
 	{
 		oManager->rbManager->clearModels();//Clear existing models in buffer.
 		oManager->prjManager->setProjectPath(fP);
+		oManager->rbManager->internalUpdate();
+
 		std::string a = oManager->prjManager->projectName;
 		oManager->uiSystem->prjPanelUI->setProjectNameText(a);
 	}
@@ -388,12 +465,14 @@ void EventManager::onLoadFromDisk()
 	{
 		oManager->rbManager->clearModels();
 		oManager->prjManager->loadFileNew(fP);
+		oManager->rbManager->internalUpdate();
 		
 		//Set ui panel display of project name
 		std::string a = oManager->prjManager->projectName;
 		oManager->uiSystem->prjPanelUI->setProjectNameText(a);
 
 		oManager->rbManager->selectModelByIndex(0);
+		
 	}
 
 }
@@ -405,8 +484,9 @@ void EventManager::onLoadFromDisk()
 void EventManager::addRbEntry()
 {
 	//Determine if given name is valid. If valid add to list else show an error.
-		//Get string from rename window
-	auto g = oManager->dialogWindowSystem->getCurrentDialog()->_promptWindow->_textField->getString();
+	//Get string from rename window
+	auto f = static_cast<DialogPromptWindow*>(oManager->dialogWindowSystem->getCurrentDialog()->dialogWindow);
+	auto g = f->_textField->getString();
 	
 	std::string n{ g };
 
@@ -415,8 +495,7 @@ void EventManager::addRbEntry()
 	{
 		oManager->rbManager->addARigidBodyEntry(n);
 		oManager->dialogWindowSystem->closeRenameDialog();
-		//oManager->editorPanel->pauseInput(false);
-		//oManager->uiSystem->editPanelUI->pauseInput(false);
+		oManager->editSystem->pauseInput(false);
 		currentState = State::NONE;
 	}
 	else
@@ -424,7 +503,9 @@ void EventManager::addRbEntry()
 		auto msg = oManager->rbManager->getErrorMessage(n);
 		std::string msgStr{ msg };
 
-		oManager->dialogWindowSystem->getCurrentDialog()->_promptWindow->showWarning(msgStr);
+		auto w = static_cast<DialogPromptWindow*>(oManager->dialogWindowSystem->getCurrentDialog()->dialogWindow);
+		w->showWarning(msgStr);
+
 		currentState = State::WAIT_FOR_ADD;
 	}
 }
@@ -433,7 +514,9 @@ void EventManager::renRbEntry()
 {
 	//Determine if given name is valid. If valid rename else show an error.
 	//Get string from rename window
-	auto g = oManager->dialogWindowSystem->getCurrentDialog()->_promptWindow->_textField->getString();
+
+	auto f = static_cast<DialogPromptWindow*>(oManager->dialogWindowSystem->getCurrentDialog()->dialogWindow);
+	auto g = f->_textField->getString();
 	
 	std::string gStr{ g };
 
@@ -450,18 +533,18 @@ void EventManager::renRbEntry()
 		oManager->rbManager->renameSelectedModel(gStr);
 		//oManager->rbManager->selectModel(g);
 		oManager->dialogWindowSystem->closeRenameDialog();
-		//oManager->editorPanel->pauseInput(false);
+		oManager->editSystem->pauseInput(false);
 		//oManager->uiSystem->editPanelUI->pauseInput(false);
 		currentState = State::NONE;
 	}
 	else
 	{
 		auto msg = oManager->rbManager->getErrorMessage(gStr);
-		oManager->dialogWindowSystem->getCurrentDialog()->_promptWindow->showWarning(msg);
+		auto w = static_cast<DialogPromptWindow*>(oManager->dialogWindowSystem->getCurrentDialog()->dialogWindow);
+		w->showWarning(msg);
 		currentState = State::WAIT_FOR_REN;
 	}
 }
-
 
 //-----------
 //Others

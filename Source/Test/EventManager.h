@@ -14,8 +14,11 @@ class EventManager : public ax::Node
 {
 
 public:
-	enum State { NONE, WAIT_FOR_ADD, WAIT_FOR_REN };
+	enum State { NONE, WAIT_FOR_ADD, WAIT_FOR_REN, WAIT_FOR_IMG };
 public:
+	//A global associative map that can store different info like $_POST in PHP
+	std::map<std::string, std::string> buffer;
+
 	State currentState;
 
 	ProjectPanelUI* panelUI;
@@ -39,6 +42,7 @@ public:
 	void onButtonPressFromRbPanel(std::string);
 	void onAListingClickedFromRbPanel(std::string n);
 	void onSpwnButtonFromRbPanel(std::string n);
+	void onImgButtonFromRbPanel(std::string n);
 	//Rbpanel individual button
 	void onAddButtonPressedOnRbPanel();
 	void onDelButtonPressedOnRbPanel();
@@ -65,6 +69,12 @@ public:
 	void onBtnPressFromWindow(std::string);
 	void onRenameOkBtnPress();
 	void onRenameCancelBtnPress();
+
+	//ImageSelectWindow Events
+	void onBtnPressFromImgSelectWindow(std::string);
+	void onImgSelectBrowseBtnPress();
+	void onImgSelectClearBtnPress();
+	void onImgSelectOkBtnPress();
 
 	//On tab changed event
 	void onTabChanged(int index);
@@ -96,6 +106,5 @@ public:
 
 private:
 	ax::EventListenerCustom* _listener;
-
 };
 #endif // __EVENT_MANAGER_H__

@@ -18,16 +18,16 @@ bool RbListController::init()
 void RbListController::onEnter()
 {
     Node::onEnter();
+
+    syncToolbarWithRbManager();
+
 }
 
-void RbListController::syncUIwithRbManager()
+void RbListController::syncToolbarWithRbManager()
 {
-    rbUI->clearAllEntries();
-
-    for each (auto var in rbMan->_rbModelsMap)
-    {
-        rbUI->addEntry(var.first);
-    }
+    rbUI->_rbToolbarLayout->_addRbBtn->setEnabled(rbMan->inState.canAdd);
+    rbUI->_rbToolbarLayout->_delRbBtn->setEnabled(rbMan->inState.canDelete);
+    rbUI->_rbToolbarLayout->_renRbBtn->setEnabled(rbMan->inState.canRename);
 }
 
 void RbListController::enableSpawnMode(bool en)
@@ -39,6 +39,11 @@ void RbListController::enableSpawnMode(bool en)
 void RbListController::addSpwnBtnListener(std::function<void(std::string)> callback)
 {
     OnASpawnClicked = callback;
+}
+
+void RbListController::addImgBtnListener(std::function<void(std::string)> callback)
+{
+    OnAImgClicked = callback;
 }
 
 void RbListController::rbSpawnCallback(Ref* ref, ui::Widget::TouchEventType touchType)
@@ -53,6 +58,17 @@ void RbListController::rbSpawnCallback(Ref* ref, ui::Widget::TouchEventType touc
     }
 }
 
+void RbListController::rbImgCallback(Ref* ref, ui::Widget::TouchEventType touchType)
+{
+    if (touchType == ui::Widget::TouchEventType::ENDED)
+    {
+        auto t = dynamic_cast<ui::Button*>(ref);
+        auto t1 = static_cast<RbEntryLayout*>(t->getUserData());
+        if (OnAImgClicked)
+            OnAImgClicked(t1->listingName);
+    }
+}
+
 //----------
 //Events
 //----------
@@ -60,7 +76,6 @@ void RbListController::rbSpawnCallback(Ref* ref, ui::Widget::TouchEventType touc
 //-------------------------------------
 //Callbacks from Rigidbodies Manager
 //-------------------------------------
-
 
 void RbListController::entryAddedCallback(std::string s)
 {
@@ -75,4 +90,11 @@ void RbListController::entryDeletedCallback(std::string s)
 void RbListController::entrySelectedCallback(std::string s)
 {
     rbUI->selectEntry(s);
+}
+
+void RbListController::rbManagerStateChangeCallback()
+{
+    rbUI->_rbToolbarLayout->_addRbBtn->setEnabled(rbMan->inState.canAdd);
+    rbUI->_rbToolbarLayout->_delRbBtn->setEnabled(rbMan->inState.canDelete);
+    rbUI->_rbToolbarLayout->_renRbBtn->setEnabled(rbMan->inState.canRename);
 }

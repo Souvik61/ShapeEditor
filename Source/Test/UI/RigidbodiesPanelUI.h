@@ -24,6 +24,7 @@ public:
 
 	std::function<void(std::string)> onAListingClicked;
 	std::function<void(std::string)> onASpawnClicked;
+	std::function<void(std::string)> onAImgBtnClicked;
 public:
 
     virtual bool init();
@@ -81,6 +82,7 @@ public:
 	int id;
 	bool isSelected;
 	ax::ui::Button* _spwnBtn;
+	ax::ui::Button* imgBtn;
 	std::string listingName;
 	CREATE_FUNC(RbEntryLayout);
 
@@ -89,7 +91,11 @@ public:
 	void setup(ax::Size size, std::string);
 
 	void setSelectedState(bool selected);
-	void enableSpawnBtn(bool en) { _spwnBtn->setVisible(en); }
+	void enableSpawnModeUI(bool en) 
+	{
+		_spwnBtn->setVisible(en);
+		imgBtn->setVisible(!en);
+	}
 
 };
 

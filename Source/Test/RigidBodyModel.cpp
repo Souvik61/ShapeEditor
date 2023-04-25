@@ -1,6 +1,7 @@
 #include "RigidBodyModel.h"
 #include "Test/b2d/Clipper.h"
 
+using namespace std;
 USING_NS_CC;
 
 bool RigidBodyModel::init()
@@ -8,6 +9,18 @@ bool RigidBodyModel::init()
     _isSaveDirty = false;
     _isPhysDirty = true;
     return true;
+}
+
+void RigidBodyModel::setImagePath(std::string imagePath)
+{
+    this->imagePath = imagePath;
+}
+
+bool RigidBodyModel::isImagePathValid()
+{
+    if (imagePath == "")
+        return true;
+    return FileUtils::getInstance()->isFileExist(imagePath);
 }
 
 void RigidBodyModel::computePhysics()

@@ -35,7 +35,7 @@ bool TestScene13::init()
         return false;
     }
 
-    //scheduleUpdate();
+    scheduleUpdate();
 
     visibleSize = _director->getVisibleSize();
     origin = _director->getVisibleOrigin();
@@ -57,6 +57,8 @@ bool TestScene13::init()
     _manager->rbManager->setInputModuleUI(_uiSystem->editPanelUI);
     prjManager->jIOSystem->setOverallManager(_manager);
 
+    rbManager->oManager = _manager;
+
     auto rBListCtrl = RbListController::create();
     addChild(rBListCtrl);
     rBListCtrl->rbMan = rbManager;
@@ -65,6 +67,7 @@ bool TestScene13::init()
     _manager->rbManager->_onEntryAddedListenerList.push_back(CC_CALLBACK_1(RbListController::entryAddedCallback, rBListCtrl));
     _manager->rbManager->onEntryDeletedListenerList.push_back(CC_CALLBACK_1(RbListController::entryDeletedCallback, rBListCtrl));
     _manager->rbManager->onSelChangedListenerList.push_back(CC_CALLBACK_1(RbListController::entrySelectedCallback, rBListCtrl));
+    _manager->rbManager->OnStateChangedListenerList.push_back(CC_CALLBACK_0(RbListController::rbManagerStateChangeCallback, rBListCtrl));
 
     //Add event manager
     auto eM = EventManager::create();
@@ -81,7 +84,7 @@ bool TestScene13::init()
     //Add dialog system
     {
         auto d = DialogWindowSystem::create();
-        addChild(d, 11);
+        addChild(d, 1000);
         _manager->dialogWindowSystem = d;
         _manager->eventManager->_dialogSystem = d;
         _manager->eventManager->setDialogWindowSystem(d);
@@ -92,7 +95,7 @@ bool TestScene13::init()
     {
         shapeDraw1->setRbManager(_manager->rbManager);
         shapeDraw1->setEditorPanel(_manager->uiSystem->editPanelUI);
-        addChild(shapeDraw1, 9);
+        addChild(shapeDraw1, 10);
         //_manager->uiSystem->editPanelUI->setDrawNode(shapeDraw1);
     }
 
@@ -108,7 +111,7 @@ bool TestScene13::init()
 
         //New Editor draw
         auto eDraw = EditorDraw::create();
-        addChild(eDraw, 1);
+        addChild(eDraw, 9);
         eDraw->editManager = editM;
         editM->drawer = eDraw;
 
@@ -134,7 +137,9 @@ bool TestScene13::init()
     _manager->uiSystem->rbPanelUI->onAListingClicked = CC_CALLBACK_1(EventManager::onAListingClickedFromRbPanel, _manager->eventManager);
     _manager->uiSystem->prjPanelUI->onBtnPressedCallback = CC_CALLBACK_1(EventManager::onBtnPressedFromPrjPanel, _manager->eventManager);
     rBListCtrl->addSpwnBtnListener(CC_CALLBACK_1(EventManager::onSpwnButtonFromRbPanel, _manager->eventManager));
+    rBListCtrl->addImgBtnListener(CC_CALLBACK_1(EventManager::onImgButtonFromRbPanel, _manager->eventManager));
 
+    
     dynamic_cast<EditorPanelUI*>(_manager->uiSystem->editPanelUI)->playTab->pCtrlPanel->eOnButtonPress = CC_CALLBACK_1(EventManager::onPlayTabCtrlEvent, _manager->eventManager);
 
     //Add new screen space translator
@@ -165,7 +170,8 @@ bool TestScene13::init()
         Vec2 c = a - mid;
 
         Vec3 p = getDefaultCamera()->getPosition3D();
-        cam->setPosition(c + Vec2(0, 0));
+        //cam->setPosition(c + Vec2(0, 0));
+        cam->setPosition(Vec2(-140, 250));
         cam->setPositionZ(p.z);
 
         //Add a pointer to show spawn point
@@ -174,7 +180,17 @@ bool TestScene13::init()
         camPointer->setCameraMask((unsigned short)CameraFlag::USER1, true);
         //camPointer->setPositionX(5);
         //camPointer->setPositionY(5);
-        addChild(camPointer, 2, "sp_pointer");
+        //addChild(camPointer, 2, "sp_pointer");
+
+
+        //Add a flag to show world origin
+        auto flag = Sprite::create("Sprites/flag_red.png");
+        flag->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
+        flag->setScale(0.4f);
+        flag->setCameraMask((unsigned short)CameraFlag::USER1, true);
+        //camPointer->setPositionX(5);
+        //camPointer->setPositionY(5);
+        addChild(flag, 2, "flag");
 
 
         //Sky
@@ -203,14 +219,30 @@ bool TestScene13::init()
 
     //Testing
     //auto l = DrawNode::create();
-    //l->drawLine(Vec2::ZERO, Vec2(100, 0), Color4F::RED);
-    //l->setPosition(200, 200);
+    ////l->drawLine(Vec2::ZERO, Vec2(100, 0), Color4F::RED);
+    //l->drawDot(Vec2::ZERO, 10, Color4B::RED);
+    //l->setPosition(640, 360);
     //addChild(l, 100);
 
     //This means all things are inited.
     _manager->init();
+
+    //addCloseButton();
     
     return true;
+}
+
+void TestScene13::update(float dt)
+{
+    Scene::update(dt);
+
+}
+
+void TestScene13::onEnter()
+{
+    Scene::onEnter();
+    //This is to create a camera rendering in editor
+    _manager->editSystem->createCamera();
 }
 
 //Add UI subsystem
@@ -345,20 +377,77 @@ void TestScene13::addB2DSystem()
 void TestScene13::addGridDraw()
 {
     auto bG = BackGrid::create();
-    bG->setVisible(false);
+    //bG->setVisible(false);
     addChild(bG, -2);
 
     bG->gridSize = visibleSize;//Set total grid size
-    bG->cellSize.setSize(10, 10);//Set cell size
+    bG->cellSize.set(10, 10);//Set cell size
 
-    //bG->validateGrid();
+    bG->validateGrid();
 
     _manager->backGrid = bG;
+}
+
+void TestScene13::addCloseButton()
+{
+    auto closeItem = MenuItemImage::create(
+        "CloseNormal.png",
+        "CloseSelected.png",
+        CC_CALLBACK_1(TestScene13::menuCloseCallback, this));
+
+    if (closeItem == nullptr ||
+        closeItem->getContentSize().width <= 0 ||
+        closeItem->getContentSize().height <= 0)
+    {
+
+    }
+    else
+    {
+        float x = origin.x + visibleSize.width - closeItem->getContentSize().width / 2;
+        float y = origin.y + closeItem->getContentSize().height / 2;
+        closeItem->setPosition(Vec2(x, y));
+    }
+
+    // create menu, it's an autorelease object
+    auto menu = Menu::create(closeItem, NULL);
+    menu->setPosition(Vec2::ZERO);
+    this->addChild(menu, 1);
 }
 
 void TestScene13::menuCloseCallback(Ref* pSender)
 {
     //Close the cocos2d-x game scene and quit the application
     //_director->end();
+
+    //Vec2 a = _manager->editSystem->convertEditCamToGlobalScreenSpaceCoord(Vec2(180, 185));
+    //Vec2 b = _manager->editSystem->convertGlobalScreenSpaceToEditCamCoord(Vec2(780,360));
+    //
+    ////Testing
+    //auto l = DrawNode::create();
+    //l->setCameraMask((unsigned short)CameraFlag::USER2);
+    //l->drawDot(Vec2::ZERO, 10, Color4B::RED);
+    //l->setPosition(b);
+    //addChild(l, 100);
+    //_manager->editSystem->rendTexVisitNodes.push_back(l);
+
+    //Vec2 a = _manager->editSystem->convertGlobalScreenSpaceToEditCamCoord(Vec2(0, 0));
+    //Vec2 b = _manager->editSystem->convertGlobalScreenSpaceToEditCamCoord(Vec2(500, 0));
+    //Vec2 c = b - a;
+    //CCLOG("%f;%f", c.x, c.y);
+
+    //auto a = _uiSystem->editPanelUI->playTab->spawnPointer;
+    //
+    //Vec2 b = a->getParent()->convertToWorldSpace(a->getPosition());
+    //
+    ////Testing
+    //auto l = DrawNode::create();
+    ////l->setCameraMask((unsigned short)CameraFlag::USER2);
+    //l->drawDot(Vec2::ZERO, 10, Color4B::RED);
+    //l->setPosition(b);
+    //addChild(l, 100);
+
+    //Vec2 c = b2Cam->projectGL(Vec3(640, 360, 0));
+
+    //CCLOG("%f;%f", c.x, c.y);
 
 }

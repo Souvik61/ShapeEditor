@@ -9,48 +9,61 @@ USING_NS_CC;
 class RigidBodyModel;
 class EditorPanel;
 class EditorPanelUI;
+class OverallManager;
 
-class RigidBodiesManager {
+class RigidBodiesManager 
+{
 
 public:
+    struct RigidBodiesManagerOpState {
+        bool canAdd = false;
+        bool canRename = false;
+        bool canDelete = false;
+    };
     
 private:
     //EditorPanel* _editPanel;
     EditorPanelUI* _editPanel;
 public:
-
     std::vector <std::function<void(std::string)>> _onEntryAddedListenerList; //Push a func() to this list if you want to listen to this event.
     std::vector <std::function<void(std::string)>> onSelChangedListenerList; //Push a func() to this list if you want to listen to "OnSelectionChanged" event.
     std::vector <std::function<void(std::string)>> onEntryDeletedListenerList; //Push a func() to this list if you want to listen to "OnEntryDeleted" event.
+    std::vector <std::function<void(void)>> OnStateChangedListenerList; //Push a func() to this list if you want to listen to "onStateChanged" event.
 
     std::string PROP_SELECTION = "selection";
 
+    RigidBodiesManagerOpState inState;
     cocos2d::Map<std::string, RigidBodyModel*> _rbModelsMap;
+    //Not used(deprecated)
     Vector<RigidBodyModel*> _rbModels;
     
     std::string selectedModelName;
     RigidBodyModel* _selectedModel;
+
+    OverallManager* oManager;
     
     RigidBodiesManager();
 
-    RigidBodyModel* getSelectedModel() {
-        return _selectedModel;
-    }
+    RigidBodyModel* getSelectedModel() { return _selectedModel; }
+
+    //Sync internal state
+    void internalUpdate();
 
     //Call "computePhysics()" on all rigidbody models
     void computeAllRigidBodies();
 
     void clearModels();
 
-    bool selectModel(std::string);
-
     void removeSelectedModel();
 
     void removeModel(std::string name);
 
-    void selectModel(RigidBodyModel* model) { _selectedModel = model; }
+    //Select model by name
+    bool selectModel(std::string name);
 
-    void selectModelByIndex(int i) { _selectedModel = _rbModels.at(i); }
+    void selectModel(RigidBodyModel* model);
+
+    void selectModelByIndex(int i);
 
     RigidBodyModel* getModel(std::string name);
 
@@ -96,6 +109,8 @@ public:
     //Actions on Mouse down at different modes
 
     void onMouseDownAtPositionCreate(Vec2 pos);
+
+    void onStateChanged();
 
 private:
 

@@ -12,6 +12,7 @@ class EditorDraw;
 class RigidBodiesManager;
 class EditorInputProcessor;
 class NewShapesDrawNode;
+class CamDelegate;
 
 //Represents a mouse selection
 class MouseSelection
@@ -42,13 +43,13 @@ public:
 class EditorManager : public ax::Node
 {
 public:
-
 	std::vector<ax::Vec2*> selectedPoints;
 	//Pointer to the nearest point
 	//It directly points to the rigidbody model's vertices array
 	ax::Vec2* nearestPoint;
 	ax::Vec2 prevMousePoint;
-
+	//Mouse location in global coord
+	ax::Vec2 mouseLocation;
 	//Represents current mouse selection
 	//The points in screen space
 	MouseSelection mSel;
@@ -63,13 +64,24 @@ public:
 	EditorMode _mode;
 	EditorMode _prevMode;//Previous mode that active
 	NewShapesDrawNode* auxDrawer;//auxilary draw node
+
+	ax::Camera* editorCam;
+	ax::Sprite* backgroundSpriteDraw;//This is drawn in RenderTex
+	CamDelegate* camDelegate;
+	std::string bgSpritePath = "";
 public:
 	virtual bool init();
 	//virtual void onEnter() override;
-    // implement the "static create()" method manually
+	virtual void update(float dt) override;
     CREATE_FUNC(EditorManager);
 
+	void updateBackgroundImage();
+
+
 	void resetPointSpace();
+
+	//Enables input processing
+	void pauseInput(bool pause);
 
 	PointSpaceNode* getPointsSpace() { return pointsNode; }
 
@@ -106,6 +118,13 @@ public:
 	void changeToPlayMode();
 	void onChangeFromPlayMode();
 
+	//Camera related
+	void createCamera();
+	//Convert world space coord to global screen space coords
+	ax::Vec2 convertEditCamToGlobalScreenSpaceCoord(ax::Vec2);
+	//Convert global screenspace coord to world coord
+	ax::Vec2 convertGlobalScreenSpaceToEditCamCoord(ax::Vec2);
+
 	//Events
 
 	//Mouse Callbacks
@@ -121,6 +140,11 @@ public:
 public:
 	bool _hasNearClosePt;
 	ax::Vec2 nearClosePt; //Nearest point that can close the shape in logic space
+
+public:
+	//This vector is visited when RenderTexture is drawn
+	std::vector<ax::Node*> rendTexVisitNodes;
+
 };
 
 #endif // __EDITOR_MANAGER_H__

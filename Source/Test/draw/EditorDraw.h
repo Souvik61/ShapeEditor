@@ -6,7 +6,7 @@
 class EditorManager;
 
 //This class is responsible for drawing from the Editor Manager
-//This draws selectedVerts, nearestPoint
+//This draws selectedVerts, nearestPoint, mousePointer(will)
 class EditorDraw : public ax::Node
 {
 public:
@@ -28,6 +28,7 @@ public:
 	void clearDrawNodes();
 	void drawModels();
 	
+	void drawMousePointers();
 	void drawSelectedVerts();
 	void drawUnitVectors();
 	void drawSelectionBox();

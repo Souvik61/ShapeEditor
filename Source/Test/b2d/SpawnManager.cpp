@@ -13,6 +13,12 @@ using namespace rb;
 
 bool SpawnManager::spawnBody(std::string name, ax::Vec2 pos)
 {
+	//If we try to spawn below ground prevent it
+	if (pos.y < 0)
+	{
+		pos.y = 10;
+	}
+
 	//Get model
 	auto rbModel = rbManager->getModel(name);
 
@@ -28,6 +34,13 @@ bool SpawnManager::spawnBody(std::string name, ax::Vec2 pos)
 	auto n = Node::create();
 	n->addComponent(rB);
 	runningScene->addChild(n);
+
+	//Testing
+	//auto l = DrawNode::create();
+	//l->setCameraMask((unsigned short)CameraFlag::USER1);
+	//l->drawDot(Vec2::ZERO, 10, Color4B::RED);
+	//l->setPosition(pos);
+	//runningScene->addChild(l, 100);
 
 	return true;
 }

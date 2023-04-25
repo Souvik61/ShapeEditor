@@ -11,6 +11,8 @@
 #include "Test/input_processors/TestInputProcessor.h"
 #include "Test/input_processors/ViewInputProcessor.h"
 #include "Test/input_processors/EditionInputProcessorv3.h"
+#include "Utils/CamDelegate.h"
+#include "Test/UI/EditorTabLayout.h"
 
 USING_NS_AX;
 
@@ -19,21 +21,106 @@ bool EditorManager::init()
 {
 	//_pointsNode = PointSpaceNode::create();
 	//addChild(_pointsNode);
-
+    scheduleUpdate();
     nearestPoint = nullptr;
     _hasNearClosePt = false;
 	
     //Initially change mode to view
     //changeMode(EditorMode::VIEW);
 
-
+    //Patch change later
+    backgroundSpriteDraw = Sprite::create();
+    backgroundSpriteDraw->setOpacity(127);
+    backgroundSpriteDraw->setCameraMask((unsigned short)CameraFlag::USER2);
+    backgroundSpriteDraw->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
+    addChild(backgroundSpriteDraw, 3);
+    rendTexVisitNodes.push_back(backgroundSpriteDraw);
 
 	return true;
+}
+
+void EditorManager::update(float dt)
+{
+    Node::update(dt);
+
+    //Put this code somewhere else
+    updateBackgroundImage();
+
+    //Position draw nodes and rendered sprite correctly
+    {
+        //Do not do this calculation every frame
+        //Calculate sprite scale factor
+        Vec2 spSize = backgroundSpriteDraw->getContentSize();
+        float scF = 500 / spSize.width;//Will change from constant 500 later
+        backgroundSpriteDraw->setScale(scF);
+
+        //Calculate zoom
+        float zoom = oManager->spaceConv->scale;
+        editorCam->initOrthographic(970 * (1 / zoom), 662 * (1 / zoom), 1, 1000);
+
+        //Calculate global screen space position of point(0,0)
+        Vec2 a;
+        oManager->spaceConv->applyT(&a);
+        //Calculate editorCamera space position of the screenspace point calculated above
+        Vec2 b = convertGlobalScreenSpaceToEditCamCoord(a);
+
+        //CCLOG("%f;%f", b.x, b.y);
+
+        backgroundSpriteDraw->setPosition(b);
+    }
+
+    if (editorCam && backgroundSpriteDraw) {
+        camDelegate->setVisitingCamera(editorCam);
+        //Set ui render texture to begin and end
+        editorUI->editTab->_rend->beginWithClear(0, 0, 0, 0);
+        //backgroundSpriteDraw->visit();
+        for (auto i : rendTexVisitNodes)
+        {
+            i->visit();
+        }
+        editorUI->editTab->_rend->end();
+        camDelegate->setVisitingCamera(nullptr);
+    }
+}
+
+void EditorManager::updateBackgroundImage()
+{
+    if (rbManager->getSelectedModel() == nullptr) return;
+
+    //If current selected rigidbody's imgPath != displayed image change it
+    if (!rbManager->getSelectedModel()->isImagePathValid()) return;
+
+    auto a = bgSpritePath;
+    auto b = rbManager->getSelectedModel()->getImagePath();
+
+    //If 2 image paths do not match
+    if (a != b)
+    {
+        bgSpritePath = b;
+        if (b == "") 
+        {
+            backgroundSpriteDraw->init();//Clear background sprite
+        }
+        else
+        {
+            backgroundSpriteDraw->initWithFile(b);
+        }
+        backgroundSpriteDraw->setOpacity(127);
+        backgroundSpriteDraw->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
+    }
 }
 
 void EditorManager::resetPointSpace()
 {
 	//pointsNode->setPosition(editorUI->getWorldViewPortMidpoint());
+}
+
+void EditorManager::pauseInput(bool pause)
+{
+    if (pause)
+        editorUI->_screenInterface->pauseInput();
+    else
+        editorUI->_screenInterface->unpauseInput();
 }
 
 void EditorManager::validateNearestPoint(const Vec2& pt)
@@ -115,8 +202,8 @@ void EditorManager::selectPointsInMouseSelection()
     if (mSel.isValid()) 
     {
         Rect rect(
-            min(p1.x, p2.x),
-            min(p1.y, p2.y),
+            std::min(p1.x, p2.x),
+            std::min(p1.y, p2.y),
             abs(p2.x - p1.x),
             abs(p2.y - p1.y)
         );
@@ -210,13 +297,14 @@ void EditorManager::onMouseMoved(EventMouse* e)
 {
     //_mousePointer->setOpacity(255);
     //_mousePointer->setPosition(e->getLocationInView());
-
+    mouseLocation = e->getLocationInView();
+    
     //Send event to rigidbodies manager
     CustomMouseEvent mEve = { CustomMouseEvent::EventType::MOVED,e };
-    //_rbManager->onMouseInteractionFromEditor(mEve, _mode);
 
     if (_currentInputProcessor)
         _currentInputProcessor->onMouseMoved(mEve); //Send event to input processor
+
     prevMousePoint = e->getLocationInView();
 }
 
@@ -381,3 +469,46 @@ void EditorManager::changeToPlayMode()
 {
     drawer->pauseDrawing(true);
 }
+
+void EditorManager::createCamera()
+{
+    auto defCam = getScene()->getDefaultCamera();
+    //Create a 2nd camera    
+    editorCam = Camera::createOrthographic(970, 662, 1, 1000);//Set harcoded values for now
+    editorCam->setCameraFlag(CameraFlag::USER2);
+    getScene()->addChild(editorCam, 1);
+    //cam->setPosition3D(defCam->getPosition3D());
+    editorCam->setPosition(Vec2(0, 0));
+    editorCam->setPositionZ(defCam->getPositionZ());
+    editorCam->setRotation3D(defCam->getRotation3D());
+}
+
+ax::Vec2 EditorManager::convertEditCamToGlobalScreenSpaceCoord(ax::Vec2 in)
+{
+    //Convert to virtual screen space
+    auto a = editorCam->projectGL(Vec3(in.x, in.y, 0));
+    //Convert to rendText Space
+    auto winSize = _director->getWinSize();
+    auto rendTexSize = editorUI->editTab->viewPlaceholder->getContentSize();
+    Vec2 b((a.x / winSize.x) * rendTexSize.width, (a.y / winSize.y) * rendTexSize.height);
+    //Convert to global screen space
+    Vec2 c = editorUI->editTab->viewPlaceholder->convertToWorldSpace(b);
+
+    return c;
+}
+
+ax::Vec2 EditorManager::convertGlobalScreenSpaceToEditCamCoord(ax::Vec2 in)
+{
+    //Convert to Rendtex space
+    Vec2 a = editorUI->editTab->viewPlaceholder->convertToNodeSpace(in);
+    //Convert to virtual viewport space
+    auto winSize = _director->getWinSize();
+    auto rendTexSize = editorUI->editTab->viewPlaceholder->getContentSize();
+    Vec2 b((a.x / rendTexSize.x) * winSize.width, (a.y / rendTexSize.y) * winSize.height);
+    //Convert to worldspace
+    Vec3 c = editorCam->unprojectGL(Vec3(b.x, b.y, 0));
+    
+    return Vec2(c.x, c.y);
+}
+
+

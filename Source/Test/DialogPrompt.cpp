@@ -1,11 +1,12 @@
 #include "DialogPrompt.h"
-//#include "../Helpers.h"
+#include "Utils/Helpers.h"
 
+USING_NS_AX;
 USING_NS_CC::ui;
 
-//--------------------------------
+//-------------------
 //Dialog Prompt Node
-//--------------------------------
+//-------------------
 
 bool DialogPrompt::init()
 {
@@ -20,9 +21,9 @@ bool DialogPrompt::init()
         //_eventDispatcher->addEventListenerWithSceneGraphPriority(_tListener, this);
     }
 
-    _promptWindow = DialogPromptWindow::create();
-    addChild(_promptWindow);
-    _promptWindow->setPosition(getContentSize() / 2);
+    //dialogWindow = DialogPromptWindow::create();
+    //addChild(dialogWindow);
+    //dialogWindow->setPosition(getContentSize() / 2);
 
     return true;
 }
@@ -38,9 +39,160 @@ bool DialogPrompt::onTouchBegan(Touch* t, Event* e)
     return true;
 }
 
-//--------------------------------
-//Dialog Prompt Window
-//--------------------------------
+//-----------------------------
+//Image Select Dialog Window
+//-----------------------------
+
+bool ImageSelectDialogWindow::init()
+{
+    if (!Layout::init())
+        return false;
+
+    Size s = Size(360, 225);
+    setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+    //setBackGroundImage("Sprites/background.png");
+    setBackGroundImage("Sprites/newicons/round_purple_sbright.png");
+    setBackGroundImageCapInsets(Rect(16, 16, 32, 32));
+    setBackGroundImageScale9Enabled(true);
+    setContentSize(s);
+
+    Vec2 pos;
+
+    //Setup touch listener
+    {
+        _tListener = EventListenerTouchOneByOne::create();
+        _tListener->setSwallowTouches(true);
+        _tListener->onTouchBegan = CC_CALLBACK_2(ImageSelectDialogWindow::onTouchBegan, this);
+        _eventDispatcher->addEventListenerWithSceneGraphPriority(_tListener, this);
+    }
+    //Set Window displaytext
+    {
+        auto t = Text::create("Select Image", "fonts/arial.ttf", 30);
+        t->setTextColor(Color4B::BLACK);
+        addChild(t);
+        _windowNameTextField = t;
+        auto tSize = t->getContentSize();
+        t->setPosition(Vec2(tSize.width / 2 + 10, s.height - (tSize.height / 2)));
+        pos = t->getPosition();
+    }
+
+    //Add Path to image text box
+    {
+        Text* prjLabel = Text::create("Image file:", "fonts/arial.ttf", 18);
+        //prjLabel->enableShadow();
+        prjLabel->setTextColor(Color4B::BLACK);
+        addChild(prjLabel, 1);
+        prjLabel->setPosition(Vec2(prjLabel->getContentSize().width / 2 + 10, pos.y - 50));
+        pos = prjLabel->getPosition();
+
+        //Text box
+        {
+            auto textBoxLayout = Layout::create();
+            textBoxLayout->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+            textBoxLayout->setLayoutType(Layout::Type::ABSOLUTE);
+            textBoxLayout->setBackGroundImage("Sprites/newicons/round_purple_dark.png");
+            textBoxLayout->setBackGroundImageScale9Enabled(true);
+            textBoxLayout->setBackGroundImageCapInsets(Rect(16, 16, 32, 32));
+            textBoxLayout->setContentSize(Size(240, 25));
+            addChild(textBoxLayout);
+            textBoxLayout->setPosition(Vec2(pos.x + (textBoxLayout->getContentSize().width / 2) + 50, pos.y));
+
+            auto text = Text::create("none", "fonts/arial.ttf", 17);
+            text->setAnchorPoint(Vec2::ANCHOR_MIDDLE_LEFT);
+            text->setTextColor(Color4B::BLACK);
+            text->setTextAreaSize(Size(233, 18));
+            text->setTextHorizontalAlignment(TextHAlignment::LEFT);
+            textBoxLayout->addChild(text);
+            text->setPosition(Vec2(7, 12.5));
+            pathTextDisplay = text;
+            //::Helper::makeBound(textBoxLayout);
+            //::Helper::makeBound(text);
+            pos = textBoxLayout->getPosition();
+        }
+
+    }
+    
+    //Create clear button
+    {
+        auto clearBtn = Button::create("Sprites/newicons/round_purple.png", "Sprites/newicons/round_purple_pressed.png");
+        clearBtn->setTitleText("Clear");
+        clearBtn->setTitleFontSize(22);
+        clearBtn->setScale9Enabled(true);
+        clearBtn->setCapInsets(Rect(16, 16, 32, 32));
+        clearBtn->setContentSize(Size(75, 30));
+        addChild(clearBtn, 1, "clear");
+        clearBtn->addTouchEventListener(CC_CALLBACK_2(ImageSelectDialogWindow::onButtonClicked, this));
+        clearBtn->setPosition(Vec2(pos.x - 40, pos.y - 45));
+
+    }
+    //Create browse button
+    {
+        auto browseBtn = Button::create("Sprites/newicons/round_purple.png", "Sprites/newicons/round_purple_pressed.png");
+        browseBtn->setTitleText("Browse");
+        browseBtn->setTitleFontSize(22);
+        browseBtn->setScale9Enabled(true);
+        browseBtn->setCapInsets(Rect(16, 16, 32, 32));
+        browseBtn->setContentSize(Size(85, 30));
+        addChild(browseBtn, 1, "browse");
+        browseBtn->addTouchEventListener(CC_CALLBACK_2(ImageSelectDialogWindow::onButtonClicked, this));
+        browseBtn->setPosition(Vec2(pos.x + 50, pos.y - 45));
+    }
+    //Create ok button
+    {
+        auto cancelBtn = Button::create("Sprites/newicons/round_purple.png", "Sprites/newicons/round_purple_pressed.png");
+        cancelBtn->setTitleText("Ok");
+        cancelBtn->setTitleFontSize(22);
+        cancelBtn->setScale9Enabled(true);
+        cancelBtn->setCapInsets(Rect(16, 16, 32, 32));
+        cancelBtn->setContentSize(Size(75, 30));
+        addChild(cancelBtn, 1, "ok");
+        cancelBtn->addTouchEventListener(CC_CALLBACK_2(ImageSelectDialogWindow::onButtonClicked, this));
+        cancelBtn->setPosition(Vec2(s.width / 2, 30));
+
+    }
+
+    return true;
+}
+
+void ImageSelectDialogWindow::runPromptAnim()
+{
+    auto a = ScaleTo::create(0.09, 1.1f);
+    auto b = ScaleTo::create(0.09, 1);
+    runAction(Sequence::create(a, b, nullptr));
+}
+
+void ImageSelectDialogWindow::onButtonClicked(Ref* s, Widget::TouchEventType t)
+{
+    if (t == Widget::TouchEventType::ENDED)
+    {
+        auto a = dynamic_cast<Button*>(s);
+        //Callback
+        if (OnAButtonClicked)
+        {
+            std::string b{ a->getName() };
+            OnAButtonClicked(b);
+        }
+    }
+}
+
+bool ImageSelectDialogWindow::onTouchBegan(ax::Touch* t, ax::Event* e)
+{
+    auto target = static_cast<ImageSelectDialogWindow*>(e->getCurrentTarget());
+    Vec2 locationInNode = target->convertToNodeSpace(t->getLocation());
+    Size s = target->getContentSize();
+    Rect rect = Rect(0, 0, s.width, s.height);
+
+    if (rect.containsPoint(locationInNode))
+    {
+        return true;
+    }
+    target->runPromptAnim();
+    return true;
+}
+
+//----------------------
+//Dialog Prompt Window 
+//----------------------
 
 bool DialogPromptWindow::init()
 {
@@ -69,6 +221,7 @@ bool DialogPromptWindow::init()
         t->setTextColor(Color4B::BLACK);
         t->enableShadow(Color4B::WHITE);
         addChild(t);
+        _windowNameTextField = t;
         t->setPosition(Vec2(s.width / 2, s.height - (t->getContentSize().height / 2)));
     }
     //Set text field background
@@ -145,6 +298,11 @@ void DialogPromptWindow::runPromptAnim()
     this->runAction(Sequence::create(a, b, nullptr));
 }
 
+void DialogPromptWindow::setWindowName(std::string n)
+{
+    _windowNameTextField->setString(n);
+}
+
 void DialogPromptWindow::showWarning(std::string warning)
 {
     tipText->setString(warning);
@@ -159,10 +317,10 @@ void DialogPromptWindow::onButtonClicked(Ref* s, Widget::TouchEventType t)
     {
         auto a = dynamic_cast<Button*>(s);
         //Callback
-        if (onAButtonClicked)
+        if (OnAButtonClicked)
         {
             std::string b{ a->getName() };
-            onAButtonClicked(b);
+            OnAButtonClicked(b);
         }
     }
 }

@@ -1,5 +1,5 @@
-#ifndef __TESTSCENE_13_H__
-#define __TESTSCENE_13_H__
+#ifndef __MISC_TESTING_H__
+#define __MISC_TESTING_H__
 
 #include "cocos2d.h"
 #include "Test/UISubsystem.h"
@@ -7,7 +7,8 @@
 class OverallManager;
 class EditorPanelUI;
 
-class TestScene13 : public ax::Scene
+//Micelaneous Testing scene
+class MiscTesting : public ax::Scene
 {
 public:
     ax::Size visibleSize;
@@ -34,7 +35,7 @@ public:
     void menuCloseCallback(cocos2d::Ref* pSender);
     
     // implement the "static create()" method manually
-    CREATE_FUNC(TestScene13);
+    CREATE_FUNC(MiscTesting);
 };
 
-#endif // __TESTSCENE_13_H__
+#endif // __MISC_TESTING_H__
