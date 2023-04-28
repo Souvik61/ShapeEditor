@@ -4,6 +4,8 @@
 #include "cocos2d.h"
 #include "ui/CocosGUI.h"
 
+class EditorTabToolbarLayout;
+
 //The tab to be used with tab group in editor panel.
 class EditorTabLayout : public ax::ui::Layout
 {
@@ -16,6 +18,7 @@ public:
 	ax::Sprite* renderSprite;
 	//A place holder that will sit in the place of renderSprite because reasons
 	ax::Node* viewPlaceholder;
+	EditorTabToolbarLayout* editorTabToolbar;
 public:
 	bool init() override;
 	CREATE_FUNC(EditorTabLayout);
@@ -24,6 +27,16 @@ public:
 	void initLayout();
 
 	void addModeDisplay();
+	void addToolbar();
 
+};
+
+//A tool bar in editor tab
+class EditorTabToolbarLayout : public ax::ui::Layout
+{
+public:
+	bool init() override;
+	CREATE_FUNC(EditorTabToolbarLayout);
+	void initWithSize(ax::Vec2 size);
 };
 #endif // __EDITOR_TAB_LAYOUT_H__

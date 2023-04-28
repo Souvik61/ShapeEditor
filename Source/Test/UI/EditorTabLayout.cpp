@@ -1,13 +1,14 @@
 #include "EditorTabLayout.h"
 #include "Utils/Helpers.h"
 #include "Test/draw/BackGrid.h"
+#include "Test/UI/CustomUI.h"
 
 USING_NS_CC;
 USING_NS_CC::ui;
 
-//--------------------------------
+//-----------------
 //EditorTabLayout
-//--------------------------------
+//-----------------
 
 bool EditorTabLayout::init()
 {
@@ -131,6 +132,8 @@ void EditorTabLayout::initLayout()
 
     addModeDisplay();
 
+    addToolbar();
+
     //::Helper::makeBound(this);
 }
 
@@ -162,4 +165,54 @@ void EditorTabLayout::addModeDisplay()
     //::Helper::makeBound(modeLabel);
 
     _modeDisplay->setPosition(80, s.height - 40);
+}
+
+void EditorTabLayout::addToolbar()
+{
+    auto s = getContentSize();
+
+    editorTabToolbar = EditorTabToolbarLayout::create();
+    editorTabToolbar->initWithSize(Vec2(150, 100));
+    addChild(editorTabToolbar, 3);
+    //Set pos
+    {
+        editorTabToolbar->setPositionX(s.width-75-15);
+        editorTabToolbar->setPositionY(s.height-50-15);
+    }
+}
+
+//------------------------
+//EditorTabToolbarLayout
+//------------------------
+
+bool EditorTabToolbarLayout::init()
+{
+    if (!Layout::init())
+    {
+        return false;
+    }
+    setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+    return true;
+}
+
+void EditorTabToolbarLayout::initWithSize(Vec2 size)
+{
+    setContentSize(size);
+    setLayoutType(ui::Layout::Type::CENTER_VERTICAL);
+    setBackGroundImage("Sprites/newicons/round_purple_selected.png");
+    setBackGroundImageScale9Enabled(true);
+    setBackGroundImageCapInsets(Rect(16, 16, 32, 32));
+
+    //Add insert points
+    {
+        auto btn = Button::create("Sprites/newicons/round_purple.png", "Sprites/newicons/round_purple_pressed.png", "Sprites/newicons/round_purple_disabled.png");
+        btn->setScale9Enabled(true);
+        btn->setCapInsets(Rect(16, 16, 32, 32));
+        btn->setContentSize(Size(100, 27));
+        btn->setTitleText("Insert points");
+        btn->setTitleFontSize(16);
+        addChild(btn, 0, "");
+        //cmplxBtn->addTouchEventListener(CC_CALLBACK_2(RbToolbarLayout::onAButtonCallback, this));
+    }
+    
 }
