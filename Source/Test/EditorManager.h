@@ -3,6 +3,7 @@
 
 #include "cocos2d.h"
 #include "UtilityClasses.h"
+#include "UI/CocosGUI.h"
 
 
 class PointSpaceNode;
@@ -83,6 +84,8 @@ public:
 	//Enables input processing
 	void pauseInput(bool pause);
 
+	//Points manip.
+
 	PointSpaceNode* getPointsSpace() { return pointsNode; }
 
 	//Given a point in logic space calculate the nearest point in rigidbody
@@ -94,11 +97,17 @@ public:
 
 	void selectedPointsReplaceBy(ax::Vec2* p);
 
+	void selectedPointsAddAll(std::vector<ax::Vec2*> pts);
+
 	//Selects(load into selectedPoints array) points that is in the BB of mouse selection
 	void selectPointsInMouseSelection();
+	void insertPointsBetweenSelected();
 	void removeSelectedPoints();
+
 	bool isRemoveEnabled();
-	//Set nearest point that can close the shape ,set avail to false if none available 
+	bool isInsertEnabled();
+	
+	//Set nearest point that can close the shape, set avail to false if none available 
 	void setNearestClosingPt(bool avail, const ax::Vec2&);
 
 	void setInputProcessor(EditorInputProcessor*);
@@ -126,6 +135,8 @@ public:
 	ax::Vec2 convertGlobalScreenSpaceToEditCamCoord(ax::Vec2);
 
 	//Events
+
+	void onInsertBetweenSelectedPointsBtnCallback(ax::Ref*, ax::ui::Widget::TouchEventType);
 
 	//Mouse Callbacks
 	virtual void onMouseUp(ax::EventMouse*);

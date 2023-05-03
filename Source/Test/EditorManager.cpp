@@ -185,6 +185,11 @@ void EditorManager::selectedPointsReplaceBy(Vec2* p)
     selectedPoints.push_back(p);
 }
 
+void EditorManager::selectedPointsAddAll(std::vector<Vec2*> pts)
+{
+/////////////////////////////////////////////////////////////////////////////////////////////////
+}
+
 void EditorManager::selectPointsInMouseSelection()
 {
     RigidBodyModel* model = rbManager->getSelectedModel();
@@ -221,6 +226,46 @@ void EditorManager::selectPointsInMouseSelection()
             }
         }
     }
+}
+
+void EditorManager::insertPointsBetweenSelected()
+{
+    if (selectedPoints.size() <= 1)return;
+
+    if (!isInsertEnabled())
+        return;
+
+    std::vector<Vec2> toAdd;
+
+    for (ShapeModel* shape : rbManager->getSelectedModel()->_shapes)
+    {
+        if (shape->getType() != ShapeModel::Type::POLYGON)
+            continue;
+
+        auto& vs = shape->_vertices;
+
+        for (int i = 0; i < vs.size(); i++) {
+            Vec2 p1 = vs.at(i);
+            Vec2 p2 = i != vs.size() - 1 ? vs.at(i + 1) : vs.at(0);
+
+            //if (selectedPoints.contains(p1) && selectedPoints.contains(p2)) {
+            //    Vector2 p = new Vector2((p1.x + p2.x) / 2, (p1.y + p2.y) / 2);
+            //    vs.add(i + 1, p);
+            //    toAdd.add(p);
+            //}
+
+            bool cond = isSelectedPointsContain(p1) && isSelectedPointsContain(p2);
+
+            if (cond)
+            {
+                Vec2 p((p1.x + p2.x) / 2, (p1.y + p2.y) / 2);
+                vs.insert(vs.begin() + i + 1, p);
+                toAdd.push_back(p);
+            }
+        }
+    }
+
+    //selectedPoints.addAll(toAdd);
 }
 
 void EditorManager::removeSelectedPoints()
@@ -269,6 +314,11 @@ bool EditorManager::isRemoveEnabled()
     return !selectedPoints.empty();
 }
 
+bool EditorManager::isInsertEnabled()
+{
+    return true;
+}
+
 void EditorManager::setNearestClosingPt(bool avail,const ax::Vec2& v)
 {
     _hasNearClosePt = avail;
@@ -279,6 +329,13 @@ void EditorManager::setNearestClosingPt(bool avail,const ax::Vec2& v)
 //Events
 //-------------------
 
+void EditorManager::onInsertBetweenSelectedPointsBtnCallback(ax::Ref* s, ax::ui::Widget::TouchEventType t)
+{
+    if (t == ui::Widget::TouchEventType::ENDED)
+    {
+        insertPointsBetweenSelected();
+    }
+}
 
 //------------------------
 //--Mouse Input functions

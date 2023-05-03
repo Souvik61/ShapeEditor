@@ -7,6 +7,7 @@
 #include "Test/NewShapesDrawNode.h"
 #include "Test/RbListController.h"
 #include "Test/draw/EditorDraw.h"
+#include "Test/UI/EditorTabLayout.h"
 //Box2d helpers
 #include "Phys/B2_WorldNode.h"
 #include "Phys/DebugDrawNode.h"
@@ -124,6 +125,7 @@ bool TestScene14::init()
         //Link tab changed event to Event manager
         //This is awkward
         _manager->uiSystem->editPanelUI->OnTabChanged = AX_CALLBACK_1(EventManager::onTabChanged, eM);
+        _manager->uiSystem->editPanelUI->editTab->editorTabToolbar->insertPointsButton->addTouchEventListener(AX_CALLBACK_2(EditorManager::onInsertBetweenSelectedPointsBtnCallback, editM));
 
         //Set initial mode to view
         editM->changeMode(EditorMode::VIEW);

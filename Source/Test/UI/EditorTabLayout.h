@@ -35,6 +35,8 @@ public:
 class EditorTabToolbarLayout : public ax::ui::Layout
 {
 public:
+	ax::ui::Button* insertPointsButton;
+public:
 	bool init() override;
 	CREATE_FUNC(EditorTabToolbarLayout);
 	void initWithSize(ax::Vec2 size);

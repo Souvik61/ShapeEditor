@@ -172,12 +172,12 @@ void EditorTabLayout::addToolbar()
     auto s = getContentSize();
 
     editorTabToolbar = EditorTabToolbarLayout::create();
-    editorTabToolbar->initWithSize(Vec2(150, 100));
+    editorTabToolbar->initWithSize(Vec2(110, 70));
     addChild(editorTabToolbar, 3);
     //Set pos
     {
-        editorTabToolbar->setPositionX(s.width-75-15);
-        editorTabToolbar->setPositionY(s.height-50-15);
+        editorTabToolbar->setPositionX(s.width - 55 - 15);
+        editorTabToolbar->setPositionY(s.height - 35 - 15);
     }
 }
 
@@ -203,7 +203,17 @@ void EditorTabToolbarLayout::initWithSize(Vec2 size)
     setBackGroundImageScale9Enabled(true);
     setBackGroundImageCapInsets(Rect(16, 16, 32, 32));
 
-    //Add insert points
+    auto lp = LinearLayoutParameter::create();
+    lp->setGravity(LinearLayoutParameter::LinearGravity::CENTER_HORIZONTAL);
+
+    {
+        auto text = Text::create("Actions", "fonts/arial.ttf", 17);
+        text->setTextColor(Color4B::BLACK);
+        text->setLayoutParameter(lp);
+        addChild(text, 1);
+    }
+
+    //Add insert points button
     {
         auto btn = Button::create("Sprites/newicons/round_purple.png", "Sprites/newicons/round_purple_pressed.png", "Sprites/newicons/round_purple_disabled.png");
         btn->setScale9Enabled(true);
@@ -211,8 +221,10 @@ void EditorTabToolbarLayout::initWithSize(Vec2 size)
         btn->setContentSize(Size(100, 27));
         btn->setTitleText("Insert points");
         btn->setTitleFontSize(16);
-        addChild(btn, 0, "");
+        addChild(btn, 2, "");
+        btn->setLayoutParameter(lp->clone());
         //cmplxBtn->addTouchEventListener(CC_CALLBACK_2(RbToolbarLayout::onAButtonCallback, this));
+        insertPointsButton = btn;
     }
     
 }
