@@ -157,8 +157,11 @@ void EditorManager::validateNearestPoint(const Vec2& pt)
         for (int i = 0; i < shape->_vertices.size(); i++)
         {
             Vec2* v = &shape->_vertices.at(i);
+            Vec2 vC = shape->_vertices.at(i);
             
-            if (v->distanceSquared(p) < dist)
+            oManager->spaceConv->applyT(&vC);
+
+            if (vC.distanceSquared(p) < dist)
             {
                 nearestPoint = v;
             }
