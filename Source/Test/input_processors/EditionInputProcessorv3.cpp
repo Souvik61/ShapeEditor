@@ -93,7 +93,7 @@ void EditionInputProcessorv3::onMouseMoved(CustomMouseEvent e)
     {
         Vec2 p = e.mEvent->getLocationInView();
         //_editorPanel->oManager->buffDelegate->applyNewInvTransform(&p);
-        //_editorPanel->oManager->spaceConv->applyTInv(&p);
+        _editorPanel->oManager->spaceConv->applyTInv(&p);
     
         editManager->validateNearestPoint(p);
     }

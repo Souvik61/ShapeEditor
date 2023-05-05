@@ -88,8 +88,9 @@ public:
 
 	PointSpaceNode* getPointsSpace() { return pointsNode; }
 
-	//Given a point in screen space calculate the nearest point in rigidbody
+	//Given a point in logic space calculate the nearest point in rigidbody
 	//set the "nearestPoint" to point to the nearest point in the original array
+	//Manipulating this  will also change original point
 	void validateNearestPoint(const ax::Vec2& pt);
 
 	bool isSelectedPointsContain(ax::Vec2 p);
