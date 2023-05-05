@@ -93,9 +93,9 @@ void EditionInputProcessorv3::onMouseMoved(CustomMouseEvent e)
     {
         Vec2 p = e.mEvent->getLocationInView();
         //_editorPanel->oManager->buffDelegate->applyNewInvTransform(&p);
-        _editorPanel->oManager->spaceConv->applyTInv(&p);
+        //_editorPanel->oManager->spaceConv->applyTInv(&p);
     
-        editManager->validateNearestPoint(p);
+        editManager->validateNearestPointScreen(p);
     }
 }
 
@@ -112,8 +112,8 @@ void EditionInputProcessorv3::onMouseDown(CustomMouseEvent e)
     auto iScreen = _editorPanel->_screenInterface;
     
     Vec2 t = e.mEvent->getLocationInView();
-    _editorPanel->oManager->spaceConv->applyTInv(&t);
-    editManager->validateNearestPoint(t);
+    //_editorPanel->oManager->spaceConv->applyTInv(&t);
+    editManager->validateNearestPointScreen(t);
     
     draggedPoint = editManager->nearestPoint;
     
