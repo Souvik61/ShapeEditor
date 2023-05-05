@@ -167,6 +167,35 @@ void EditorManager::validateNearestPoint(const Vec2& pt)
 
 }
 
+void EditorManager::validateNearestPointScreen(const ax::Vec2& pt)
+{
+    RigidBodyModel* model = rbManager->getSelectedModel();
+    if (model == nullptr) return;
+
+    Vec2 p = pt;
+
+    nearestPoint = nullptr;
+
+    float dist = 100 * 1; //canvas.worldCamera.zoom;
+
+
+    for (ShapeModel* shape : model->_shapes) {
+
+        for (int i = 0; i < shape->_vertices.size(); i++)
+        {
+            Vec2* v = &shape->_vertices.at(i);
+            Vec2 vC = shape->_vertices.at(i);
+
+            oManager->spaceConv->applyT(&vC);
+
+            if (vC.distanceSquared(p) < dist)
+            {
+                nearestPoint = v;
+            }
+        }
+    }
+}
+
 bool EditorManager::isSelectedPointsContain(Vec2 p)
 {
     size_t s = selectedPoints.size();
