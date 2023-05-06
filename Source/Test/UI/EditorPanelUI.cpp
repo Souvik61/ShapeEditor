@@ -12,6 +12,7 @@ USING_NS_AX::ui;
 bool EditorPanelUI::init()
 { 
     //_currentInputProcessor = nullptr;
+    _isFocused = false;
     _prevMode = EditorMode::VIEW;
 
     //998,720
@@ -176,7 +177,7 @@ void EditorPanelUI::onMouseDown(cocos2d::EventMouse* em)
 
     if (rect.containsPoint(locationInNode))
     {
-
+        _isFocused = true;
         CustomMouseEvent mEve = { CustomMouseEvent::EventType::DOWN,em };
         //Do something
 
@@ -191,7 +192,7 @@ void EditorPanelUI::onMouseMoved(EventMouse* em)
     Size s = this->getContentSize();
     Rect rect = Rect(10, 10, s.width - 20, s.height - 50);
 
-    if (rect.containsPoint(locationInNode))
+    if (rect.containsPoint(locationInNode) || _isFocused)
     {
         //if (_currentInputProcessor)
         //    _currentInputProcessor->onMouseMoved(mEve); //Send event to input processor
@@ -203,17 +204,18 @@ void EditorPanelUI::onMouseMoved(EventMouse* em)
 
 void EditorPanelUI::onMouseUp(EventMouse* e)
 {
-    Vec2 locationInNode = this->convertToNodeSpace(e->getLocationInView());
-    Size s = this->getContentSize();
-    Rect rect = Rect(0, 0, s.width, s.height);
+    //Vec2 locationInNode = this->convertToNodeSpace(e->getLocationInView());
+    //Size s = this->getContentSize();
+    //Rect rect = Rect(0, 0, s.width, s.height);
 
-    if (rect.containsPoint(locationInNode))
+    if (_isFocused)
     {
         //_rbManager->onMouseInteractionFromEditor(mEve, _mode);
 
         //if (_currentInputProcessor)
         //    _currentInputProcessor->onMouseUp(mEve); //Send event to input processor
         
+        _isFocused = false;
         editManager->onMouseUp(e);
     }
 }

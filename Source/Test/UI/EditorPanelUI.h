@@ -65,6 +65,7 @@ public:
 private:
 	//This node is kept at the mid of viewport because reasons
 	ax::DrawNode* viewMid;
+	bool _isFocused;
 };
 
 #endif // __NEW_EDITORPANEL_UI_H__
