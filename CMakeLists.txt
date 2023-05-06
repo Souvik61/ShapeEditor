@@ -92,6 +92,8 @@ file(GLOB_RECURSE GAME_HEADER
 	Source/Test/input_processors/PlayInputProcessor.h
     Source/Test/input_processors/TestInputProcessor.h
 	Source/Test/input_processors/ViewInputProcessor.h
+	Source/Test/models/RigidBodyModel.h
+	Source/Test/models/ShapeModel.h
 	Source/Test/UI/CustomUI.h
 	Source/Test/UI/EditorPanelUI.h
 	Source/Test/UI/EditorScreenInterface.h
@@ -113,8 +115,6 @@ file(GLOB_RECURSE GAME_HEADER
 	Source/Test/ProjectManager.h
 	Source/Test/RbListController.h
 	Source/Test/RigidbodiesManager.h
-	Source/Test/RigidBodyModel.h
-	Source/Test/ShapeModel.h
 	Source/Test/ShapesDrawNode.h
 	Source/Test/SpaceConverter.h
 	Source/Test/StateTracker.h
@@ -162,6 +162,8 @@ file(GLOB_RECURSE GAME_SOURCE
 	Source/Test/input_processors/PlayInputProcessor.cpp
 	Source/Test/input_processors/TestInputProcessor.cpp
 	Source/Test/input_processors/ViewInputProcessor.cpp
+	Source/Test/models/RigidBodyModel.cpp
+	Source/Test/models/ShapeModel.cpp
 	Source/Test/UI/CustomUI.cpp
 	Source/Test/UI/EditorPanelUI.cpp
 	Source/Test/UI/EditorScreenInterface.cpp
@@ -183,8 +185,6 @@ file(GLOB_RECURSE GAME_SOURCE
 	Source/Test/ProjectManager.cpp
 	Source/Test/RbListController.cpp
 	Source/Test/RigidbodiesManager.cpp
-	Source/Test/RigidBodyModel.cpp
-	Source/Test/ShapeModel.cpp
 	Source/Test/ShapesDrawNode.cpp
 	Source/Test/SpaceConverter.cpp
 	Source/Test/StateTracker.cpp
