@@ -272,6 +272,7 @@ void EditorManager::insertPointsBetweenSelected()
             continue;
 
         auto& vs = shape->_vertices;
+        auto& a = selectedPoints;
 
         for (int i = 0; i < vs.size(); i++) {
             Vec2 p1 = vs.at(i);
@@ -283,6 +284,7 @@ void EditorManager::insertPointsBetweenSelected()
             //    toAdd.add(p);
             //}
 
+            //bool cond = isSelectedPointsContain(p1) && isSelectedPointsContain(p2);
             bool cond = isSelectedPointsContain(p1) && isSelectedPointsContain(p2);
 
             if (cond)
@@ -434,6 +436,29 @@ void EditorManager::onKeyDown(EventKeyboard::KeyCode k, Event* e)
 
 void EditorManager::onKeyUp(EventKeyboard::KeyCode, Event*)
 {
+}
+
+void EditorManager::copyFromVec2PtrToVec2(std::vector<Vec2*>& src, std::vector<Vec2>& dest)
+{
+    dest.clear();
+    dest.reserve(src.size());
+
+    for (auto vec : src)
+    {
+        dest.push_back(*vec);
+    }
+}
+
+bool EditorManager::isThisArrayContainThisVec(const std::vector<Vec2>& arr, const Vec2& p)
+{
+    size_t s = arr.size();
+
+    for (size_t i = 0; i < s; i++)
+    {
+        if (arr.at(i) == p) //Could be used fuzzy equals
+            return true;
+    }
+    return false;
 }
 
 //-------------------

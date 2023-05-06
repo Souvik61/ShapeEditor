@@ -153,6 +153,13 @@ public:
 	virtual void onKeyDown(cocos2d::EventKeyboard::KeyCode, cocos2d::Event*);
 	virtual void onKeyUp(cocos2d::EventKeyboard::KeyCode, cocos2d::Event*);
 
+	//Helpers
+	
+	//A function to copy from a Vec2* array to Vec2 array
+	void copyFromVec2PtrToVec2(std::vector<ax::Vec2*>& src, std::vector<ax::Vec2>& dest);
+	
+	bool isThisArrayContainThisVec(const std::vector<ax::Vec2>& arr, const ax::Vec2& p);
+
 public:
 	bool _hasNearClosePt;
 	ax::Vec2 nearClosePt; //Nearest point that can close the shape in logic space
