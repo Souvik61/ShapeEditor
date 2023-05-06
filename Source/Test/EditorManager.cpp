@@ -15,6 +15,7 @@
 #include "Test/UI/EditorTabLayout.h"
 
 USING_NS_AX;
+using namespace std;
 
 // on "init" you need to initialize your instance
 bool EditorManager::init()
@@ -272,7 +273,10 @@ void EditorManager::insertPointsBetweenSelected()
             continue;
 
         auto& vs = shape->_vertices;
-        auto& a = selectedPoints;
+        
+        //Make a copy of selected points vector
+        vector<Vec2> selectedPointsCpy;
+        copyFromVec2PtrToVec2(selectedPoints, selectedPointsCpy);
 
         for (int i = 0; i < vs.size(); i++) {
             Vec2 p1 = vs.at(i);
@@ -285,7 +289,7 @@ void EditorManager::insertPointsBetweenSelected()
             //}
 
             //bool cond = isSelectedPointsContain(p1) && isSelectedPointsContain(p2);
-            bool cond = isSelectedPointsContain(p1) && isSelectedPointsContain(p2);
+            bool cond = isThisArrayContainThisVec(selectedPointsCpy, p1) && isThisArrayContainThisVec(selectedPointsCpy, p2);
 
             if (cond)
             {
