@@ -11,7 +11,7 @@ class CircleModel;
 class RigidBodyModel : public ax::Ref
 {
 public:
-    ax::Vec2 origin;
+    ax::Vec2 originPoint;
     ax::Vector<ShapeModel*> _shapes;
     ax::Vector<PolygonModel*> _polygons;
     ax::Vector<CircleModel*> _circles;
@@ -27,7 +27,7 @@ public:
 
     bool init();
 
-    ax::Vec2 getOrigin() { return origin; }
+    ax::Vec2 getOrigin() { return originPoint; }
 
     void setName(std::string name) {
         this->name = name;
