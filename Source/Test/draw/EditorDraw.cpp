@@ -1,6 +1,7 @@
 #include "EditorDraw.h"
 #include "Test/EditorManager.h"
 #include "Test/OverallManager.h"
+#include "Test/models/RigidBodyModel.h"
 
 USING_NS_CC;
 
@@ -14,6 +15,8 @@ bool EditorDraw::init()
 	addChild(_selectionDraw, 1);
     _trDraw = DrawNode::create();
     addChild(_trDraw, 10);
+    _orgDraw = DrawNode::create();
+    addChild(_orgDraw, 11);
 
     //Add three vertices sprites
 
@@ -53,6 +56,7 @@ void EditorDraw::clearDrawNodes()
     _vertDraw->clear();
 	_selectionDraw->clear();
     _trDraw->clear();
+    _orgDraw->clear();
 }
 
 void EditorDraw::drawModels()
@@ -61,12 +65,17 @@ void EditorDraw::drawModels()
     drawSelectionBox();
     drawUnitVectors();
     drawMousePointers();
+    drawOriginPoint();
 
     //Draw nearest point to the mouse pointer
     if (editManager->nearestPoint != nullptr) {
+
+
         Vec2 t = *editManager->nearestPoint;
         editManager->oManager->spaceConv->applyT(&t);
         _vertDraw->drawDot(t, 7, Color4F::GREEN); //11
+
+
     }
 
     if (editManager->_hasNearClosePt)
@@ -88,6 +97,23 @@ void EditorDraw::drawSelectionBox()
         _selectionDraw->drawRect(a, b, Color4F::GREEN);
         _selectionDraw->drawSolidRect(a, b, Color4F(0, 1, 0, 0.40f));
     }
+}
+
+void EditorDraw::drawOriginPoint()
+{
+    auto model = editManager->rbManager->getSelectedModel();
+
+    if (!model) return;
+
+    Vec2 v = model->getOrigin();
+    editManager->oManager->spaceConv->applyT(&v);
+    
+    _orgDraw->setLineWidth(2);
+    _orgDraw->drawLine(v + Vec2(-10, 0), v + Vec2(10, 0), Color4B::RED);
+    _orgDraw->drawLine(v + Vec2(0, -10), v + Vec2(0, 10), Color4B::RED);
+    _orgDraw->drawCircle(v, 10, 0, 8, false, Color4B::RED);
+    //_orgDraw->drawDot(v, 5, Color4F::RED);
+
 }
 
 void EditorDraw::positionSprites()

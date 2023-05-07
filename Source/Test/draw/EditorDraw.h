@@ -14,6 +14,7 @@ public:
 	ax::DrawNode* _vertDraw;
 	ax::DrawNode* _selectionDraw;
 	ax::DrawNode* _trDraw;
+	ax::DrawNode* _orgDraw;
 	EditorManager* editManager;
 
 	//There vertices sprites
@@ -32,6 +33,7 @@ public:
 	void drawSelectedVerts();
 	void drawUnitVectors();
 	void drawSelectionBox();
+	void drawOriginPoint();
 	void positionSprites();
 
 	void pauseDrawing(bool val);

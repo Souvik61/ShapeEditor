@@ -97,6 +97,7 @@ bool TestScene14::init()
         shapeDraw1->setRbManager(_manager->rbManager);
         shapeDraw1->setEditorPanel(_manager->uiSystem->editPanelUI);
         addChild(shapeDraw1, 10);
+        //shapeDraw1->setVisible(false);
         //_manager->uiSystem->editPanelUI->setDrawNode(shapeDraw1);
     }
 

@@ -1,7 +1,7 @@
 #include "EditorManager.h"
 #include "PointSpaceNode.h"
 #include "Test/UI/EditorPanelUI.h"
-#include "RigidBodyModel.h"
+#include "Test/models/RigidBodyModel.h"
 #include "RigidBodiesManager.h"
 #include "Test/UI/EditorScreenInterface.h"
 #include "OverallManager.h"
