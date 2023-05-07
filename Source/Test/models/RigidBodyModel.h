@@ -28,6 +28,7 @@ public:
     bool init();
 
     ax::Vec2 getOrigin() { return originPoint; }
+    ax::Vec2* getOriginPtr() { return &originPoint; }
 
     void setName(std::string name) {
         this->name = name;

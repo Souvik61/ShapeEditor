@@ -179,6 +179,17 @@ void EditorManager::validateNearestPointScreen(const ax::Vec2& pt)
 
     float dist = 100 * 1; //canvas.worldCamera.zoom;
 
+    //If nearest point is origin
+    {
+        auto o = model->getOrigin();
+        
+        oManager->spaceConv->applyT(&o);
+
+        if (o.distanceSquared(p) < dist)
+        {
+            nearestPoint = model->getOriginPtr();
+        }
+    }
 
     for (ShapeModel* shape : model->_shapes) {
 
@@ -195,6 +206,8 @@ void EditorManager::validateNearestPointScreen(const ax::Vec2& pt)
             }
         }
     }
+
+
 }
 
 bool EditorManager::isSelectedPointsContain(Vec2 p)

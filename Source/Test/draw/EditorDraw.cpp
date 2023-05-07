@@ -70,12 +70,20 @@ void EditorDraw::drawModels()
     //Draw nearest point to the mouse pointer
     if (editManager->nearestPoint != nullptr) {
 
+        bool cond = (*editManager->nearestPoint) == editManager->rbManager->getSelectedModel()->originPoint;
 
-        Vec2 t = *editManager->nearestPoint;
-        editManager->oManager->spaceConv->applyT(&t);
-        _vertDraw->drawDot(t, 7, Color4F::GREEN); //11
-
-
+        if (!cond)//If nearest point is not origin
+        {
+            Vec2 t = *editManager->nearestPoint;
+            editManager->oManager->spaceConv->applyT(&t);
+            _vertDraw->drawDot(t, 7, Color4F::GREEN); //11
+        }
+        else
+        {
+            Vec2 t = *editManager->nearestPoint;
+            editManager->oManager->spaceConv->applyT(&t);
+            _orgDraw->drawDot(t, 11, Color4F::RED); //11
+        }
     }
 
     if (editManager->_hasNearClosePt)
