@@ -1,7 +1,7 @@
 #include "EditionInputProcessorv3.h"
 #include "Test/UI/EditorPanelUI.h"
 #include "../RigidBodiesManager.h"
-#include "../RigidBodyModel.h"
+#include "Test/models/RigidBodyModel.h"
 #include "../ShapesDrawNode.h"
 #include "Test/OverallManager.h"
 
@@ -125,7 +125,7 @@ void EditionInputProcessorv3::onMouseDown(CustomMouseEvent e)
     }
     else {
         //If dragged point is origin point
-        if ((*draggedPoint) == model->origin) {
+        if ((*draggedPoint) == model->originPoint) {
             editManager->selectedPoints.clear();
         }
         //If we clicked a point
