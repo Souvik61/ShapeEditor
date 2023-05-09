@@ -1,7 +1,7 @@
 #include "JsonIoSystem.h"
 #include "OverallManager.h"
-#include "RigidBodyModel.h"
-#include "ShapeModel.h"
+#include "Test/models/RigidBodyModel.h"
+#include "Test/models/ShapeModel.h"
 
 using namespace rapidjson;
 
@@ -35,8 +35,8 @@ std::string JsonIoSystem::serialize()
         {
             rapidjson::Value orgObj;
             orgObj.SetObject();
-            orgObj.AddMember("x", model->origin.x, doc.GetAllocator());
-            orgObj.AddMember("y", model->origin.y, doc.GetAllocator());
+            orgObj.AddMember("x", model->getOrigin().x, doc.GetAllocator());
+            orgObj.AddMember("y", model->getOrigin().y, doc.GetAllocator());
             rbObj.AddMember("origin", orgObj, doc.GetAllocator());
         }
         
@@ -188,8 +188,8 @@ void JsonIoSystem::setupJSONValFromRbIter(rapidjson::Value& rbObj, RigidBodyMode
         orgObj.SetObject();
         //orgObj.AddMember("x", model->origin.x, doc.GetAllocator());
         //orgObj.AddMember("y", model->origin.y, doc.GetAllocator());
-        orgObj.AddMember("x", model->origin.x / SCALE_RATIO, doc.GetAllocator());
-        orgObj.AddMember("y", model->origin.y / SCALE_RATIO, doc.GetAllocator());
+        orgObj.AddMember("x", model->getOrigin().x / SCALE_RATIO, doc.GetAllocator());
+        orgObj.AddMember("y", model->getOrigin().y / SCALE_RATIO, doc.GetAllocator());
         rbObj.AddMember("origin", orgObj, doc.GetAllocator());
     }
 
@@ -323,7 +323,7 @@ void JsonIoSystem::setupProject(rapidjson::Document& doc)
         {
             rapidjson::Value& org = rbDOM["origin"];
             //rbModel->origin.set(org["x"].GetFloat(), org["y"].GetFloat());
-            rbModel->origin.set(org["x"].GetFloat() * SCALE_RATIO, org["y"].GetFloat() * SCALE_RATIO);
+            rbModel->getOriginPtr()->set(org["x"].GetFloat() * SCALE_RATIO, org["y"].GetFloat() * SCALE_RATIO);
         }
 
         //Parse shapes list

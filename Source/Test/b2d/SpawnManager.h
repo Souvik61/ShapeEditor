@@ -27,10 +27,12 @@ public:
 	bool spawnBody(std::string name, ax::Vec2 pos);
 
 	rb::B2PhysicsBody* createBodyFromModel(RigidBodyModel* model, ax::Vec2 pos);
+	rb::B2PhysicsBody* createBodyFromModelwithOrigin(RigidBodyModel* model, ax::Vec2 pos);
 
 private:
 	//A helper
 	void fillArray(ax::Vec2 dest[], std::vector<ax::Vec2> src, int size);
+	void fillArrayWithOriginOffset(ax::Vec2 dest[], std::vector<ax::Vec2> src, int size,const ax::Vec2& origin);
 	//A function to calculate polygon area
 	float getPolygonArea(ax::Vec2[], int s);
 	float getPolygonSignedArea(ax::Vec2 points[], int s);

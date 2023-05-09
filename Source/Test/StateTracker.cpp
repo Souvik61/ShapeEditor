@@ -1,7 +1,7 @@
 #include "StateTracker.h"
 #include "OverallManager.h"
 #include "RigidBodiesManager.h"
-#include "RigidBodyModel.h"
+#include "Test/models/RigidBodyModel.h"
 
 bool StateTracker::isSaveDirty()
 {

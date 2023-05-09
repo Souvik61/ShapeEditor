@@ -8,7 +8,7 @@
 #include "StateTracker.h"
 #include "Test/EditorManager.h"
 #include "Test/RbListController.h"
-#include "RigidBodyModel.h"
+#include "Test/models/RigidBodyModel.h"
 
 //---------------
 //Event Manager

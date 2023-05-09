@@ -3,8 +3,8 @@
 #include "Phys/B2_PhysicsBody.h"
 #include "Test/b2d/B2dMisc.h"
 #include "Test/RigidBodiesManager.h"
-#include "Test/RigidBodyModel.h"
-#include "Test/ShapeModel.h"
+#include "Test/models/RigidBodyModel.h"
+#include "Test/models/ShapeModel.h"
 #include "Phys/DefHelper.h"
 #include "Phys/ShapeHelper.h"
 
@@ -29,7 +29,7 @@ bool SpawnManager::spawnBody(std::string name, ax::Vec2 pos)
 		return false;
 
 	//Create a rigidbody
-	B2PhysicsBody* rB = createBodyFromModel(rbModel, pos);
+	B2PhysicsBody* rB = createBodyFromModelwithOrigin(rbModel, pos);
 
 	auto n = Node::create();
 	n->addComponent(rB);
@@ -96,10 +96,46 @@ rb::B2PhysicsBody* SpawnManager::createBodyFromModel(RigidBodyModel* model, Vec2
 	return body;
 }
 
+rb::B2PhysicsBody* SpawnManager::createBodyFromModelwithOrigin(RigidBodyModel* model, ax::Vec2 pos)
+{
+	b2BodyDef def;
+	DefHelper::initWithPos(def, pos);
+	def.type = b2_dynamicBody;//create dynamic body
+	auto body = wN->createPhysicsBodyComp(def);
+
+
+	//For each polygons in model
+	for (auto poly : model->_polygons) {
+
+		int s = poly->vertices.size();
+		Vec2* verts = new Vec2[s];
+
+		//fillArray(verts, poly->vertices, s);
+		fillArrayWithOriginOffset(verts, poly->vertices, s, model->getOrigin());
+
+		if (getPolygonArea(verts, s) < 0.00001f)
+			continue;
+
+		b2PolygonShape shape1;
+		ShapeHelper::initPolygonShapeWithVerts(shape1, verts, s);
+
+		body->createFixture(&shape1, 1);
+
+	}
+	return body;
+}
+
 void SpawnManager::fillArray(ax::Vec2 dest[], std::vector<ax::Vec2> src, int size)
 {
 	for (int i = 0; i < size; i++) {
 		dest[i].set(src.at(i));
+	}
+}
+
+void SpawnManager::fillArrayWithOriginOffset(ax::Vec2 dest[], std::vector<ax::Vec2> src, int size, const Vec2& origin)
+{
+	for (int i = 0; i < size; i++) {
+		dest[i].set(src.at(i) - origin);
 	}
 }
 
