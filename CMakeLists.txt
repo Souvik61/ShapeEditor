@@ -132,6 +132,7 @@ file(GLOB_RECURSE GAME_HEADER
 	Source/Utils/CamDelegate.h
 	Source/Utils/FileDialogs.h
 	Source/Utils/Helpers.h
+	Source/Utils/MyBodyParser.h
 	Source/AppDelegate.h
 	Source/Globals.h
     Source/HelloWorldScene.h
@@ -202,6 +203,7 @@ file(GLOB_RECURSE GAME_SOURCE
 	Source/Utils/CamDelegate.cpp
 	Source/Utils/FileDialogs.cpp
 	Source/Utils/Helpers.cpp
+	Source/Utils/MyBodyParser.cpp
     Source/AppDelegate.cpp
 	Source/Globals.cpp
     Source/HelloWorldScene.cpp

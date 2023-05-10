@@ -101,8 +101,9 @@ void EditorManager::transformBackgroundImage()
     //Calculate sprite scale factor
     Vec2 spSize = backgroundSpriteDraw->getContentSize();
    
-    fitPolicy = (spSize.height > spSize.width) ? 1 : 0;
-
+    //Not using fit policy right now fit to only width
+    //fitPolicy = (spSize.height > spSize.width) ? 1 : 0;
+    fitPolicy = 0;
 
     //Calculate sprite scale factor
     float scF = 1;
