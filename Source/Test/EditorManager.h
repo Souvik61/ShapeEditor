@@ -78,6 +78,8 @@ public:
 
 	void updateBackgroundImage();
 
+	void transformBackgroundImage();
+
 
 	void resetPointSpace();
 

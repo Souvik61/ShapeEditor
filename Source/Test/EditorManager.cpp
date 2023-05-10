@@ -50,24 +50,7 @@ void EditorManager::update(float dt)
     //Position draw nodes and rendered sprite correctly
     {
         //Do not do this calculation every frame
-        //Calculate sprite scale factor
-        Vec2 spSize = backgroundSpriteDraw->getContentSize();
-        float scF = 500 / spSize.width;//Will change from constant 500 later
-        backgroundSpriteDraw->setScale(scF);
-
-        //Calculate zoom
-        float zoom = oManager->spaceConv->scale;
-        editorCam->initOrthographic(970 * (1 / zoom), 662 * (1 / zoom), 1, 1000);
-
-        //Calculate global screen space position of point(0,0)
-        Vec2 a;
-        oManager->spaceConv->applyT(&a);
-        //Calculate editorCamera space position of the screenspace point calculated above
-        Vec2 b = convertGlobalScreenSpaceToEditCamCoord(a);
-
-        //CCLOG("%f;%f", b.x, b.y);
-
-        backgroundSpriteDraw->setPosition(b);
+        transformBackgroundImage();
     }
 
     if (editorCam && backgroundSpriteDraw) {
@@ -107,8 +90,39 @@ void EditorManager::updateBackgroundImage()
             backgroundSpriteDraw->initWithFile(b);
         }
         backgroundSpriteDraw->setOpacity(127);
-        backgroundSpriteDraw->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
+        backgroundSpriteDraw->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
     }
+}
+
+void EditorManager::transformBackgroundImage()
+{
+    //If 0 FIT_WIDTH ,1 FIT_HEIGHT
+    int fitPolicy = 0;
+    //Calculate sprite scale factor
+    Vec2 spSize = backgroundSpriteDraw->getContentSize();
+   
+    fitPolicy = (spSize.height > spSize.width) ? 1 : 0;
+
+
+    //Calculate sprite scale factor
+    float scF = 1;
+    scF = 500 / (fitPolicy == 0 ? spSize.width : spSize.height);//Will change from constant 500 later
+    
+    backgroundSpriteDraw->setScale(scF);
+
+    //Calculate zoom
+    float zoom = oManager->spaceConv->scale;
+    editorCam->initOrthographic(970 * (1 / zoom), 662 * (1 / zoom), 1, 1000);
+
+    //Calculate global screen space position of point(0,0)
+    Vec2 a;
+    oManager->spaceConv->applyT(&a);
+    //Calculate editorCamera space position of the screenspace point calculated above
+    Vec2 b = convertGlobalScreenSpaceToEditCamCoord(a);
+
+    //CCLOG("%f;%f", b.x, b.y);
+
+    backgroundSpriteDraw->setPosition(b);
 }
 
 void EditorManager::resetPointSpace()
