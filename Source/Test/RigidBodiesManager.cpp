@@ -1,8 +1,8 @@
 #include "RigidBodiesManager.h"
-#include "RigidBodyModel.h"
 #include "Test/UI/EditorPanelUI.h"
 #include "OverallManager.h"
-#include "ShapeModel.h"
+#include "Test/models/RigidBodyModel.h"
+#include "Test/models/ShapeModel.h"
 
 using namespace std;
 

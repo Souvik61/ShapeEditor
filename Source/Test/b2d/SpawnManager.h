@@ -22,6 +22,9 @@ public:
 	ax::Scene* runningScene;
 public:
 
+	//Do not use
+	bool spawnBodyOld(std::string name, ax::Vec2 pos);
+
 	//Spawn a physics body with given name at position pos in global space
 	//Return true if success else false
 	bool spawnBody(std::string name, ax::Vec2 pos);

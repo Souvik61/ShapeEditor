@@ -11,7 +11,7 @@
 USING_NS_CC;
 using namespace rb;
 
-bool SpawnManager::spawnBody(std::string name, ax::Vec2 pos)
+bool SpawnManager::spawnBodyOld(std::string name, ax::Vec2 pos)
 {
 	//If we try to spawn below ground prevent it
 	if (pos.y < 0)
@@ -41,6 +41,43 @@ bool SpawnManager::spawnBody(std::string name, ax::Vec2 pos)
 	//l->drawDot(Vec2::ZERO, 10, Color4B::RED);
 	//l->setPosition(pos);
 	//runningScene->addChild(l, 100);
+
+	return true;
+}
+
+bool SpawnManager::spawnBody(std::string name, ax::Vec2 pos)
+{
+	//If we try to spawn below ground prevent it
+	if (pos.y < 0)
+	{
+		pos.y = 10;
+	}
+
+	//Get model
+	auto rbModel = rbManager->getModel(name);
+
+	if (rbModel->_isPhysDirty)
+		rbModel->computePhysics();//Refresh polygon shapes
+
+	if (!rbModel->_shapesValid)
+		return false;
+
+	//Create a rigidbody
+	B2PhysicsBody* rB = createBodyFromModelwithOrigin(rbModel, pos);
+
+	Node* n;
+
+	if (rbModel->isImagePathValid() && rbModel->getImagePath() != "")
+	{
+		n = Sprite::create(rbModel->getImagePath());
+	}
+	else
+	{
+		n = Node::create();
+	}
+	n->setCameraMask((unsigned short)CameraFlag::USER1);
+	n->addComponent(rB);
+	runningScene->addChild(n, 1);
 
 	return true;
 }

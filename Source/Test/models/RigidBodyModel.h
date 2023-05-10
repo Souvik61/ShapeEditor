@@ -40,6 +40,7 @@ public:
 
     std::string getImagePath() { return imagePath; }
 
+    //Remember empty imagepath is also valid so make additional checks if this is not what we want
     bool isImagePathValid();
 
     void clear() {

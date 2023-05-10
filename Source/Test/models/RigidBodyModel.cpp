@@ -8,6 +8,10 @@ bool RigidBodyModel::init()
 {
     _isSaveDirty = false;
     _isPhysDirty = true;
+    
+    //Set default origin point
+    originPoint.set(250.f, 250.f);
+
     return true;
 }
 
