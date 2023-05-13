@@ -10,8 +10,6 @@ Will add circle shape support in future.
 
 https://github.com/Souvik12345678/NewProject_12/assets/35128994/2f5f0935-5e47-49a4-81e2-5209e124f253
 
-https://github.com/Souvik12345678/NewProject_12/assets/35128994/9bfab9f5-97fb-4389-b85c-0c880990dc4b
-
 ## Editor Features:
 
 - Create custom shapes and export to JSON format.
