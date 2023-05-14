@@ -6,9 +6,8 @@ With added features like written in C++, Play tab, Save prompt.
 
 Will add circle shape support in future.
 
-## Demo Videos
+## Screenshots
 
-https://github.com/Souvik12345678/NewProject_12/assets/35128994/2f5f0935-5e47-49a4-81e2-5209e124f253
 
 ## Editor Features:
 
