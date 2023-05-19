@@ -63,18 +63,22 @@ bool SpawnManager::spawnBody(std::string name, ax::Vec2 pos)
 		return false;
 
 	//Create a rigidbody
-	B2PhysicsBody* rB = createBodyFromModelwithOrigin(rbModel, pos);
+	//B2PhysicsBody* rB = createBodyFromModelWithSize(rbModel, pos, Vec2(1, 1));
+	B2PhysicsBody* rB = nullptr;
 
 	Node* n;
 
 	if (rbModel->isImagePathValid() && rbModel->getImagePath() != "")
 	{
 		n = Sprite::create(rbModel->getImagePath());
+		rB = createBodyFromModelWithSize(rbModel, pos, n->getContentSize());
 	}
 	else
 	{
 		n = Node::create();
+		rB = createBodyFromModelWithSize(rbModel, pos, Vec2(500, 500));
 	}
+
 	n->setCameraMask((unsigned short)CameraFlag::USER1);
 	n->addComponent(rB);
 	runningScene->addChild(n, 1);
@@ -162,6 +166,34 @@ rb::B2PhysicsBody* SpawnManager::createBodyFromModelwithOrigin(RigidBodyModel* m
 	return body;
 }
 
+rb::B2PhysicsBody* SpawnManager::createBodyFromModelWithSize(RigidBodyModel* model, ax::Vec2 pos, Vec2 size)
+{
+	b2BodyDef def;
+	DefHelper::initWithPos(def, pos);
+	def.type = b2_dynamicBody;//create dynamic body
+	auto body = wN->createPhysicsBodyComp(def);
+
+	//For each polygons in model
+	for (auto poly : model->_polygons) {
+
+		int s = poly->vertices.size();
+		Vec2* verts = new Vec2[s];
+
+
+		fillArrayWithNormalizedOriginOffset(verts, poly->vertices, s, model->getOrigin(), size);
+
+		if (getPolygonArea(verts, s) < 0.00001f)
+			continue;
+
+		b2PolygonShape shape1;
+		ShapeHelper::initPolygonShapeWithVerts(shape1, verts, s);
+
+		body->createFixture(&shape1, 1);
+
+	}
+	return body;
+}
+
 void SpawnManager::fillArray(ax::Vec2 dest[], std::vector<ax::Vec2> src, int size)
 {
 	for (int i = 0; i < size; i++) {
@@ -173,6 +205,14 @@ void SpawnManager::fillArrayWithOriginOffset(ax::Vec2 dest[], std::vector<ax::Ve
 {
 	for (int i = 0; i < size; i++) {
 		dest[i].set(src.at(i) - origin);
+	}
+}
+
+void SpawnManager::fillArrayWithNormalizedOriginOffset(ax::Vec2 dest[], std::vector<ax::Vec2> src, int vertCount, const ax::Vec2& origin,ax::Vec2 size)
+{
+	for (int i = 0; i < vertCount; i++) 
+	{
+		dest[i] = (src.at(i) - origin) * (size.width / 500);
 	}
 }
 

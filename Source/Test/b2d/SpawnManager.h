@@ -31,11 +31,13 @@ public:
 
 	rb::B2PhysicsBody* createBodyFromModel(RigidBodyModel* model, ax::Vec2 pos);
 	rb::B2PhysicsBody* createBodyFromModelwithOrigin(RigidBodyModel* model, ax::Vec2 pos);
+	rb::B2PhysicsBody* createBodyFromModelWithSize(RigidBodyModel* model, ax::Vec2 pos, ax::Vec2 size);
 
 private:
 	//A helper
 	void fillArray(ax::Vec2 dest[], std::vector<ax::Vec2> src, int size);
 	void fillArrayWithOriginOffset(ax::Vec2 dest[], std::vector<ax::Vec2> src, int size,const ax::Vec2& origin);
+	void fillArrayWithNormalizedOriginOffset(ax::Vec2 dest[], std::vector<ax::Vec2> src, int vertCount, const ax::Vec2& origin, ax::Vec2 size);
 	//A function to calculate polygon area
 	float getPolygonArea(ax::Vec2[], int s);
 	float getPolygonSignedArea(ax::Vec2 points[], int s);

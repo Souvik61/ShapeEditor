@@ -117,6 +117,7 @@ bool PlayTabCtrlPanel::init()
 
     //Add clear button 
     Button* button = Button::create("Sprites/ui/button.png", "Sprites/ui/buttonHighlighted.png");
+    button->setSwallowTouches(true);
     button->setContentSize(Size(130, 40));
     button->setTitleText("Clear shapes");
     button->setTitleFontSize(18);
@@ -133,7 +134,6 @@ bool PlayTabCtrlPanel::init()
 
             this->onAKeyPressed(nStr);
         }
-
         });
 
     button->setPosition(Vec2(100, 27));

@@ -70,11 +70,11 @@ PhysicsBody* MyBodyParser::bodyFormJson(cocos2d::Node *pNode, const std::string&
                     {
                         int pcount = polygons[i].Size();
                         Point* points = new Point[pcount];
-                        for (int pi = 0; pi<pcount; ++pi)
-                        {
-                            points[pi].x = offx + width * polygons[i][pcount-1-pi]["x"].GetDouble();
-                            points[pi].y = offy + width * polygons[i][pcount-1-pi]["y"].GetDouble();
-                        }
+						for (int pi = 0; pi < pcount; ++pi)
+						{
+							points[pi].x = offx + width * polygons[i][pcount - 1 - pi]["x"].GetDouble();
+							points[pi].y = offy + width * polygons[i][pcount - 1 - pi]["y"].GetDouble();
+						}
                         body->addShape(PhysicsShapePolygon::create(points, pcount, material));
                         delete [] points;
                     }

@@ -9,8 +9,12 @@
 
 #include <string>
 #include "cocos2d.h"
+#include "rapidjson/document.h"
+
 USING_NS_CC;
-#include "json/document.h"
+
+class B2_PhysicsBody;
+class B2_WorldNode;
 
 class MyBodyParser {
     MyBodyParser(){}
@@ -24,6 +28,11 @@ public:
 	//added ----
 	PhysicsBody* bodyFromJsonWithTag(Node* pNode, const std::string& name, PhysicsMaterial material);
 	//added-end----
+    
+    //Some helpers
+    B2_PhysicsBody* bodyFromJsonB2d(Node* pNode, const std::string& name, B2_WorldNode* wN);
+    //Some helpers -end
+
 	Vec2 getOriginPoint(Size size,const std::string& name);
 	Vec2 getNormalizedOrigin(Size size, std::string name);
 };
